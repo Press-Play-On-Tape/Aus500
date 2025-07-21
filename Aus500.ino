@@ -67,6 +67,9 @@ DealPhysics dealPhysics;
 uint16_t seed = 72;
 #endif
 
+BidMode bidMode = BidMode::Level;
+uint8_t bidSuit = 0;
+uint8_t bidLevel = 0; 
 
 void setup() {
 

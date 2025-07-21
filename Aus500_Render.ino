@@ -57,115 +57,115 @@ void renderPlayerHands(uint8_t currentPlane, uint8_t color) {
 
 }
 
-void renderPlayerHands_ValidOptions(uint8_t currentPlane) {
+// void renderPlayerHands_ValidOptions(uint8_t currentPlane) {
 
-    uint8_t playerCardCount = game.players[Constants::HumanPlayer].getCardCount();
-    uint8_t xStart = 48 - (playerCardCount * 4);
+//     uint8_t playerCardCount = game.players[Constants::HumanPlayer].getCardCount();
+//     uint8_t xStart = 48 - (playerCardCount * 4);
 
-    if (playerCardCount == 1) {
+//     if (playerCardCount == 1) {
 
-        // game.setSelectedCard(0);
-        renderHumanHand_LightGrey(currentPlane);
+//         // game.setSelectedCard(0);
+//         renderHumanHand_LightGrey(currentPlane);
 
-    }
-    else {
+//     }
+//     else {
 
-        uint8_t tableCardCount = game.gameRound->getTableCardCount();
+//         uint8_t tableCardCount = game.gameRound->getTableCardCount();
 
-        if (tableCardCount == 0) {
+//         if (tableCardCount == 0) {
 
-            renderHumanHand_LightGrey(currentPlane);
+//             renderHumanHand_LightGrey(currentPlane);
 
-        }
-        else {
+//         }
+//         else {
 
-            // bool hasSuit = game.players[Constants::HumanPlayer].hasSuit(game.gameRound->getHand(game.getFirstPlayer()).getSuit());
-            // Card &firstCard = game.gameRound->getHand(game.getFirstPlayer());
+//             // bool hasSuit = game.players[Constants::HumanPlayer].hasSuit(game.gameRound->getHand(game.getFirstPlayer()).getSuit());
+//             // Card &firstCard = game.gameRound->getHand(game.getFirstPlayer());
 
-            // if (hasSuit) {
+//             // if (hasSuit) {
 
-            //     for (uint8_t i = 0; i < playerCardCount; i++) {
+//             //     for (uint8_t i = 0; i < playerCardCount; i++) {
 
-            //         Card &card = game.players[Constants::HumanPlayer].getCard(i);
+//             //         Card &card = game.players[Constants::HumanPlayer].getCard(i);
 
-            //         if (card.getSuit() != Suit::None) {
+//             //         if (card.getSuit() != Suit::None) {
 
-            //             if (card.getSuit() == firstCard.getSuit()) {
+//             //             if (card.getSuit() == firstCard.getSuit()) {
 
-            //                 if (game.getSelectedCard() == Constants::NoCard || game.getSelectedCard() == i) {
+//             //                 if (game.getSelectedCard() == Constants::NoCard || game.getSelectedCard() == i) {
 
-            //                     game.setSelectedCard(i);
-            //                     SpritesU::drawPlusMaskFX(xStart + (i * 8), 43, Images::Cards_Bottom, card.getCardIndex() + currentPlane);
+//             //                     game.setSelectedCard(i);
+//             //                     SpritesU::drawPlusMaskFX(xStart + (i * 8), 43, Images::Cards_Bottom, card.getCardIndex() + currentPlane);
 
-            //                 }
-            //                 else {
+//             //                 }
+//             //                 else {
 
-            //                     SpritesU::drawPlusMaskFX(xStart + (i * 8), 47, Images::Cards_Bottom, card.getCardIndex() + currentPlane);
+//             //                     SpritesU::drawPlusMaskFX(xStart + (i * 8), 47, Images::Cards_Bottom, card.getCardIndex() + currentPlane);
 
-            //                 }
+//             //                 }
 
-            //                 game.setValidCard(i, true);
+//             //                 game.setValidCard(i, true);
 
-            //             }
-            //             else {
+//             //             }
+//             //             else {
 
-            //                 game.setValidCard(i, false);
-            //                 SpritesU::drawPlusMaskFX(xStart + (i * 8), 47, Images::Cards_Bottom_Grey, card.getCardIndex() + currentPlane);
+//             //                 game.setValidCard(i, false);
+//             //                 SpritesU::drawPlusMaskFX(xStart + (i * 8), 47, Images::Cards_Bottom_Grey, card.getCardIndex() + currentPlane);
 
-            //             }
+//             //             }
 
-            //         }
+//             //         }
 
-            //     }
+//             //     }
 
-            // }
-            // else {
+//             // }
+//             // else {
 
-                renderHumanHand_LightGrey(currentPlane);
+//                 renderHumanHand_LightGrey(currentPlane);
 
-            // }
+//             // }
 
-        }
+//         }
 
-    }
+//     }
 
-    SpritesU::drawOverwriteFX(0, 10, Images::Hand_Left, (game.players[2].getCardCount() * 3) + currentPlane);
-    SpritesU::drawOverwriteFX(31, -3, Images::Hand_Top, (game.players[3].getCardCount() * 3) + currentPlane);
-    SpritesU::drawOverwriteFX(100, 10, Images::Hand_Right, (game.players[0].getCardCount() * 3) + currentPlane);
+//     SpritesU::drawOverwriteFX(0, 10, Images::Hand_Left, (game.players[2].getCardCount() * 3) + currentPlane);
+//     SpritesU::drawOverwriteFX(31, -3, Images::Hand_Top, (game.players[3].getCardCount() * 3) + currentPlane);
+//     SpritesU::drawOverwriteFX(100, 10, Images::Hand_Right, (game.players[0].getCardCount() * 3) + currentPlane);
 
 
-}
+// }
 
-void renderHumanHand_LightGrey(uint8_t currentPlane) {
+// void renderHumanHand_LightGrey(uint8_t currentPlane) {
   
-    uint8_t cardCount = game.players[Constants::HumanPlayer].getCardCount();
-    uint8_t xStart = 48 - (cardCount * 4);
+//     uint8_t cardCount = game.players[Constants::HumanPlayer].getCardCount();
+//     uint8_t xStart = 48 - (cardCount * 4);
 
-    for (uint8_t i = 0; i < cardCount; i++) {
+//     for (uint8_t i = 0; i < cardCount; i++) {
 
-        Card &card = game.players[Constants::HumanPlayer].getCard(i);
+//         Card &card = game.players[Constants::HumanPlayer].getCard(i);
 
-        if (card.getSuit() != Suit::None) {
+//         if (card.getSuit() != Suit::None) {
 
-//            game.setValidCard(i, true);
+// //            game.setValidCard(i, true);
 
-            if (game.getSelectedCard() == Constants::NoCard || game.getSelectedCard() == i) {
+//             if (game.getSelectedCard() == Constants::NoCard || game.getSelectedCard() == i) {
 
-                game.setSelectedCard(i);
-                SpritesU::drawPlusMaskFX(xStart + (i * 8), 43, Images::Cards_Bottom, card.getCardIndex() + currentPlane);
+//                 game.setSelectedCard(i);
+//                 SpritesU::drawPlusMaskFX(xStart + (i * 8), 43, Images::Cards_Bottom, card.getCardIndex() + currentPlane);
 
-            }
-            else {
+//             }
+//             else {
 
-                SpritesU::drawPlusMaskFX(xStart + (i * 8), 47, Images::Cards_Bottom, card.getCardIndex() + currentPlane);
+//                 SpritesU::drawPlusMaskFX(xStart + (i * 8), 47, Images::Cards_Bottom, card.getCardIndex() + currentPlane);
 
-            }
+//             }
 
-        }
+//         }
 
-    }
+//     }
 
-}
+// }
 
 void renderKitty(uint8_t currentPlane) {
     
@@ -179,126 +179,194 @@ void renderKitty(uint8_t currentPlane) {
 
 }
 
-void renderTableCards(uint8_t currentPlane) {
-        
-    if (game.gameRound->getHand(3)->getSuit() != Suit::None)  {
-
-        uint8_t idx = game.gameRound->getHand(3)->getCardIndex();
-        if (game.gameRound->getHand(3)->getRank() == Rank::Joker)  idx = 0;
-        
-        SpritesU::drawPlusMaskFX(38, 9, Images::Cards_Bottom, idx + currentPlane); 
-    }
-
-    if (game.gameRound->getHand(1)->getSuit() != Suit::None)  {
-
-        uint8_t idx = game.gameRound->getHand(1)->getCardIndex();
-        if (game.gameRound->getHand(1)->getRank() == Rank::Joker)  idx = 0;
-
-        SpritesU::drawPlusMaskFX(49, 19, Images::Cards_Bottom, idx + currentPlane); 
-    }
-
-    if (game.gameRound->getHand(0)->getSuit() != Suit::None)  {
-
-        uint8_t idx = game.gameRound->getHand(0)->getCardIndex();
-        if (game.gameRound->getHand(0)->getRank() == Rank::Joker)  idx = 0;
-
-        SpritesU::drawPlusMaskFX(60, 13, Images::Cards_Right,  + currentPlane); 
-    }
-
-    if (game.gameRound->getHand(2)->getSuit() != Suit::None)  {
-
-        uint8_t idx = game.gameRound->getHand(2)->getCardIndex();
-        if (game.gameRound->getHand(2)->getRank() == Rank::Joker)  idx = 0;
-
-        SpritesU::drawPlusMaskFX(20, 21, Images::Cards_Left, idx + currentPlane); 
-    }
-
-}
 
 void renderBids(uint8_t currentPlane) {
     
-    renderBids(currentPlane, 0);
+
+    { // Player 0
+
+        Bid &bid = game.gameRound->getBid(0);
+
+        switch (bid.getBidType()) {
+
+            case BidType::Suit:
+                {
+                    uint8_t idx = ((10 - bid.getLevel()) * 6) + static_cast<uint8_t>(bid.getSuit());
+                    SpritesU::drawPlusMaskFX(91, 15, Images::Bid_Right, (idx * 3) + currentPlane); 
+                }
+                break;
+
+            case BidType::No_Trumps:
+                {
+                    uint8_t idx = (((10 - bid.getLevel()) * 6) + 5);                          
+                    SpritesU::drawPlusMaskFX(91, 15, Images::Bid_Right, (idx * 3) + currentPlane); 
+                }
+                break;
+
+            case BidType::Pass:
+                SpritesU::drawPlusMaskFX(91, 15, Images::Bid_Right, (23 * 3) + currentPlane); 
+                break;
+        
+            case BidType::Misere:
+                SpritesU::drawPlusMaskFX(91, 15, Images::Bid_Right, (29 * 3) + currentPlane); 
+                break;
+
+
+        }
+
+
+    }
+
+    { // Player 1
+
+        Bid &bid = game.gameRound->getBid(1);
+
+        switch (bid.getBidType()) {
+
+            case BidType::Suit:
+                {
+                    uint8_t idx = ((static_cast<uint8_t>(bid.getSuit()) * 5) + (bid.getLevel() - 6));
+                    SpritesU::drawPlusMaskFX(14, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                }
+                break;
+
+            case BidType::No_Trumps:
+                {
+                    uint8_t idx = (20 + (bid.getLevel() - 6));
+                    SpritesU::drawPlusMaskFX(14, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                }
+                break;
+
+            case BidType::Pass:
+                SpritesU::drawPlusMaskFX(14, 40, Images::Bid_Bottom, (26 * 3) + currentPlane); 
+                break;
+        
+            case BidType::Misere:
+                SpritesU::drawPlusMaskFX(14, 40, Images::Bid_Bottom, (25 * 3) + currentPlane); 
+                break;
+
+
+        }
+
+
+    }
+
+    { // Player 2
+
+        Bid &bid = game.gameRound->getBid(2);
+
+        switch (bid.getBidType()) {
+
+            case BidType::Suit:
+                {
+                    uint8_t idx = (((bid.getLevel() - 6) * 6) + (5 - static_cast<uint8_t>(bid.getSuit())));
+                    SpritesU::drawPlusMaskFX(6, 16, Images::Bid_Left, (idx * 3) + currentPlane); 
+                }
+                break;
+
+            case BidType::No_Trumps:
+                {
+                    uint8_t idx = (((bid.getLevel() - 6) * 6) + 1);
+                    SpritesU::drawPlusMaskFX(6, 16, Images::Bid_Left, (idx * 3) + currentPlane); 
+                }
+                break;
+
+            case BidType::Pass:
+                SpritesU::drawPlusMaskFX(6, 16, Images::Bid_Left, (6 * 3) + currentPlane); 
+                break;
+        
+            case BidType::Misere:
+                SpritesU::drawPlusMaskFX(6, 16, Images::Bid_Left, currentPlane); 
+                break;
+
+
+        }
+
+
+    }
+
+    { // Player 3
+
+        Bid &bid = game.gameRound->getBid(3);
+
+        switch (bid.getBidType()) {
+
+            case BidType::Suit:
+                {
+                    uint8_t idx = ((static_cast<uint8_t>(bid.getSuit()) * 5) + (bid.getLevel() - 6));
+                    SpritesU::drawPlusMaskFX(64, 6, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                }
+                break;
+
+            case BidType::No_Trumps:
+                {
+                    uint8_t idx = (20 + (bid.getLevel() - 6));
+                    SpritesU::drawPlusMaskFX(64, 6, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                }
+                break;
+
+            case BidType::Pass:
+                SpritesU::drawPlusMaskFX(64, 6, Images::Bid_Bottom, (26 * 3) + currentPlane); 
+                break;
+        
+            case BidType::Misere:
+                SpritesU::drawPlusMaskFX(64, 6, Images::Bid_Bottom, (25 * 3) + currentPlane); 
+                break;
+
+
+        }
+
+    }
 
 }
 
-void renderBids(uint8_t currentPlane, uint8_t offset) {
-
-    // uint8_t dealer = game.getDealer() % 4;
-
-    // if (game.players[0].getBid() != Constants::NoBid) {
+void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
         
-    //     SpritesU::drawOverwriteFX(92 + offset, 18, Images::Score_Numbers_Right, (game.players[0].getBid() * 3) + currentPlane); 
-    //     SpritesU::drawOverwriteFX(92 + offset, 24, Images::Score_Numbers_Right, 33 + currentPlane); 
-    //     SpritesU::drawOverwriteFX(92 + offset, 28, Images::Score_Numbers_Right, (game.players[0].getTricks() * 3) + currentPlane); 
+    if (winningHand != 3 || (winningHand == 3 && game.getFrameCount(48))) {
+
+        if (game.gameRound->getHand(3)->getRank() != Rank::None)  {
+
+            uint8_t idx = game.gameRound->getHand(3)->getCardIndex();
+            if (game.gameRound->getHand(3)->getRank() == Rank::Joker) idx = 0;
+            
+            SpritesU::drawPlusMaskFX(38, 9, Images::Cards_Bottom, idx + currentPlane); 
+        }
+
+    }
         
-    //     if (dealer == 0) {
-    //         SpritesU::drawOverwriteFX(93 + offset, 36, Images::Dealer, currentPlane); 
-    //     }
+    if (winningHand != 1 || (winningHand == 1 && game.getFrameCount(48))) {
 
-    // }
-    // else {
+        if (game.gameRound->getHand(1)->getRank() != Rank::None)  {
+
+            uint8_t idx = game.gameRound->getHand(1)->getCardIndex();
+            if (game.gameRound->getHand(1)->getRank() == Rank::Joker) idx = 0;
+
+            SpritesU::drawPlusMaskFX(49, 19, Images::Cards_Bottom, idx + currentPlane); 
+        }
+    }
+            
+    if (winningHand != 0 || (winningHand == 0 && game.getFrameCount(48))) {
+
+        if (game.gameRound->getHand(0)->getRank() != Rank::None)  {
+
+            uint8_t idx = game.gameRound->getHand(0)->getCardIndex();
+            if (game.gameRound->getHand(0)->getRank() == Rank::Joker) idx = 0;
+
+            SpritesU::drawPlusMaskFX(60, 13, Images::Cards_Right, idx + currentPlane); 
+        }
+
+    }
         
-    //     if (dealer == 0) {
-    //         SpritesU::drawOverwriteFX(93 + offset, 24, Images::Dealer, currentPlane); 
-    //     }
+    if (winningHand != 2 || (winningHand == 2 && game.getFrameCount(48))) {
 
-    // }
+        if (game.gameRound->getHand(2)->getRank() != Rank::None)  {
 
-    // if (game.players[1].getBid() != Constants::NoBid) {
+            uint8_t idx = game.gameRound->getHand(2)->getCardIndex();
+            if (game.gameRound->getHand(2)->getRank() == Rank::Joker) idx = 0;
 
-    //     SpritesU::drawOverwriteFX(44, 40 + (offset * 3 > 16 ? 16 : offset * 3), Images::Score_Numbers_Bottom, (game.players[1].getTricks() * 3) + currentPlane); 
-    //     SpritesU::drawOverwriteFX(50, 40 + (offset * 3 > 16 ? 16 : offset * 3), Images::Score_Numbers_Bottom, 33 + currentPlane); 
-    //     SpritesU::drawOverwriteFX(54, 40 + (offset * 3 > 16 ? 16 : offset * 3), Images::Score_Numbers_Bottom, (game.players[1].getBid() * 3) + currentPlane); 
-        
-    //     if (dealer == 1) {
-    //         SpritesU::drawOverwriteFX(62, 41 + (offset * 3 > 16 ? 16 : offset * 3), Images::Dealer, currentPlane); 
-    //     }
+            SpritesU::drawPlusMaskFX(20, 21, Images::Cards_Left, idx + currentPlane); 
+        }
 
-    // }
-    // else {
-        
-    //     if (dealer == 1) {
-    //         SpritesU::drawOverwriteFX(50, 41 + (offset * 3 > 16 ? 16 : offset * 3), Images::Dealer, currentPlane); 
-    //     }
-
-    // }
-
-    // if (game.players[2].getBid() != Constants::NoBid) {
-
-    //     SpritesU::drawOverwriteFX(6 - offset, 18, Images::Score_Numbers_Left, (game.players[2].getTricks() * 3) + currentPlane); 
-    //     SpritesU::drawOverwriteFX(6 - offset, 24, Images::Score_Numbers_Left, 33 + currentPlane); 
-    //     SpritesU::drawOverwriteFX(6 - offset, 28, Images::Score_Numbers_Left, (game.players[2].getBid() * 3) + currentPlane); 
-        
-    //     if (dealer == 2) {
-    //         SpritesU::drawOverwriteFX(7 - offset, 36, Images::Dealer, currentPlane); 
-    //     }
-
-    // }
-    // else {
-        
-    //     if (dealer == 2) {
-    //         SpritesU::drawOverwriteFX(7 - offset, 24, Images::Dealer, currentPlane); 
-    //     }
-
-    // }
-
-    // if (game.players[3].getBid() != Constants::NoBid) {
-
-    //     SpritesU::drawOverwriteFX(44, 6 - offset, Images::Score_Numbers_Bottom, (game.players[3].getTricks() * 3) + currentPlane); 
-    //     SpritesU::drawOverwriteFX(50, 6 - offset, Images::Score_Numbers_Bottom, 33 + currentPlane); 
-    //     SpritesU::drawOverwriteFX(54, 6 - offset, Images::Score_Numbers_Bottom, (game.players[3].getBid() * 3) + currentPlane); 
-
-    //     if (dealer == 3) {
-    //         SpritesU::drawOverwriteFX(62, 7 - offset, Images::Dealer, currentPlane); 
-    //     }
-
-    // }
-    // else {
-
-    //     if (dealer == 3) {
-    //         SpritesU::drawOverwriteFX(50, 7 - offset, Images::Dealer, currentPlane); 
-    //     }
-
-    // }
+    }
 
 }

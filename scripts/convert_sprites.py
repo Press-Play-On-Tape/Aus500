@@ -153,7 +153,12 @@ convert_header(IMAGES + 'Cards/Flip/Flip.png',                                  
 # convert_header(IMAGES + 'Instructions_Arrows.png',                                             BASE + 'Images.hpp', 'Instructions_Arrows', 4, 8, 8)
 # convert_header(IMAGES + 'Pause.png',                                                           BASE + 'Images.hpp', 'Pause', 4, 128, 64)
 
-convert_header(IMAGES + 'Bid/Bid_Panel.png',                                                   BASE + 'Images.hpp', 'Bid_Panel', 4, 53, 32)
+convert_header(IMAGES + 'Bid/Bid_Panel.png',                                                   BASE + 'Images.hpp', 'Bid_Panel', 4, 52, 24)
 convert_header(IMAGES + 'Bid/Bid_Suits.png',                                                   BASE + 'Images.hpp', 'Bid_Suits', 4, 9, 8)
 convert_header(IMAGES + 'Bid/Bid_Numbers.png',                                                 BASE + 'Images.hpp', 'Bid_Numbers', 4, 7, 8)
+
+convert_header(IMAGES + 'Bid/Bid_Bottom.png',                                                  BASE + 'Images.hpp', 'Bid_Bottom', 4, 23, 8)
+convert_header(IMAGES + 'Bid/Bid_Left.png',                                                    BASE + 'Images.hpp', 'Bid_Left', 4, 8, 24)
+convert_header(IMAGES + 'Bid/Bid_Right.png',                                                   BASE + 'Images.hpp', 'Bid_Right', 4, 8, 24)
+convert_header(IMAGES + 'Bid/Bid_Result.png',                                                  BASE + 'Images.hpp', 'Bid_Result', 4, 40, 8)
 convert_header(IMAGES + 'Titles/Title500.png',                                                 BASE + 'Images.hpp', 'Title500', 4)

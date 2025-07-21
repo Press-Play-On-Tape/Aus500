@@ -292,6 +292,10 @@ struct GameRound {
             this->currentPlayer = winningPlayer;
             this->handCount--;
 
+        }
+
+        void resetHand() {
+
             for (uint8_t i = 0; i < 4; i++) {
                 this->hand[i].reset();
             }

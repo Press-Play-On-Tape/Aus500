@@ -80,14 +80,31 @@ struct Bid {
             
         }
 
-        /**
-        * @brief Compares this bid to another to see which is higher ranking in 500.
-        * @param other The other bid to compare against.
-        * @return True if this bid is higher than the other, false otherwise.
-        */
+
         bool isHigherThan(const Bid& other) const {
 
             return this->getScore() > other.getScore();
+
+        }
+
+
+        uint8_t getImageIndex() {
+        
+            switch (this->getBidType()) {
+
+                case BidType::Suit:
+                    return (static_cast<uint8_t>(this->suit) * 5) + (this->level - 6);
+
+                case BidType::No_Trumps:
+                    return 20 + (this->level - 6);
+
+                case BidType::Pass:
+                    return 26;
+
+                case BidType::Misere:
+                    return 27;
+
+            }
 
         }
 

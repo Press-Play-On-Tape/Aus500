@@ -22,6 +22,7 @@ struct Game {
         GameRound *gameRound;
 
         uint16_t getFrameCount()                        { return this->frameCount; }
+        uint16_t getFrameCount(uint8_t val)             { return this->frameCount % val < val / 2; }
         uint8_t getSelectedCard()                       { return this->selecteCard; }
         GameState getPrevGameState()                    { return this->prevGameState; }
 

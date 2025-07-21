@@ -29,6 +29,36 @@ enum class MusicSFX : uint8_t {
 #endif
 
 
+enum class BidMode : uint8_t { 
+    Level, 
+    Suit, 
+    Bid, 
+    Pass, 
+    Misere,
+};
+
+inline BidMode &operator++(BidMode &c) {
+    c = static_cast<BidMode>( static_cast<uint8_t>(c) + 1 );
+    return c;
+}
+
+inline BidMode operator++(BidMode &c, int) {
+    BidMode result = c;
+    ++c;
+    return result;
+}
+
+inline BidMode &operator--(BidMode &c) {
+    c = static_cast<BidMode>( static_cast<uint8_t>(c) - 1 );
+    return c;
+}
+
+inline BidMode operator--(BidMode &c, int) {
+    BidMode result = c;
+    --c;
+    return result;
+}
+
 enum class Suit : uint8_t { 
     Spades, 
     Clubs, 
@@ -184,6 +214,7 @@ enum class GameState : uint8_t {
         Bid, 
         Bid_Finished,
         Bid_Failed,
+        Bid_Error,
         Handle_Kitty,
         Play_Round_Start,
         Play_00,

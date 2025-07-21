@@ -245,6 +245,7 @@ void play_Update() {
 
         case GameState::Play_Deal_42:
 
+            game.setFrameCount(0);
             gameState = GameState::Bid;
             dealKitty();
             break;
@@ -267,6 +268,7 @@ void play_Update() {
 
             }
 
+            game.setFrameCount(0);
             gameState = GameState::Bid;
         
             break;
@@ -274,90 +276,135 @@ void play_Update() {
         case GameState::Bid:
             {
 
-                Bid &highestBid = game.gameRound->getHighestBid();
-                Bid &previousBid = game.gameRound->getBid(playerCurrentlyBidding);
-                Bid &partnerBid = game.gameRound->getBid((playerCurrentlyBidding + 2) % 4);
+                if (playerCurrentlyBidding == 1) {
 
-                Bid retBid = game.players[playerCurrentlyBidding].bid(previousBid, partnerBid, highestBid);
-                previousBid.setBidScore(retBid.getBidScore());
-                previousBid.setBidType(retBid.getBidType());
-                previousBid.setLevel(retBid.getLevel());
-                previousBid.setSuit(retBid.getSuit());
+                    if (justPressed & LEFT_BUTTON && bidMode == BidMode::Suit)          bidMode--;
+                    else if (justPressed & LEFT_BUTTON && bidMode > BidMode::Suit)      bidMode = BidMode::Suit;
+                    else if (justPressed & RIGHT_BUTTON && bidMode < BidMode::Bid)      bidMode++;
 
-                #if defined(DEBUG) && defined(DEBUG_FORCE_NOBID)
-                    game.gameRound->getBid(playerCurrentlyBidding).setBidType(BidType::Pass);
-                #endif
-
-                if (game.gameRound->getBid(playerCurrentlyBidding).getBidType() != BidType::Pass && game.gameRound->getBid(playerCurrentlyBidding).isHigherThan(game.gameRound->getHighestBid())) {
+                    else if (justPressed & UP_BUTTON) {
                     
-                    #ifdef DEBUG
-                        DEBUG_PRINT(F("Player "));
-                        DEBUG_PRINT(playerCurrentlyBidding);
-                        DEBUG_PRINT(F(" bids "));
-                        DEBUG_PRINT_BID(previousBid.getBidType(), previousBid.getSuit(), previousBid.getLevel());
-                        DEBUG_PRINTLN();
-                    #endif
+                        if (bidMode == BidMode::Level && bidLevel < 4)                  bidLevel++;
+                        if (bidMode == BidMode::Suit  && bidSuit < 4)                   bidSuit++;
+                        if (bidMode == BidMode::Pass || bidMode == BidMode::Misere)     bidMode--;
 
-                    game.gameRound->setHighestBid(game.gameRound->getBid(playerCurrentlyBidding));
-                    winningBidIdx = playerCurrentlyBidding;
-                }
-                else {
-
-                    #ifdef DEBUG
-                        DEBUG_PRINT(F("Player "));
-                        DEBUG_PRINT(playerCurrentlyBidding);
-                        DEBUG_PRINTLN(F(" passes"));
-                    #endif
-
-                }
-
-                uint8_t continueBiddingCount = 0;
-                uint8_t bids = 0;
-                uint8_t passes = 0;
-
-                for (uint8_t i = 0; i < 4; i++) {
-
-                    if (game.gameRound->getBid(i).getBidType() != BidType::Pass) {
-                        continueBiddingCount++;
                     }
 
-                    switch (game.gameRound->getBid(i).getBidType()) {
+                    else if (justPressed & DOWN_BUTTON) {
 
-                        case BidType::Suit:
-                        case BidType::No_Trumps:
-                        case BidType::Misere:
-                        #ifdef OPEN_MISERE
-                        case BidType::Open_Misere:
+                        if (bidMode == BidMode::Level && bidLevel > 0)                  bidLevel--;
+                        if (bidMode == BidMode::Suit && bidSuit > 0)                    bidSuit--;
+                        if (bidMode == BidMode::Bid || bidMode == BidMode::Pass)        bidMode++;
+
+                    }
+
+                    else if (justPressed & A_BUTTON) {
+
+                        if (bidMode == BidMode::Bid || bidMode == BidMode::Misere) {
+
+                            Bid bid;
+                            Bid &highestBid = game.gameRound->getHighestBid();
+                            Bid &playersBid = game.gameRound->getBid(1);
+                            
+                            bid.setLevel(bidLevel + 6);
+
+                            if (bidMode == BidMode::Misere) {
+
+                                bid.setBidType(BidType::Misere);
+
+                            }
+                            else {
+                                
+                                if (bidSuit == 4) {
+
+                                    bid.setSuit(Suit::No_Trumps);
+                                    bid.setBidType(BidType::No_Trumps);
+                                }
+                                else {
+
+                                    bid.setSuit(static_cast<Suit>(bidSuit));
+                                    bid.setBidType(BidType::Suit);
+                                }
+
+                            }
+
+                            if (bid.isHigherThan(highestBid)) {
+
+                                highestBid.setLevel(bid.getLevel());
+                                highestBid.setSuit(bid.getSuit());
+                                highestBid.setBidScore(bid.getBidScore());
+                                highestBid.setBidType(bid.getBidType());
+
+                                playersBid.setLevel(bid.getLevel());
+                                playersBid.setSuit(bid.getSuit());
+                                playersBid.setBidScore(bid.getBidScore());
+                                playersBid.setBidType(bid.getBidType());
+
+                                continueBidding();
+
+                            }
+                            else {
+
+                                gameState = GameState::Bid_Error;
+
+                            }
+
+                        }
+
+                        else if (bidMode == BidMode::Pass) {
+
+                            game.gameRound->getBid(1).setBidType(BidType::Pass);
+                            continueBidding();
+
+                        }
+
+                    }
+
+                }
+                else {
+                    
+                    if (game.getFrameCount() == 32) {
+
+                        Bid &highestBid = game.gameRound->getHighestBid();
+                        Bid &previousBid = game.gameRound->getBid(playerCurrentlyBidding);
+                        Bid &partnerBid = game.gameRound->getBid((playerCurrentlyBidding + 2) % 4);
+
+                        Bid retBid = game.players[playerCurrentlyBidding].bid(previousBid, partnerBid, highestBid);
+                        previousBid.setBidScore(retBid.getBidScore());
+                        previousBid.setBidType(retBid.getBidType());
+                        previousBid.setLevel(retBid.getLevel());
+                        previousBid.setSuit(retBid.getSuit());
+
+                        #if defined(DEBUG) && defined(DEBUG_FORCE_NOBID)
+                            game.gameRound->getBid(playerCurrentlyBidding).setBidType(BidType::Pass);
                         #endif
-                            bids++;
-                            break;
 
-                        case BidType::Pass:     
-                            passes++;
-                            break;
+                        if (game.gameRound->getBid(playerCurrentlyBidding).getBidType() != BidType::Pass && game.gameRound->getBid(playerCurrentlyBidding).isHigherThan(game.gameRound->getHighestBid())) {
+                            
+                            #ifdef DEBUG
+                                DEBUG_PRINT(F("Player "));
+                                DEBUG_PRINT(playerCurrentlyBidding);
+                                DEBUG_PRINT(F(" bids "));
+                                DEBUG_PRINT_BID(previousBid.getBidType(), previousBid.getSuit(), previousBid.getLevel());
+                                DEBUG_PRINTLN();
+                            #endif
+
+                            game.gameRound->setHighestBid(game.gameRound->getBid(playerCurrentlyBidding));
+                            winningBidIdx = playerCurrentlyBidding;
+                        }
+                        else {
+
+                            #ifdef DEBUG
+                                DEBUG_PRINT(F("Player "));
+                                DEBUG_PRINT(playerCurrentlyBidding);
+                                DEBUG_PRINTLN(F(" passes"));
+                            #endif
+
+                        }
+
+                        continueBidding();
 
                     }
-
-                }
-
-                if (passes < 3 || (passes == 3 && bids == 0)) {
-
-                    do {    // Skip to the next non-passed player ..
-
-                        playerCurrentlyBidding = (playerCurrentlyBidding + 1) % 4;
-
-                    }
-                    while (game.gameRound->getBid(playerCurrentlyBidding).getBidType() == BidType::Pass);
-
-                }
-                else if (passes == 3 && bids == 1) {
-
-                    gameState++;     
-
-                }
-                else {
-
-                    gameState = GameState::Bid_Failed;
 
                 }
 
@@ -397,6 +444,14 @@ void play_Update() {
 
         case GameState::Bid_Failed:
             gameState = GameState::Play_Shuffle;
+            break;
+
+        case GameState::Bid_Error:
+
+            if (justPressed & A_BUTTON) {
+                gameState = GameState::Bid;
+            }
+
             break;
 
         case GameState::Handle_Kitty:
@@ -685,8 +740,10 @@ Serial.println("-------");
             }
             else {
 
-                if (gameRound.getRound() != 10 || (justPressed & A_BUTTON)) {
+                // if (gameRound.getRound() != 10 || (justPressed & A_BUTTON)) {
+                if (justPressed & A_BUTTON) {
                 
+                    game.gameRound->resetHand();
                     gameState = GameState::Play_Round_Start;
 
                 }
@@ -748,61 +805,109 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
             break;
 
-        case GameState::Bid ... GameState::Handle_Kitty:
+        case GameState::Bid:
+
+            SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
+            renderPlayerHands(currentPlane, LIGHT_GREY);
+            renderBids(currentPlane);
+
+            if (playerCurrentlyBidding == 1) {
+
+                SpritesU::drawPlusMaskFX(27, 15, Images::Bid_Panel, (static_cast<uint8_t>(bidMode) * 3) + currentPlane);
+                SpritesU::drawOverwriteFX(31, 24, Images::Bid_Numbers, ((bidLevel + (bidMode != BidMode::Level ? 5 : 0)) * 3) + currentPlane);
+                SpritesU::drawOverwriteFX(40, 23, Images::Bid_Suits, ((bidSuit + (bidMode != BidMode::Suit ? 5 : 0)) * 3) + currentPlane);
+            }
+
+            break;
+
+        case GameState::Bid_Finished ... GameState::Bid_Failed:
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
             renderPlayerHands(currentPlane, LIGHT_GREY);
             renderKitty(currentPlane);
+            renderBids(currentPlane);
 
             break;
 
-        case GameState::Play_Round_Start ... GameState::Play_EndOfGame:
+        case GameState::Bid_Error:
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
             renderPlayerHands(currentPlane, LIGHT_GREY);
-            renderTableCards(currentPlane);
+            renderBids(currentPlane);
+
+            SpritesU::drawPlusMaskFX(27, 15, Images::Bid_Panel, (5 * 3) + currentPlane);
+            SpritesU::drawOverwriteFX(33, 29, Images::Bid_Result, (game.gameRound->getHighestBid().getImageIndex() * 3) + currentPlane);
+
+            break;
+
+        case GameState::Handle_Kitty ... GameState::Play_EndOfGame:
+
+            SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
+            renderPlayerHands(currentPlane, LIGHT_GREY);
+            renderTableCards(currentPlane, 2);
+            // renderBids(currentPlane);
 
             break;
 
 
-        // case GameState::Play_Flip:
-
-        //     SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-        //     // SpritesU::drawOverwriteFX(109, 36, Images::Numbers, ((game.getCardCount() - 1) * 3) + currentPlane);
-        //     // SpritesU::drawOverwriteFX(111, 52, Images::Arrows, (static_cast<uint8_t>(game.getDirection()) * 3) + currentPlane);
-        //     renderPlayerHands(currentPlane, LIGHT_GREY);
-        //     SpritesU::drawOverwriteFX(109, 1, Images::Hand_Full, currentPlane);
-        //     SpritesU::drawPlusMaskFX(110, 1, Images::Flip, ((game.getFrameCount() / 2) * 3) + currentPlane);
-        //     break;
-
-        // case GameState::Play_Bid_01:
-        // case GameState::Play_Bid_11:
-
-        //     SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-        //     // SpritesU::drawOverwriteFX(109, 36, Images::Numbers, ((game.getCardCount() - 1) * 3) + currentPlane);
-        //     // SpritesU::drawOverwriteFX(111, 52, Images::Arrows, (static_cast<uint8_t>(game.getDirection()) * 3) + currentPlane);
-        //     renderBids(currentPlane);
-        //     renderPlayerHands(currentPlane, LIGHT_GREY);
-        //     // SpritesU::drawPlusMaskFX(109, 0, Images::Cards_Bottom_Grey, game.getTurnedCard().getCardIndex() + currentPlane);
-        //     SpritesU::drawOverwriteFX(34, 21, Images::Bid, (bid * 3) + currentPlane);
-        //     break;
-
-        // case GameState::Play_Bid_00:
-        // case GameState::Play_Bid_02:
-        // case GameState::Play_Bid_03:
-        // case GameState::Play_Bid_10:
-        // case GameState::Play_Bid_12:
-
-        //     SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-        //     // SpritesU::drawOverwriteFX(109, 36, Images::Numbers, ((game.getCardCount() - 1) * 3) + currentPlane);
-        //     // SpritesU::drawOverwriteFX(111, 52, Images::Arrows, (static_cast<uint8_t>(game.getDirection()) * 3) + currentPlane);
-        //     renderBids(currentPlane);
-        //     renderPlayerHands(currentPlane, DARK_GREY);
-        //     // SpritesU::drawPlusMaskFX(109, 0, Images::Cards_Bottom_Grey, game.getTurnedCard().getCardIndex() + currentPlane);
-        //     break;
 
 
     }
 
 }
 
+void continueBidding() {
+
+    uint8_t continueBiddingCount = 0;
+    uint8_t bids = 0;
+    uint8_t passes = 0;
+
+    for (uint8_t i = 0; i < 4; i++) {
+
+        if (game.gameRound->getBid(i).getBidType() != BidType::Pass) {
+            continueBiddingCount++;
+        }
+
+        switch (game.gameRound->getBid(i).getBidType()) {
+
+            case BidType::Suit:
+            case BidType::No_Trumps:
+            case BidType::Misere:
+            #ifdef OPEN_MISERE
+            case BidType::Open_Misere:
+            #endif
+                bids++;
+                break;
+
+            case BidType::Pass:     
+                passes++;
+                break;
+
+        }
+
+    }
+
+
+    if (passes < 3 || (passes == 3 && bids == 0)) {
+
+        do {    // Skip to the next non-passed player ..
+
+            playerCurrentlyBidding = (playerCurrentlyBidding + 1) % 4;
+
+        }
+        while (game.gameRound->getBid(playerCurrentlyBidding).getBidType() == BidType::Pass);
+        game.setFrameCount(0);
+
+    }
+    else if (passes == 3 && bids == 1) {
+
+        gameState++;     
+
+    }
+    else {
+
+        gameState = GameState::Bid_Failed;
+
+    }
+    
+}
