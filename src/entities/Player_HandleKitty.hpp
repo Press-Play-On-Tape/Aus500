@@ -98,7 +98,7 @@ void handleKitty() {
                                     
                     case 3:
                         if (scoreOfSuit <= 34) {
-                            
+                          
                             uint8_t cardsDiscarded = this->discardAll_InSuit(suit);
                             numberDiscarded = numberDiscarded + cardsDiscarded;
                             
@@ -120,7 +120,7 @@ void handleKitty() {
                 if (numberDiscarded == 3) return;
  
             }
- 
+
 
             // If we have not unloaded 3 cards, discard the lowest cards of the shortest suits ..
 
@@ -222,7 +222,7 @@ void handleKitty() {
                 }
 
             }
-             
+            
             this->sort();
 
             break;

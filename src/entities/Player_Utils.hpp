@@ -748,8 +748,8 @@ uint8_t discardAll_InSuit(Suit suit) {
 
 }
 
-// Discard all cards in hand with a rank of 'lowestRank' or above ..
 
+// Discard all cards in hand with a rank of 'lowestRank' or above ..
 
 uint8_t discardAll_InSuit(Suit suit, Rank lowestRank) {
 
@@ -770,9 +770,6 @@ uint8_t discardAll_InSuit(Suit suit, Rank lowestRank) {
             Card *card = &cards[j];
 
             if (card->getSuit() == suit && card->getRank() == rank) {
-
-                this->gameRound->getHand(this->gameRound->getCurrentPlayer())->setSuit(card->getSuit());
-                this->gameRound->getHand(this->gameRound->getCurrentPlayer())->setRank(card->getRank());
                 
                 this->cardCount--;
                 cardsDiscarded++;
@@ -813,9 +810,6 @@ void discardCard(Card &discardCard) {
         Card *card = &cards[j];
 
         if (card->getSuit() == discardCard.getSuit() && card->getRank() == discardCard.getRank()) {
-
-            this->gameRound->getHand(this->gameRound->getCurrentPlayer())->setSuit(card->getSuit());
-            this->gameRound->getHand(this->gameRound->getCurrentPlayer())->setRank(card->getRank());
             
             this->cardCount--;
             cardsDiscarded++;

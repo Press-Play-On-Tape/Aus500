@@ -400,7 +400,6 @@ void play_Update() {
             break;
 
         case GameState::Handle_Kitty:
-
             game.gameRound->setRound(0);
             game.gameRound->clearKitty();
             game.players[game.gameRound->getWinningBid_Idx()].handleKitty();
@@ -416,6 +415,7 @@ void play_Update() {
 
         case GameState::Play_Round_Start:
             {
+            
                 game.gameRound->incRound();
 
 

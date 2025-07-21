@@ -6,7 +6,7 @@
 #define DEBUG_PRINTLN  Serial.println
 #define DEBUG_BREAK    asm volatile("break\n");
 
-#define _DEBUG
+#define DEBUG
 #define DEBUG_BASIC
 #define DEBUG_SOUND
 
@@ -26,7 +26,7 @@
 
 //Kitty
 
-#define _DEBUG_HANDLEKITTY_TRUMPS
+#define DEBUG_HANDLEKITTY_TRUMPS
 #define _DEBUG_HANDLEKITTY_MISERE
 
 //Play
