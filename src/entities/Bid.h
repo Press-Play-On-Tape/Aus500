@@ -9,10 +9,10 @@ struct Bid {
 
     private:
     
-        uint8_t playerIdx = 0;
-        BidType type = BidType::Pass;
         Suit suit = Suit::None;       
         uint8_t level = 0;                              // e.g., 6 for "6 Spades", 8 for "8 No Trumps"
+        uint8_t playerIdx = 0;
+        BidType type = BidType::Pass;
         uint16_t bidScore = 0;                          // The internal evaluation score for the hand
 
     public:
@@ -27,6 +27,7 @@ struct Bid {
         void setBidType(BidType val)                    { this->type = val; }
         void setLevel(uint8_t val)                      { this->level = val; }
         void setBidScore(uint16_t val)                  { this->bidScore = val; }
+        void setPlayerIdx(uint16_t val)                 { this->playerIdx = val; }
 
         void reset(uint8_t playerIdx) {
         
@@ -39,27 +40,31 @@ struct Bid {
         }
               
         uint16_t getScore() {
-        
+
             switch (this->getBidType()) {
             
                 case BidType::No_Trumps:
                     return (((this->getLevel() - 6) * 100) + 120);
 
                 case BidType::Suit:
+                    {
+                        uint16_t base = ((this->getLevel() - 6) * 100);
 
-                    switch (this->getSuit()) {
-                    
-                        case Suit::Spades:
-                            return (((this->getLevel() - 6) * 100) + 40);
-                    
-                        case Suit::Clubs:
-                            return (((this->getLevel() - 6) * 100) + 60);
-                    
-                        case Suit::Diamonds:
-                            return (((this->getLevel() - 6) * 100) + 80);
-                    
-                        case Suit::Hearts:
-                            return (((this->getLevel() - 6) * 100) + 100);
+                        switch (this->getSuit()) {
+                        
+                            case Suit::Spades:
+                                return base + 40;
+                        
+                            case Suit::Clubs:
+                                return base + 60;
+                        
+                            case Suit::Diamonds:
+                                return base + 80;
+                        
+                            case Suit::Hearts:
+                                return base + 100;
+
+                        }
 
                     }
 
@@ -106,6 +111,15 @@ struct Bid {
 
             }
 
+        }
+
+        void setBid(Bid &bid) {
+        
+            this->setBidScore(bid.getBidScore());
+            this->setBidType(bid.getBidType());
+            this->setLevel(bid.getLevel());
+            this->setSuit(bid.getSuit());
+            
         }
 
 };

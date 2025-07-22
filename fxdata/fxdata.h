@@ -66,17 +66,17 @@ namespace Images
   constexpr uint24_t Numbers_3x5 = 0x02FCE0;
   constexpr uint24_t Arrows = 0x032A96;
   constexpr uint24_t HighScores = 0x032AE6;
-  constexpr uint24_t Dealer = 0x0334D8;
-  constexpr uint24_t Hand_Full = 0x0334E9;
-  constexpr uint24_t Rotate = 0x033584;
-  constexpr uint24_t Flip = 0x039AC6;
-  constexpr uint24_t Bid_Panel = 0x03ACC8;
-  constexpr uint24_t Bid_Suits = 0x03C2BA;
-  constexpr uint24_t Bid_Numbers = 0x03C3CA;
-  constexpr uint24_t Bid_Bottom = 0x03C49E;
-  constexpr uint24_t Bid_Left = 0x03D4CC;
-  constexpr uint24_t Bid_Right = 0x03E5AE;
-  constexpr uint24_t Bid_Result = 0x03F690;
-  constexpr uint24_t Title500 = 0x04033A;
+  constexpr uint24_t Hand_Full = 0x0334D8;
+  constexpr uint24_t Rotate = 0x033573;
+  constexpr uint24_t Flip = 0x039AB5;
+  constexpr uint24_t Bid_Panel = 0x03ACB7;
+  constexpr uint24_t Bid_Suits = 0x03C2A9;
+  constexpr uint24_t Bid_Numbers = 0x03C3B9;
+  constexpr uint24_t Bid_Bottom = 0x03C48D;
+  constexpr uint24_t Bid_Left = 0x03D4BB;
+  constexpr uint24_t Bid_Right = 0x03E59D;
+  constexpr uint24_t Bid_Result = 0x03F67F;
+  constexpr uint24_t Title500 = 0x040329;
+  constexpr uint24_t Dealer = 0x040F2B;
 }
 

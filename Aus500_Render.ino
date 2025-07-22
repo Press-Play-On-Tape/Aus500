@@ -211,7 +211,6 @@ void renderBids(uint8_t currentPlane) {
                 SpritesU::drawPlusMaskFX(91, 15, Images::Bid_Right, (29 * 3) + currentPlane); 
                 break;
 
-
         }
 
 
@@ -226,25 +225,32 @@ void renderBids(uint8_t currentPlane) {
             case BidType::Suit:
                 {
                     uint8_t idx = ((static_cast<uint8_t>(bid.getSuit()) * 5) + (bid.getLevel() - 6));
-                    SpritesU::drawPlusMaskFX(14, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawOverwriteFX(39 - (bid.getLevel() == 10 ? 2 : 0), 40, Images::Dealer, currentPlane); 
                 }
                 break;
 
             case BidType::No_Trumps:
                 {
                     uint8_t idx = (20 + (bid.getLevel() - 6));
-                    SpritesU::drawPlusMaskFX(14, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawOverwriteFX(38 - (bid.getLevel() == 10 ? 2 : 0), 40, Images::Dealer, currentPlane); 
                 }
                 break;
 
             case BidType::Pass:
-                SpritesU::drawPlusMaskFX(14, 40, Images::Bid_Bottom, (26 * 3) + currentPlane); 
+                SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (26 * 3) + currentPlane); 
+                SpritesU::drawOverwriteFX(36, 40, Images::Dealer, currentPlane); 
                 break;
         
             case BidType::Misere:
-                SpritesU::drawPlusMaskFX(14, 40, Images::Bid_Bottom, (25 * 3) + currentPlane); 
+                SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (25 * 3) + currentPlane); 
+                SpritesU::drawOverwriteFX(34, 40, Images::Dealer, currentPlane); 
                 break;
 
+            case BidType::None:
+                SpritesU::drawOverwriteFX(52, 40, Images::Dealer, currentPlane); 
+                break;
 
         }
 
@@ -294,23 +300,31 @@ void renderBids(uint8_t currentPlane) {
             case BidType::Suit:
                 {
                     uint8_t idx = ((static_cast<uint8_t>(bid.getSuit()) * 5) + (bid.getLevel() - 6));
-                    SpritesU::drawPlusMaskFX(64, 6, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawOverwriteFX(61 + (bid.getLevel() == 10 ? 1 : 0), 6, Images::Dealer, currentPlane); 
                 }
                 break;
 
             case BidType::No_Trumps:
                 {
                     uint8_t idx = (20 + (bid.getLevel() - 6));
-                    SpritesU::drawPlusMaskFX(64, 6, Images::Bid_Bottom, (idx * 3) + currentPlane); 
-                }
+                    SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawOverwriteFX(62 + (bid.getLevel() == 10 ? 2 : 0), 6, Images::Dealer, currentPlane); 
+               }
                 break;
 
             case BidType::Pass:
-                SpritesU::drawPlusMaskFX(64, 6, Images::Bid_Bottom, (26 * 3) + currentPlane); 
+                SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Bottom, (26 * 3) + currentPlane); 
+                SpritesU::drawOverwriteFX(64, 6, Images::Dealer, currentPlane); 
                 break;
         
             case BidType::Misere:
-                SpritesU::drawPlusMaskFX(64, 6, Images::Bid_Bottom, (25 * 3) + currentPlane); 
+                SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Bottom, (25 * 3) + currentPlane); 
+                SpritesU::drawOverwriteFX(66, 6, Images::Dealer, currentPlane); 
+                break;
+
+            case BidType::None:
+                SpritesU::drawOverwriteFX(52, 6, Images::Dealer, currentPlane); 
                 break;
 
 

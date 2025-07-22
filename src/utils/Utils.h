@@ -5,7 +5,7 @@
 
 void DEBUG_PRINT_SUIT(Suit suit) {
 
-    #ifdef DEBUG_BASIC
+    #ifdef DEBUG
 
         switch (suit) {
 
@@ -41,7 +41,7 @@ void DEBUG_PRINT_SUIT(Suit suit) {
 
 void DEBUG_PRINT_RANK(Rank rank) {
 
-    #ifdef DEBUG_BASIC
+    #ifdef DEBUG
 
         switch (rank) {
 
@@ -78,7 +78,7 @@ void DEBUG_PRINT_RANK(Rank rank) {
 
 void DEBUG_PRINT_CARD(Suit suit, Rank rank) {
 
-    #ifdef DEBUG_BASIC
+    #ifdef DEBUG
 
         DEBUG_PRINT_RANK(rank);
         DEBUG_PRINT_SUIT(suit);
@@ -90,7 +90,7 @@ void DEBUG_PRINT_CARD(Suit suit, Rank rank) {
 
 void DEBUG_PRINT_SPACE() {
 
-    #ifdef DEBUG_BASIC
+    #ifdef DEBUG
 
         DEBUG_PRINT(F(" "));
 

@@ -139,7 +139,6 @@ convert_header(IMAGES + 'HUD/Numbers.png',                                      
 convert_header(IMAGES + 'HUD/Numbers_3x5.png',                                                 BASE + 'Images.hpp', 'Numbers_3x5', 4, 13, 8)
 convert_header(IMAGES + 'HUD/Arrows.png',                                                      BASE + 'Images.hpp', 'Arrows', 4, 13, 8)
 convert_header(IMAGES + 'HUD/HighScores.png',                                                  BASE + 'Images.hpp', 'HighScores', 4)
-convert_header(IMAGES + 'HUD/Dealer.png',                                                      BASE + 'Images.hpp', 'Dealer', 4)
 
 convert_header(IMAGES + 'Cards/Hand_Full.png',                                                 BASE + 'Images.hpp', 'Hand_Full', 4)
 convert_header(IMAGES + 'Cards/Rotate/Rotate.png',                                             BASE + 'Images.hpp', 'Rotate', 4, 30, 32)
@@ -162,3 +161,4 @@ convert_header(IMAGES + 'Bid/Bid_Left.png',                                     
 convert_header(IMAGES + 'Bid/Bid_Right.png',                                                   BASE + 'Images.hpp', 'Bid_Right', 4, 8, 24)
 convert_header(IMAGES + 'Bid/Bid_Result.png',                                                  BASE + 'Images.hpp', 'Bid_Result', 4, 40, 8)
 convert_header(IMAGES + 'Titles/Title500.png',                                                 BASE + 'Images.hpp', 'Title500', 4)
+convert_header(IMAGES + 'Dealer.png',                                                          BASE + 'Images.hpp', 'Dealer', 4)

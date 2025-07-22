@@ -7,8 +7,7 @@
 #define DEBUG_BREAK    asm volatile("break\n");
 
 #define DEBUG
-#define DEBUG_BASIC
-#define DEBUG_SOUND
+#define _DEBUG_BASIC
 
 
 // Bidding
@@ -51,36 +50,6 @@
 #define _DEBUG_GETBOTTOM_NONSUIT
 #define _DEBUG_GETNEXTLOWEST_NONTRUMP_INSUIT
 #define _DEBUG_NUMBER_OF_UNPLAYED_CARDS
-
-
-#ifndef DEBUG_SOUND
-namespace Music {
-
-    constexpr uint24_t Songs[] = { Music::Song_MainTheme };
-
-    constexpr uint24_t SFXs[] =  { Music::SFX_Death, 
-                                   Music::SFX_Victory,
-                                   Music::SFX_XPGain,
-                                   Music::SFX_Three_Inc,
-                                   Music::SFX_Three_Dec,
-                                   Music::SFX_PlayerBlip,
-                                   Music::SFX_EnemyBlip,
-                                   Music::SFX_Explosion,
-                                   Music::SFX_DoubleBeep,
-                                   Music::SFX_DoubleBeepDown,
-                                   Music::SFX_Bet1,
-                                   Music::SFX_Bet2,
-                                   Music::SFX_Bet3,
-                                   Music::SFX_Bet4,
-                                   Music::SFX_Bet5,
-                                   Music::SFX_Bet6,
-                                   Music::SFX_Click,
-                                   Music::SFX_SmallBlind,
-                                   Music::SFX_BigBlind,
-                                };
-
-}
-#endif
 
 
 namespace Constants {

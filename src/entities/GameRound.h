@@ -796,6 +796,7 @@ struct GameRound {
 
                 DEBUG_PRINT(F("Card led suit: "));            
                 DEBUG_PRINT_SUIT(cardLedSuit);
+                DEBUG_PRINTLN();
 
             #endif
 
@@ -813,7 +814,7 @@ struct GameRound {
 
                             Card &card = this->hand[i];
 
-                            if (card.isTrump(trumps) && card.getRank() > rank) {
+                            if (card.isTrump(trumps) && card.getRank(trumps) > rank) {
 
                                 rank = card.getRank(trumps);
                                 returnIdx = i;

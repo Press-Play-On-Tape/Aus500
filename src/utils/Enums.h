@@ -1,34 +1,5 @@
 #pragma once
 
-#ifndef DEBUG_SOUND
-enum class MusicSong : uint8_t {
-    MainTheme
-};
-
-enum class MusicSFX : uint8_t {
-    SFX_Death,
-    SFX_Victory,
-    SFX_XPGain,
-    SFX_Three_Inc,
-    SFX_Three_Dec,
-    SFX_PlayerBlip,
-    SFX_EnemyBlip,
-    SFX_Explosion,
-    SFX_DoubleBeep,
-    SFX_DoubleBeepDown,
-    SFX_Bet1,
-    SFX_Bet2,
-    SFX_Bet3,
-    SFX_Bet4,
-    SFX_Bet5,
-    SFX_Bet6,
-    SFX_Click,
-    SFX_SmallBlind,
-    SFX_BigBlind,
-};
-#endif
-
-
 enum class BidMode : uint8_t { 
     Level, 
     Suit, 

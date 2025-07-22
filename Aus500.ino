@@ -9,6 +9,7 @@
 #include "src/utils/Enums.h"
 #include "src/utils/Constants.h"
 #include "src/utils/Utils.h"
+#include "src/entities/BidInput.h"
 #include "src/entities/Card.h"
 #include "src/entities/Deck.h"
 #include "src/entities/Bid.h"
@@ -29,16 +30,6 @@
 
 extern ArduboyGBase_Config<ABG_Mode::L4_Triplane> a;
 decltype(a) a;
-
-#ifndef DEBUG_SOUND
-    #define SYNTHU_IMPLEMENTATION
-    #define SYNTHU_NUM_CHANNELS 6
-    #define SYNTHU_UPDATE_EVERY_N_FRAMES 3
-    #define SYNTHU_ENABLE_SFX 1
-    #define SYNTHU_FX_READDATABYTES_FUNC FX::readDataBytes
-    #include "src/utils/SynthU.hpp"
-    #define ABG_TIMER1
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,9 +58,7 @@ DealPhysics dealPhysics;
 uint16_t seed = 72;
 #endif
 
-BidMode bidMode = BidMode::Level;
-uint8_t bidSuit = 0;
-uint8_t bidLevel = 0; 
+BidInput bidInput;
 
 void setup() {
 
@@ -79,11 +68,6 @@ void setup() {
     
     FX::begin(FX_DATA_PAGE, FX_SAVE_PAGE);
     // FX::loadGameState((uint8_t*)&cookie, sizeof(cookie));
-    #ifndef DEBUG_SOUND
-    audioInit();
-    setAudioOn();
-    #endif
-
 
     for (uint8_t i = 0; i < 4; i++) {
         game.players[i].setPlayerNumber(i);
@@ -128,10 +112,6 @@ void loop() {
 
 
     }
-
-    #ifndef DEBUG_SOUND
-    audioUpdate();
-    #endif
 
 }
 

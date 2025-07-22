@@ -537,7 +537,6 @@ uint8_t getNextHighest_NonTrump_InSuit(Suit suit, Rank specifiedRank) {
 
 uint8_t getTop_NonSuit(Suit suitToFollow) {
 
-
     #if defined(DEBUG) && defined(DEBUG_GETTOP_NONSUIT)
         DEBUG_PRINT(F("getTop "));
         DEBUG_PRINT_SUIT(suitToFollow);

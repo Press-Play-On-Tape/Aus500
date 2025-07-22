@@ -62,11 +62,11 @@ Bid bid(Bid &previousBid, Bid&partnersBid, Bid &bestInRound) {
 
                     #if defined(DEBUG) && defined(DEBUG_EVALUATE)
                         DEBUG_PRINT_BID(elev.getBidType(), elev.getSuit(), elev.getLevel());
-                        DEBUG_PRINT(" ");
+                        DEBUG_PRINT_SPACE();
                         DEBUG_PRINT(elev.getScore());
-                        DEBUG_PRINT(" ");
+                        DEBUG_PRINT_SPACE();
                         DEBUG_PRINT_BID(myBid.getBidType(), myBid.getSuit(), myBid.getLevel());
-                        DEBUG_PRINT(" ");
+                        DEBUG_PRINT_SPACE();
                         DEBUG_PRINTLN(myBid.getScore());
                     #endif
 
@@ -479,10 +479,11 @@ Bid decideBid(Bid &bestInRound) {
                             {
 
                                 Bid testBid;
-                                testBid.setBidType(bestBid.getBidType());
-                                testBid.setSuit(bestBid.getSuit());
+                                testBid.setBid(bestBid);
+                                // testBid.setBidType(bestBid.getBidType());
+                                // testBid.setSuit(bestBid.getSuit());
                                 testBid.setLevel(bestBid.getLevel() - 1);
-                                testBid.setBidScore(bestBid.getBidScore());
+                                // testBid.setBidScore(bestBid.getBidScore());
 
                                 if (testBid.isHigherThan(bestInRound)) {
 
@@ -500,10 +501,11 @@ Bid decideBid(Bid &bestInRound) {
                                 {
 
                                     Bid testBid;
-                                    testBid.setBidType(BidType::Misere);
-                                    testBid.setSuit(bestBid.getSuit());
-                                    testBid.setLevel(bestBid.getLevel());
-                                    testBid.setBidScore(bestBid.getBidScore());
+                                    testBid.setBid(bestBid);
+                                    // testBid.setBidType(BidType::Misere);
+                                    // testBid.setSuit(bestBid.getSuit());
+                                    // testBid.setLevel(bestBid.getLevel());
+                                    // testBid.setBidScore(bestBid.getBidScore());
 
                                     if (testBid.isHigherThan(bestInRound)) {
 

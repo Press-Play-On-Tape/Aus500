@@ -52,11 +52,6 @@ bool prepareSuitPiles(SuitPile suitPiles[]) {
     }
 
 
-    int16_t totalDangerScore = hasJoker ? 3 : 0;
-
-    const int16_t DANGER_THRESHOLD = 5; // A tunable parameter. Lower is stricter.
-
-
     // Sort the runs ..
 
     for (uint8_t suit = 0; suit < 4; suit++) {
