@@ -51,7 +51,7 @@ struct GameRound {
 
         void setJokerSuit(Suit val)                                 { this->jokerSuit = val; }
         void setKitty(uint8_t idx, Card &kitty)                     { this->kitty[idx].setSuit(kitty.getSuit()); this->kitty[idx].setRank(kitty.getRank()); }
-        void setKittyPointer(uint8_t idx, Card &kitty)              { this->kittyPointer; }
+        void setKittyPointer(uint8_t idx)                           { this->kittyPointer = idx; }
         void setScore(uint8_t teamIdx, int16_t val)                 { this->score[teamIdx] = val; }
         void setRound(uint8_t val)                                  { this->round = val; }
         void setFirstPlayer(uint8_t val)                            { this->firstPlayer = val; }

@@ -162,3 +162,4 @@ convert_header(IMAGES + 'Bid/Bid_Right.png',                                    
 convert_header(IMAGES + 'Bid/Bid_Result.png',                                                  BASE + 'Images.hpp', 'Bid_Result', 4, 40, 8)
 convert_header(IMAGES + 'Titles/Title500.png',                                                 BASE + 'Images.hpp', 'Title500', 4)
 convert_header(IMAGES + 'Dealer.png',                                                          BASE + 'Images.hpp', 'Dealer', 4)
+convert_header(IMAGES + 'EveryonePassed.png',                                                  BASE + 'Images.hpp', 'EveryonePassed', 4)

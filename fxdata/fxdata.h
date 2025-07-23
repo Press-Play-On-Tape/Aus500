@@ -6,8 +6,8 @@ using uint24_t = __uint24;
 
 // Initialize FX hardware using  FX::begin(FX_DATA_PAGE); in the setup() function.
 
-constexpr uint16_t FX_DATA_PAGE  = 0xfbe0;
-constexpr uint24_t FX_DATA_BYTES = 266044;
+constexpr uint16_t FX_DATA_PAGE  = 0xfbdf;
+constexpr uint24_t FX_DATA_BYTES = 266256;
 
 constexpr uint16_t FX_SAVE_PAGE  = 0xfff0;
 constexpr uint24_t FX_SAVE_BYTES = 2;
@@ -78,5 +78,6 @@ namespace Images
   constexpr uint24_t Bid_Result = 0x03F67F;
   constexpr uint24_t Title500 = 0x040329;
   constexpr uint24_t Dealer = 0x040F2B;
+  constexpr uint24_t EveryonePassed = 0x040F3C;
 }
 

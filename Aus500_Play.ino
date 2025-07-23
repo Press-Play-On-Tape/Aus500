@@ -46,7 +46,7 @@ void continueBidding() {
     }
     else if (passes == 3 && bids == 1) {
 
-        gameState++;     
+        gameState++;    
 
     }
     else {
@@ -146,7 +146,7 @@ void play_Update() {
                 game.players[player].reset();
             }
 
-            gameRound.setDealer_Idx(gameRound.getDealer_Idx() + 3);
+            gameRound.setDealer_Idx(gameRound.getDealer_Idx() + 1);
 
             if (gameRound.getDealer_Idx() == 0) {
                 populateRotateDetails(0);
@@ -527,7 +527,30 @@ void play_Update() {
             break;
 
         case GameState::Bid_Failed:
-            gameState = GameState::Play_Shuffle;
+            
+            if (game.getFrameCount() % 4 > 0) return;
+
+            switch (game.players[0].getCardCount() > 0) {
+
+                case 1 ... 10:
+
+                    for (uint8_t i = 0; i < 4; i++) {
+                        game.players[i].getCard(game.players[i].getCardCount() - 1).reset();
+                        game.players[i].setCardCount(game.players[i].getCardCount() - 1);
+                    }
+
+                    break;
+
+                case 0:
+                    dealPhysics.x = 0;
+                    dealPhysics.x2 = 0;
+                    dealPhysics.y = 0;
+                    dealPhysics.y2 = 0;
+                    gameState = GameState::Play_Shuffle;
+                    break;
+            
+            }
+            
             break;
 
         case GameState::Bid_Error:
@@ -556,9 +579,6 @@ void play_Update() {
             {
             
                 game.gameRound->incRound();
-
-
-
 
                 Bid bid = game.gameRound->getWinningBid();
 
@@ -886,6 +906,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
             renderPlayerHands(currentPlane, LIGHT_GREY);
             renderKitty(currentPlane);
+            renderDealer(currentPlane);
             SpritesU::drawOverwriteFX(109, 1, Images::Hand_Full, currentPlane);
 
             if (dealPhysics.x > dealPhysics.x2 && dealPhysics.y < dealPhysics.y2) {
@@ -915,11 +936,20 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
             break;
 
-        case GameState::Bid_Finished ... GameState::Bid_Failed:
+        case GameState::Bid_Finished:
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
             renderPlayerHands(currentPlane, LIGHT_GREY);
             renderKitty(currentPlane);
+            renderBids(currentPlane);
+
+            break;
+
+        case GameState::Bid_Failed:
+
+            SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
+            SpritesU::drawOverwriteFX(35, 20, Images::EveryonePassed, currentPlane);
+            renderPlayerHands(currentPlane, LIGHT_GREY);
             renderBids(currentPlane);
 
             break;
