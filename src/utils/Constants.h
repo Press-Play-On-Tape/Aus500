@@ -6,7 +6,7 @@
 #define DEBUG_PRINTLN  Serial.println
 #define DEBUG_BREAK    asm volatile("break\n");
 
-#define _DEBUG
+#define DEBUG
 #define _DEBUG_BASIC
 
 
@@ -56,16 +56,16 @@ namespace Constants {
 
     const uint16_t DealCardCoords[] PROGMEM = {
       // x,  y,  noOfIncs  StartingRot, numberofRots
-        44, 54,  24,       12,          27,  // 01
-        48, 48,  24,       12,          27,  // 02
-        52, 48,  24,       12,          27,  // 03
-        56, 48,  24,       12,          27,  // 04
-        60, 48,  24,       12,          27,  // 05
-        64, 48,  24,       12,          27,  // 06
-        68, 48,  24,       12,          27,  // 07
-        72, 48,  24,       12,          27,  // 08
-        76, 48,  24,       12,          27,  // 09
-        80, 48,  24,       12,          27,  // 10
+        44, 54,  // 01
+        48, 48,  // 02
+        52, 48,  // 03
+        56, 48,  // 04
+        60, 48,  // 05
+        64, 48,  // 06
+        68, 48,  // 07
+        72, 48,  // 08
+        76, 48,  // 09
+        80, 48,  // 10
     };
 
     const int8_t Bounce[] PROGMEM = { -36, -30, -24, -16, -12, -6, 0, 4, 8, 12, 16, 20, 24, 28, 32, 28, 25, 22, 21, 21, 22, 25, 28, 32, 29, 27, 26, 26, 27, 28, 32, 30, 29, 30, 32, 31, 32 };
@@ -102,16 +102,17 @@ namespace Constants {
 
 struct DealPhysics {
 
-    float x = 0;
-    float y = 0;
+    int16_t x = 0;
+    int16_t y = 0;
 
-    float xInc = 0;
-    float yInc = 0;
-    float x2 = 0;
-    float y2 = 0;
-    float rot = 0;
-    float rotStart = 0;
-    float rotInc = 0;
-    int8_t noOfIncs = 0;
+    int16_t xInc = 0;
+    int16_t yInc = 0;
+    int16_t x2 = 0;
+    int16_t y2 = 0;
+    int16_t rot = 0;
+    int16_t rotInc = 27 * 16;
+
+    static constexpr int16_t rotStart = 24 * 16;
+    static constexpr int8_t noOfIncs = 24;
 
 };

@@ -58,6 +58,12 @@ DealPhysics dealPhysics;
 uint16_t seed = 72;
 #endif
 
+
+
+
+uint8_t selectedCard = 0;
+
+
 BidInput bidInput;
 
 void setup() {

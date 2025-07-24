@@ -10,6 +10,18 @@
 #include "GameRound.h"
 
 
+void clearSelection() {
+
+    for (uint8_t i = 0; i < this->cardCount; i++) {
+
+        Card &card = this->cards[i];
+        card.setSelected(false);
+
+    }
+    
+}
+
+
 uint8_t getCountOfSuit(Suit suit) {
 
     uint8_t count = 0;

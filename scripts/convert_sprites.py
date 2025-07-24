@@ -112,6 +112,7 @@ IMAGES = '../images/'
 deleteFile(BASE + 'Images.hpp')
 
 convert_header(IMAGES + 'Cards/Cards_Bottom.png',                                              BASE + 'Images.hpp', 'Cards_Bottom', 4, 18, 24)
+convert_header(IMAGES + 'Cards/Cards_Bottom_Grey.png',                                         BASE + 'Images.hpp', 'Cards_Bottom_Grey', 4, 18, 24)
 convert_header(IMAGES + 'Cards/Cards_Left.png',                                                BASE + 'Images.hpp', 'Cards_Left', 4, 23, 24)
 convert_header(IMAGES + 'Cards/Cards_Right.png',                                               BASE + 'Images.hpp', 'Cards_Right', 4, 23, 24)
 

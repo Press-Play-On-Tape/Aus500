@@ -12,17 +12,21 @@ struct Card {
 
         Suit suit;
         Rank rank;
+        bool selected = false;
 
-        Suit getSuit()                 { return this->suit; }
-        Rank getRank()                 { return this->rank; }
+        Suit getSuit()                      { return this->suit; }
+        Rank getRank()                      { return this->rank; }
+        bool isSelected()                   { return this->selected; }
 
-        void setSuit(Suit val)         { this->suit = val; }
-        void setRank(Rank val)         { this->rank = val; }
+        void setSuit(Suit val)              { this->suit = val; }
+        void setRank(Rank val)              { this->rank = val; }
+        void setSelected(bool val)          { this->selected = val; }
 
         void reset() {
         
             this->setSuit(Suit::None);
             this->setRank(Rank::None);
+            this->setSelected(false);
             
         }
 
@@ -30,6 +34,21 @@ struct Card {
 
             return (3 * ((static_cast<uint8_t>(this->getSuit()) * 11) + (static_cast<uint8_t>(this->getRank()) - 4)));
             
+        }
+
+        Suit getSuit(Suit trumps) {
+        
+            if (isLeftBower(trumps))    { 
+           
+                if (trumps == Suit::Spades)     return Suit::Clubs;
+                if (trumps == Suit::Clubs)      return Suit::Spades;
+                if (trumps == Suit::Diamonds)   return Suit::Hearts;
+                if (trumps == Suit::Hearts)     return Suit::Diamonds;
+            
+            }
+
+            return this->suit; 
+         
         }
 
         Rank getRank(Suit trumps) {
