@@ -61,31 +61,13 @@ void continueBidding() {
 void play_Init() { 
 
     game.resetFrameCount();
-    // bid = 0;
-
     gameState = GameState::Play_Shuffle;
 
-    // game.fillCardsPile();
-    // game.shuffleCardsPile();
-    // game.players[Constants::HumanPlayer].sort();
-
-
-//    game.setFirstPlayer((game.getDealer() + 1) % 4);
-//    game.resetEOR();
-
-    // for (uint8_t i = 0; i < Constants::PlayerCount; i++) {
-
-    //     game.players[i].resetEOR();
-    //     game.getTableCard(i).setSuit(Suits::None);
-
-    // }
-
-
-
+    #ifdef DEBUG_RAND
     uint16_t r = random(8000);
-
-Serial.print("Rand ");
-Serial.println(r);
+    DEBUG_PRINT("Rand ");
+    DEBUG_PRINTLN(r);
+    #endif
 
     randomSeed(807);
     #ifdef DEBUG_CRASH
@@ -117,7 +99,7 @@ void populateRotateDetails(uint8_t card) {
 uint8_t getCardIdx(uint8_t player, uint8_t offset, uint8_t cardsToBeDealt) {
 
     uint8_t dealer = game.gameRound->getDealer_Idx();
-    return (cardsToBeDealt * ((player - dealer + 4) % 4)) + offset;
+    return (cardsToBeDealt * ((player - dealer + 3) % 4)) + offset;
 
 }
 
@@ -175,7 +157,12 @@ void play_Update() {
                     uint8_t dealer = game.gameRound->getDealer_Idx();
                     uint8_t card = static_cast<uint8_t>(gameState) - static_cast<uint8_t>(GameState::Play_Deal_00);
                     uint8_t round = (gameState <= GameState::Play_Deal_11 ? 0 : 30);
-
+// Serial.print("dealer ");
+// Serial.print(gameRound.getDealer_Idx());
+// Serial.print(", card ");
+// Serial.print(card);
+// Serial.print(", s ");
+// Serial.println(getCardIdx(1, round, 3));
                     if (card >= getCardIdx(1, round, 3) && card <= getCardIdx(1, round, 3) + 2) {
 
                         uint8_t player = 1;
@@ -203,7 +190,7 @@ void play_Update() {
 
                     }
                     else {
-
+// Serial.println("b");
                         for (uint8_t player = 0; player < 4; player++) {
 
                             if (player == 1) continue;
@@ -948,7 +935,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
         case GameState::Bid_Failed:
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-            SpritesU::drawOverwriteFX(35, 20, Images::EveryonePassed, currentPlane);
+            SpritesU::drawOverwriteFX(34, 19, Images::EveryonePassed, currentPlane);
             renderPlayerHands(currentPlane, LIGHT_GREY);
             renderBids(currentPlane);
 
