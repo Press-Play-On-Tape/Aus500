@@ -188,7 +188,6 @@ enum class GameState : uint8_t {
         Bid_Error,
         Handle_Kitty,
         Play_Round_Start,
-        Play_00,
         Play_01,
         Play_02,
         Play_EndOfHand,

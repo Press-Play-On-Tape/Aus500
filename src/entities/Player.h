@@ -47,6 +47,19 @@ struct Player {
 
         }
 
+        uint8_t getSelectedCount() {
+        
+            uint8_t count = 0;
+
+            for (uint8_t i = 0; i < this->cardCount; i++) {
+
+                if (this->cards[i].isSelected()) count++;
+            }
+
+            return count;
+
+        }
+
         #include "Player_DecideBid.hpp"
         #include "Player_DecideBid_SuitHand.hpp"
         #include "Player_DecideBid_TrumpHand.hpp"

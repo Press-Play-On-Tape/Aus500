@@ -1,11 +1,10 @@
 #include <ArduboyFX.h>  
 
 
-void renderPlayerHands(uint8_t currentPlane, uint8_t color) {
+void renderPlayerHands(uint8_t currentPlane, bool blinkSelected, bool blinkRaised) {
 
     uint8_t cardCount = game.players[Constants::HumanPlayer].getCardCount();
-
-    uint8_t xStart = 48 - (cardCount * 4);
+    int8_t xStart = 48 - (cardCount * 4) + (cardCount > 10 ? 3 : 0);
 
     for (uint8_t i = 0; i < cardCount; i++) {
 
@@ -16,7 +15,7 @@ void renderPlayerHands(uint8_t currentPlane, uint8_t color) {
 
             uint8_t y = 47 - (card.isSelected() ? 4 : 0);
 
-            if (card.isSelected() & game.getFrameCount(48)) {
+            if ((blinkRaised && card.isSelected() || (blinkSelected && i == selectedCard)) && game.getFrameCount(48)) {
             
                 if (rank != Rank::Joker) {
                     SpritesU::drawPlusMaskFX(xStart + (i * 8), y, Images::Cards_Bottom_Grey, game.players[Constants::HumanPlayer].getCard(i).getCardIndex() + currentPlane);
@@ -41,35 +40,17 @@ void renderPlayerHands(uint8_t currentPlane, uint8_t color) {
 
     }
 
-    if (color == LIGHT_GREY) {
 
-        if (game.players[2].getCardCount() > 0) {
-            SpritesU::drawOverwriteFX(0, 10, Images::Hand_Left, (game.players[2].getCardCount() * 3) + currentPlane);
-        }
-
-        if (game.players[3].getCardCount() > 0) {
-            SpritesU::drawOverwriteFX(31, -3, Images::Hand_Top, (game.players[3].getCardCount() * 3) + currentPlane);
-        }
-
-        if (game.players[0].getCardCount() > 0) {
-            SpritesU::drawOverwriteFX(100, 10, Images::Hand_Right, (game.players[0].getCardCount() * 3) + currentPlane);
-        }
-
+    if (game.players[2].getCardCount() > 0) {
+        SpritesU::drawOverwriteFX(0, 4, Images::Hand_Left, (game.players[2].getCardCount() * 3) + currentPlane);
     }
-    else {
 
-        if (game.players[2].getCardCount() > 0) {
-            SpritesU::drawOverwriteFX(0, 10, Images::Hand_Left, ((game.players[2].getCardCount() + 11) * 3) + currentPlane);
-        }
+    if (game.players[3].getCardCount() > 0) {
+        SpritesU::drawOverwriteFX(31, -3, Images::Hand_Top, (game.players[3].getCardCount() * 3) + currentPlane);
+    }
 
-        if (game.players[3].getCardCount() > 0) {
-            SpritesU::drawOverwriteFX(31, -3, Images::Hand_Top, ((game.players[3].getCardCount() + 11) * 3) + currentPlane);
-        }
-
-        if (game.players[0].getCardCount() > 0) {
-            SpritesU::drawOverwriteFX(100, 10, Images::Hand_Right, ((game.players[0].getCardCount() + 11) * 3) + currentPlane);
-        }
-
+    if (game.players[0].getCardCount() > 0) {
+        SpritesU::drawOverwriteFX(100, 4, Images::Hand_Right, (game.players[0].getCardCount() * 3) + currentPlane);
     }
 
 }

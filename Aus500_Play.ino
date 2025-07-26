@@ -543,17 +543,72 @@ void play_Update() {
             break;
 
         case GameState::Handle_Kitty:
-            game.gameRound->setRound(0);
-            game.gameRound->clearKitty();
-            game.players[game.gameRound->getWinningBid_Idx()].handleKitty();
 
-            //#include "GameOfArds_DEBUG.hpp"
+            if (game.gameRound->getHighestBid().getPlayerIdx() == 1) {
 
-            for (uint8_t i = 0; i < 4; i++) {
-                game.players[i].sort();
+                if (justPressed == LEFT_BUTTON && selectedCard > 0) {
+
+                    selectedCard--;
+
+                }
+
+                if (justPressed == RIGHT_BUTTON && selectedCard < game.players[Constants::HumanPlayer].getCardCount() - 1) {
+
+                    selectedCard++;
+
+                }
+
+                if (justPressed == UP_BUTTON && game.players[Constants::HumanPlayer].getSelectedCount() < 3) {
+
+                    game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
+                
+                }
+
+                if (justPressed == DOWN_BUTTON && game.players[Constants::HumanPlayer].getCard(selectedCard).isSelected()) {
+
+                    game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(false);
+                
+                }
+
+                if (justPressed == A_BUTTON && game.players[Constants::HumanPlayer].getSelectedCount() == 3) {
+
+                    game.gameRound->setRound(0);
+                    game.gameRound->clearKitty();
+
+                    uint8_t kittyIndex = 0;
+
+                    for (uint8_t i = 0; i < game.players[Constants::HumanPlayer].getCardCount(); i++) {
+
+                        if (game.players[Constants::HumanPlayer].getCard(i).isSelected()) {
+
+                            game.gameRound->getKitty(kittyIndex)->setSuit(game.players[Constants::HumanPlayer].getCard(i).getSuit());
+                            game.gameRound->getKitty(kittyIndex)->setRank(game.players[Constants::HumanPlayer].getCard(i).getRank());
+                            game.gameRound->getKitty(kittyIndex)->setSelected(false);
+                            game.players[Constants::HumanPlayer].getCard(i).reset();
+                            kittyIndex++;
+
+                        }
+
+                    }
+
+                    game.players[Constants::HumanPlayer].sort();
+                    game.gameRound->setRound(0);
+                    selectedCard = 0;
+                    gameState++;
+                
+                }
+
+            }
+            else {
+
+                game.gameRound->setRound(0);
+                game.players[game.gameRound->getWinningBid_Idx()].handleKitty();
+                game.players[game.gameRound->getWinningBid_Idx()].sort();
+                selectedCard = 0;
+                gameState++;
+
             }
 
-            gameState++;
             break;
 
         case GameState::Play_Round_Start:
@@ -580,12 +635,11 @@ void play_Update() {
     
             }
 
-            gameState++;
 
-            break;
+            // Select card in players hand ..
 
-        case GameState::Play_00:
-
+            if (selectedCard >= game.players[1].getCardCount()) selectedCard--;
+            game.players[1].getCard(selectedCard).setSelected(true);
             gameState++;
 
             break;
@@ -661,11 +715,12 @@ void play_Update() {
 
                     #endif
 
-                    playX();
+                    play_CardSelected();
 
                 }
                 else {
-                
+
+
                     // Serial.println("My turn");
 
                     if (justPressed == LEFT_BUTTON && selectedCard > 0) {
@@ -685,21 +740,17 @@ void play_Update() {
                     if (justPressed == A_BUTTON && game.players[gameRound.getCurrentPlayer()].getCard(selectedCard).isSelected()) {
 
                         Suit trumps = game.gameRound->winningBid_Suit();
-                        // Card largestTrump = this->gameRound->getLargestTrumpInPlay(trumps);
                         Card cardLed = game.gameRound->getCardLed();
-
                         Bid bid = game.gameRound->getWinningBid();
 
-
                         Card &cardPlayed = game.players[gameRound.getCurrentPlayer()].getCard(selectedCard);
-
 
                         switch (bid.getBidType()) {
                         
                             case BidType::Suit:
 
                                 if (cardLed.getSuit(trumps) != cardPlayed.getSuit(trumps) && game.players[gameRound.getCurrentPlayer()].hasSuit(cardLed.getSuit(trumps))) {
-                                    Serial.println("follow s");
+                                    // Serial.println("follow s");
                                     return;
                                 }
 
@@ -709,7 +760,7 @@ void play_Update() {
                             case BidType::Misere:
 
                                 if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer()].hasSuit(cardLed.getSuit())) {
-                                    Serial.println("follow nt");
+                                    // Serial.println("follow nt");
                                     return;
                                 }
 
@@ -721,7 +772,7 @@ void play_Update() {
                         // game.players[gameRound.getCurrentPlayer()].cardJustPlayed = card;
                         game.players[gameRound.getCurrentPlayer()].playCard(selectedCard);
     
-                        playX();
+                        play_CardSelected();
 
 
                     }
@@ -954,7 +1005,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
         case GameState::Play_Deal_00 ... GameState::Play_Deal_42:
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-            renderPlayerHands(currentPlane, LIGHT_GREY);
+            renderPlayerHands(currentPlane, false, false);
             renderKitty(currentPlane);
             renderDealer(currentPlane);
             SpritesU::drawOverwriteFX(109, 1, Images::Hand_Full, currentPlane);
@@ -968,7 +1019,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
         case GameState::Bid:
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-            renderPlayerHands(currentPlane, LIGHT_GREY);
+            renderPlayerHands(currentPlane, false, false);
             renderBids(currentPlane);
 
             if (playerCurrentlyBidding == 1) {
@@ -989,7 +1040,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
         case GameState::Bid_Finished:
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-            renderPlayerHands(currentPlane, LIGHT_GREY);
+            renderPlayerHands(currentPlane, false, false);
             renderKitty(currentPlane);
             renderBids(currentPlane);
 
@@ -999,7 +1050,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
             SpritesU::drawOverwriteFX(34, 19, Images::EveryonePassed, currentPlane);
-            renderPlayerHands(currentPlane, LIGHT_GREY);
+            renderPlayerHands(currentPlane, false, false);
             renderBids(currentPlane);
 
             break;
@@ -1007,7 +1058,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
         case GameState::Bid_Error:
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-            renderPlayerHands(currentPlane, LIGHT_GREY);
+            renderPlayerHands(currentPlane, false, false);
             renderBids(currentPlane);
 
             SpritesU::drawPlusMaskFX(27, 15, Images::Bid_Panel, (5 * 3) + currentPlane);
@@ -1015,12 +1066,26 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
             break;
 
-        case GameState::Handle_Kitty ... GameState::Play_02:
+        case GameState::Handle_Kitty:
 
-            SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-            renderPlayerHands(currentPlane, LIGHT_GREY);
+            if (game.gameRound->getHighestBid().getPlayerIdx() == Constants::HumanPlayer) {
+                SpritesU::drawOverwriteFX(21, 15, Images::KittyInstructions, currentPlane);
+                renderPlayerHands(currentPlane, true, false);
+            }
+            else {
+                renderPlayerHands(currentPlane, false, false);
+            }
+
             renderTableCards(currentPlane, Constants::NoWinner);
-            // renderBids(currentPlane);
+            SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
+
+            break;
+
+        case GameState::Play_Round_Start ... GameState::Play_02:
+
+            renderPlayerHands(currentPlane, false, false);
+            renderTableCards(currentPlane, Constants::NoWinner);
+            SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
 
             break;
 
@@ -1028,156 +1093,11 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
         case GameState::Play_EndOfHand ... GameState::Play_EndOfGame:
 
             SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
-            renderPlayerHands(currentPlane, LIGHT_GREY);
+            renderPlayerHands(currentPlane, false, false);
             renderTableCards(currentPlane, game.gameRound->getWinningHand());
-            // renderBids(currentPlane);
 
             break;
-
-
 
     }
 
 }
-
-
-void playX() {
-
-                gameRound.setCurrentPlayer((gameRound.getCurrentPlayer() + 1) % 4);
-
-
-                // If we ae playing misere and the player is sitting out then skip ..
-
-                #ifdef OPEN_MISERE
-                if (gameRound.winningBid_Type() == BidType::Misere || gameRound.winningBid_Type() == BidType::Open_Misere) {
-                #else
-                if (gameRound.winningBid_Type() == BidType::Misere) {
-                #endif
-
-                    if (!game.players[gameRound.getCurrentPlayer()].isPlaying()) {
-
-                        gameRound.setCurrentPlayer((gameRound.getCurrentPlayer() + 1) % 4);
-
-                    }
-
-                }
-
-
-                // Is it the end of the round?
-
-                if (gameRound.getFirstPlayer() == gameRound.getCurrentPlayer()) {
-
-                    #ifdef DEBUG_BASIC
-                        DEBUG_PRINTLN(F("-----"));
-                        DEBUG_PRINT(F("Trick winner "));
-                        DEBUG_PRINTLN(game.gameRound->getWinningHand());
-                    #endif
-
-
-                    // Increase tricks won count and scores ..
-
-                    switch (game.gameRound->getWinningBid().getBidType()) {
-                    
-                        case BidType::Misere:
-                        #ifdef OPEN_MISERE
-                        case BidType::Open_Misere:
-                        #endif
-                            game.gameRound->incTricksWon(game.gameRound->getWinningHand(BidType::No_Trumps));
-                            break;
-
-                        default:
-                            game.gameRound->incTricksWon(game.gameRound->getWinningHand());
-                            break;
-                        
-                    }
-
-             
-                    // Did anyone not follow suit?
-
-                    Suit cardLedSuit = game.gameRound->getCardLed().getSuit();
-                    Suit trumpsSuit = game.gameRound->winningBid_Suit();
-                    bool cardLedIsTrump = game.gameRound->getCardLed().isTrump(trumpsSuit);
-                    BidType bidType = game.gameRound->winningBid_Type();
-
-                    for (uint8_t playerIdx = 0; playerIdx < 4; playerIdx++) {
-
-                        switch (bidType) {
-                        
-                            case BidType::No_Trumps:
-                            case BidType::Misere:
-                            #ifdef OPEN_MISERE
-                            case BidType::Open_Misere:
-                            #endif
-
-                                if (game.gameRound->getHand(playerIdx)->getSuit() != cardLedSuit) {
-                                    game.gameRound->setHasSuitInHand(playerIdx, cardLedSuit, TriState::False);
-                                }
-
-                                break;
-
-                            case BidType::Suit:
-
-                                if (cardLedIsTrump) {
-
-                                    if (!game.gameRound->getHand(playerIdx)->isTrump(trumpsSuit)) {
-                                        game.gameRound->setHasSuitInHand(playerIdx, cardLedSuit, TriState::False);
-                                    }
-                                
-                                }
-                                else {
-
-                                    if (game.gameRound->getHand(playerIdx)->getSuit() != cardLedSuit) {
-                                        game.gameRound->setHasSuitInHand(playerIdx, cardLedSuit, TriState::False);
-                                    }
-
-                                }
-
-                                break;
-
-                        }
-
-                    }
-
-                    // If playing misere, did the calling hand win?
-
-                    #ifdef DEBUG_BASIC
-                        DEBUG_PRINT(F("Highest hand "));
-                        DEBUG_PRINT(game.gameRound->getWinningHand(BidType::No_Trumps));
-                        DEBUG_PRINT(F(", lowest hand "));
-                        DEBUG_PRINT(game.gameRound->getWinningHand());
-                        DEBUG_PRINT(F(", WinningBidIdx "));
-                        DEBUG_PRINTLN(game.gameRound->getWinningBid_Idx());
-                        DEBUG_PRINTLN(F("-------"));
-                    #endif
-
-                    #ifdef OPEN_MISERE
-                    if (gameRound.winningBid_Type() == BidType::Misere || gameRound.winningBid_Type() == BidType::Open_Misere) {
-                    #else
-                    if (gameRound.winningBid_Type() == BidType::Misere) {
-                    #endif
-                    
-                        if (game.gameRound->getWinningBid_Idx() == game.gameRound->getWinningHand(BidType::No_Trumps)) {
-
-                            gameRound.setRound(10);
-                            gameState = GameState::Play_EndOfHand;// SJH should be end of round but results written on end of hand
-                        
-                        }
-                        else {
-
-                            game.gameRound->resetHand(game.gameRound->getWinningHand(BidType::No_Trumps));
-                            gameState = GameState::Play_EndOfHand;
-
-                        }
-
-                    }
-                    else {
-
-                        game.gameRound->resetHand(game.gameRound->getWinningHand());
-                        gameState = GameState::Play_EndOfHand;
-
-                    }
-                   
-                }
-
-
-                }
