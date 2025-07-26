@@ -50,8 +50,7 @@ GameState gameState = GameState::Title_Init;
 
 uint8_t titleCounter = 0;
 int16_t instructions_Y = 0;
-
-// Font3x5 font3x5 = Font3x5();
+uint8_t jokerIndex = 0;
 DealPhysics dealPhysics;
 
 #ifdef DEBUG_FIXED_RAND

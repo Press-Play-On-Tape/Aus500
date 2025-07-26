@@ -16,12 +16,6 @@ void splashScreen_Update() {
 
     if (justPressed > 0 && titleCounter == 32) {
         
-        #ifndef DEBUG_FIXED_RAND
-            a.initRandomSeed(); 
-        #else
-            randomSeed(1);
-        #endif
-        
         gameState = GameState::Title_Init; 
 
     }

@@ -244,7 +244,7 @@ struct GameRound {
 
 
         void addKitty(Card *card) {
-        
+
             this->kitty[this->kittyPointer].setRank(card->getRank());
             this->kitty[this->kittyPointer].setSuit(card->getSuit());
             this->kittyPointer++;

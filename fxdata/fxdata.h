@@ -6,8 +6,8 @@ using uint24_t = __uint24;
 
 // Initialize FX hardware using  FX::begin(FX_DATA_PAGE); in the setup() function.
 
-constexpr uint16_t FX_DATA_PAGE  = 0xfba5;
-constexpr uint24_t FX_DATA_BYTES = 281095;
+constexpr uint16_t FX_DATA_PAGE  = 0xfb30;
+constexpr uint24_t FX_DATA_BYTES = 311287;
 
 constexpr uint16_t FX_SAVE_PAGE  = 0xfff0;
 constexpr uint24_t FX_SAVE_BYTES = 2;
@@ -47,39 +47,42 @@ namespace Constants
 namespace Images
 {
   constexpr uint24_t Cards_Bottom = 0x018810;
-  constexpr uint24_t Cards_Bottom_Grey = 0x01BFC2;
-  constexpr uint24_t Cards_Left = 0x01F774;
-  constexpr uint24_t Cards_Right = 0x023E9E;
-  constexpr uint24_t Hand_Left = 0x0285C8;
-  constexpr uint24_t Hand_Right = 0x028C3C;
-  constexpr uint24_t Hand_Top = 0x0292B0;
-  constexpr uint24_t PPOT = 0x029DC8;
-  constexpr uint24_t Sound_Volume_Grey = 0x02CDCA;
-  constexpr uint24_t Sound_Volume_White = 0x02D60C;
-  constexpr uint24_t Sound_Checkbox = 0x02DE4E;
-  constexpr uint24_t Title = 0x02DE5C;
-  constexpr uint24_t HUD = 0x0321DE;
-  constexpr uint24_t Score_Numbers_Bottom = 0x032408;
-  constexpr uint24_t Score_Numbers_Left = 0x032506;
-  constexpr uint24_t Score_Numbers_Right = 0x032604;
-  constexpr uint24_t Bid = 0x032702;
-  constexpr uint24_t Numbers = 0x0330D0;
-  constexpr uint24_t Numbers_3x5 = 0x033492;
-  constexpr uint24_t Arrows = 0x036248;
-  constexpr uint24_t HighScores = 0x036298;
-  constexpr uint24_t Hand_Full = 0x036C8A;
-  constexpr uint24_t Rotate = 0x036D25;
-  constexpr uint24_t Flip = 0x03D267;
-  constexpr uint24_t Bid_Panel = 0x03E469;
-  constexpr uint24_t Bid_Suits = 0x03FA5B;
-  constexpr uint24_t Bid_Numbers = 0x03FB6B;
-  constexpr uint24_t Bid_Bottom = 0x03FC3F;
-  constexpr uint24_t Bid_Left = 0x040C6D;
-  constexpr uint24_t Bid_Right = 0x041D4F;
-  constexpr uint24_t Bid_Result = 0x042E31;
-  constexpr uint24_t Title500 = 0x043ADB;
-  constexpr uint24_t Dealer = 0x0446DD;
-  constexpr uint24_t EveryonePassed = 0x0446EE;
-  constexpr uint24_t KittyInstructions = 0x0447CE;
+  constexpr uint24_t Cards_Bottom_Grey = 0x01CDAE;
+  constexpr uint24_t Cards_Left = 0x02134C;
+  constexpr uint24_t Cards_Right = 0x026C40;
+  constexpr uint24_t Hand_Left = 0x02C534;
+  constexpr uint24_t Hand_Right = 0x02CBA8;
+  constexpr uint24_t Hand_Top = 0x02D21C;
+  constexpr uint24_t PPOT = 0x02DD34;
+  constexpr uint24_t Sound_Volume_Grey = 0x030D36;
+  constexpr uint24_t Sound_Volume_White = 0x031578;
+  constexpr uint24_t Sound_Checkbox = 0x031DBA;
+  constexpr uint24_t Title = 0x031DC8;
+  constexpr uint24_t HUD = 0x03614A;
+  constexpr uint24_t Score_Numbers_Bottom = 0x036E3C;
+  constexpr uint24_t Score_Numbers_Left = 0x036F3A;
+  constexpr uint24_t Score_Numbers_Right = 0x037038;
+  constexpr uint24_t Bid = 0x037136;
+  constexpr uint24_t Numbers_3x5 = 0x037B04;
+  constexpr uint24_t HighScores = 0x03A8BA;
+  constexpr uint24_t HUD_Trick_Score = 0x03B2AC;
+  constexpr uint24_t HUD_Game_Score = 0x03B380;
+  constexpr uint24_t Hand_Full = 0x03D452;
+  constexpr uint24_t Hand_Full_Grey = 0x03D4ED;
+  constexpr uint24_t Rotate = 0x03D588;
+  constexpr uint24_t Flip = 0x043ACA;
+  constexpr uint24_t Bid_Panel = 0x044CCC;
+  constexpr uint24_t Bid_Suits = 0x0462BE;
+  constexpr uint24_t Bid_Numbers = 0x0463CE;
+  constexpr uint24_t Bid_Bottom = 0x0464A2;
+  constexpr uint24_t Bid_Left = 0x0474D0;
+  constexpr uint24_t Bid_Right = 0x0485B2;
+  constexpr uint24_t Bid_Result = 0x049694;
+  constexpr uint24_t Bid_Result_Narrow = 0x04A33E;
+  constexpr uint24_t Title500 = 0x04A9E5;
+  constexpr uint24_t Dealer = 0x04B5E7;
+  constexpr uint24_t EveryonePassed = 0x04B5F8;
+  constexpr uint24_t KittyInstructions = 0x04B6D8;
+  constexpr uint24_t ChooseSuit = 0x04B911;
 }
 

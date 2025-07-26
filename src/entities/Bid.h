@@ -104,10 +104,10 @@ struct Bid {
                     return 20 + (this->level - 6);
 
                 case BidType::Pass:
-                    return 26;
+                    return 25;
 
                 case BidType::Misere:
-                    return 27;
+                    return 26;
 
             }
 

@@ -69,7 +69,9 @@ void title_Update() {
             }
 
             if (justPressed & A_BUTTON) {
-                
+
+                a.initRandomSeed(); 
+
                 gameState = GameState::Play_Init;
                 game.setPrevGameState(gameState);
                 // cookie.hasSavedGame = false;

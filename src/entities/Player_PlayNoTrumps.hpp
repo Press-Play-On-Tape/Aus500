@@ -299,7 +299,7 @@ void playNoTrumps_Follow() {
 }               
 
 
-void playNoTrumps_Lead() {
+bool playNoTrumps_Lead() {
 
     #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_LEAD)
     DEBUG_PRINT(F("No Trumps - P"));

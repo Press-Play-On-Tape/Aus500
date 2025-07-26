@@ -177,7 +177,7 @@ void renderBids(uint8_t currentPlane) {
                     uint8_t idx = ((static_cast<uint8_t>(bid.getSuit()) * 5) + (bid.getLevel() - 6));
                     SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
 
-                    if (dealer == 1) {
+                    if (dealer == Constants::HumanPlayer) {
                         SpritesU::drawOverwriteFX(39 - (bid.getLevel() == 10 ? 2 : 0), 40, Images::Dealer, currentPlane); 
                     }
 
@@ -189,7 +189,7 @@ void renderBids(uint8_t currentPlane) {
                     uint8_t idx = (20 + (bid.getLevel() - 6));
                     SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
 
-                    if (dealer == 1) {
+                    if (dealer == Constants::HumanPlayer) {
                         SpritesU::drawOverwriteFX(38 - (bid.getLevel() == 10 ? 2 : 0), 40, Images::Dealer, currentPlane); 
                     }
 
@@ -200,7 +200,7 @@ void renderBids(uint8_t currentPlane) {
 
                 SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (26 * 3) + currentPlane); 
 
-                if (dealer == 1) {
+                if (dealer == Constants::HumanPlayer) {
                     SpritesU::drawOverwriteFX(36, 40, Images::Dealer, currentPlane); 
                 }
 
@@ -210,7 +210,7 @@ void renderBids(uint8_t currentPlane) {
 
                 SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (25 * 3) + currentPlane); 
 
-                if (dealer == 1) {
+                if (dealer == Constants::HumanPlayer) {
                     SpritesU::drawOverwriteFX(34, 40, Images::Dealer, currentPlane); 
                 }
 
@@ -218,7 +218,7 @@ void renderBids(uint8_t currentPlane) {
 
             case BidType::None:
 
-                if (dealer == 1) {
+                if (dealer == Constants::HumanPlayer) {
                     SpritesU::drawOverwriteFX(52, 40, Images::Dealer, currentPlane); 
                 }
 
@@ -363,7 +363,21 @@ void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
         if (game.gameRound->getHand(3)->getRank() != Rank::None)  {
 
             uint8_t idx = game.gameRound->getHand(3)->getCardIndex();
-            if (game.gameRound->getHand(3)->getRank() == Rank::Joker) idx = 0;
+
+            if (game.gameRound->getHand(3)->getRank() == Rank::Joker) {
+
+                switch (game.gameRound->getHand(3)->getSuit()) {
+
+                    case Suit::Spades ... Suit::Hearts:
+                        idx = (44 + static_cast<uint8_t>(game.gameRound->getHand(3)->getSuit())) * 3;
+                        break;
+
+                    default:
+                        idx = 0;
+
+                }
+
+            }
             
             SpritesU::drawPlusMaskFX(38, 9, Images::Cards_Bottom, idx + currentPlane); 
         }
@@ -375,10 +389,25 @@ void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
         if (game.gameRound->getHand(1)->getRank() != Rank::None)  {
 
             uint8_t idx = game.gameRound->getHand(1)->getCardIndex();
-            if (game.gameRound->getHand(1)->getRank() == Rank::Joker) idx = 0;
+
+            if (game.gameRound->getHand(1)->getRank() == Rank::Joker) {
+
+                switch (game.gameRound->getHand(1)->getSuit()) {
+
+                    case Suit::Spades ... Suit::Hearts:
+                        idx = (44 + static_cast<uint8_t>(game.gameRound->getHand(1)->getSuit())) * 3;
+                        break;
+
+                    default:
+                        idx = 0;
+
+                }
+
+            }
 
             SpritesU::drawPlusMaskFX(49, 19, Images::Cards_Bottom, idx + currentPlane); 
         }
+        
     }
             
     if (winningHand != 0 || (winningHand == 0 && game.getFrameCount(48))) {
@@ -386,7 +415,21 @@ void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
         if (game.gameRound->getHand(0)->getRank() != Rank::None)  {
 
             uint8_t idx = game.gameRound->getHand(0)->getCardIndex();
-            if (game.gameRound->getHand(0)->getRank() == Rank::Joker) idx = 0;
+
+            if (game.gameRound->getHand(0)->getRank() == Rank::Joker) {
+
+                switch (game.gameRound->getHand(0)->getSuit()) {
+
+                    case Suit::Spades ... Suit::Hearts:
+                        idx = (44 + static_cast<uint8_t>(game.gameRound->getHand(0)->getSuit())) * 3;
+                        break;
+
+                    default:
+                        idx = 0;
+
+                }
+
+            }
 
             SpritesU::drawPlusMaskFX(60, 13, Images::Cards_Right, idx + currentPlane); 
         }
@@ -398,10 +441,110 @@ void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
         if (game.gameRound->getHand(2)->getRank() != Rank::None)  {
 
             uint8_t idx = game.gameRound->getHand(2)->getCardIndex();
-            if (game.gameRound->getHand(2)->getRank() == Rank::Joker) idx = 0;
+
+            if (game.gameRound->getHand(2)->getRank() == Rank::Joker) {
+
+                switch (game.gameRound->getHand(2)->getSuit()) {
+
+                    case Suit::Spades ... Suit::Hearts:
+                        idx = (44 + static_cast<uint8_t>(game.gameRound->getHand(2)->getSuit())) * 3;
+                        break;
+
+                    default:
+                        idx = 0;
+
+                }
+
+            }
 
             SpritesU::drawPlusMaskFX(20, 21, Images::Cards_Left, idx + currentPlane); 
         }
+
+    }
+
+}
+
+
+
+void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
+
+    if (displayCard && !displayWinningBid) {
+
+        SpritesU::drawOverwriteFX(105, 0, Images::HUD, currentPlane);
+
+    }
+    else if (!displayCard && !displayWinningBid) {
+
+        SpritesU::drawOverwriteFX(105, 0, Images::HUD, 3 + currentPlane);
+
+    }
+    else if (!displayCard && displayWinningBid) {
+
+        switch (gameState) {
+        
+            case GameState::Play_EndOfHand:
+            case GameState::Play_EndOfRound:
+
+                if (game.gameRound->getWinningHand() == 1 || game.gameRound->getWinningHand() == 3) {
+
+                    if (game.getFrameCount(48)) {
+
+                        SpritesU::drawOverwriteFX(105, 0, Images::HUD, 6 + currentPlane);
+                        SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
+    
+                    }
+                    else {
+                    
+                        SpritesU::drawOverwriteFX(105, 0, Images::HUD, 9 + currentPlane);
+
+                    }
+
+                    SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);
+                
+                }
+                else {
+
+                    if (game.getFrameCount(48)) {
+
+                        SpritesU::drawOverwriteFX(105, 0, Images::HUD, 6 + currentPlane);
+                        SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
+                        SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);
+    
+                    }
+                    else {
+                    
+                        SpritesU::drawOverwriteFX(105, 0, Images::HUD, 12 + currentPlane);
+                        SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
+
+                    }
+
+
+                }
+
+                break;
+
+            default:
+                SpritesU::drawOverwriteFX(105, 0, Images::HUD, 6 + currentPlane);
+                SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
+                SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);
+                break;
+
+        }
+
+
+        SpritesU::drawOverwriteFX(107, 29, Images::Bid_Result_Narrow, (game.gameRound->getHighestBid().getImageIndex() * 3) + currentPlane);
+
+        int16_t score = game.gameRound->getScore(1);
+        uint16_t idx = abs(score) / 10;
+
+        if (score < 0) idx = idx + 100;
+        SpritesU::drawOverwriteFX(113, 51, Images::HUD_Game_Score, (idx * 3) + currentPlane);
+
+        score = game.gameRound->getScore(0);
+        idx = abs(score) / 10;
+
+        if (score < 0) idx = idx + 100;
+        SpritesU::drawOverwriteFX(113, 58, Images::HUD_Game_Score, (idx * 3) + currentPlane);
 
     }
 

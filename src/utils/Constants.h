@@ -8,6 +8,7 @@
 
 #define DEBUG
 #define _DEBUG_BASIC
+#define DEBUG_RAND
 
 
 // Bidding
