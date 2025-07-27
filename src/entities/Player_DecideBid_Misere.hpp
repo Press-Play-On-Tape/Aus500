@@ -45,8 +45,9 @@ bool prepareSuitPiles(SuitPile suitPiles[]) {
 
         uint8_t suitIndex = static_cast<uint8_t>(card.getSuit());
 
-        suitPiles[suitIndex].cards[suitPiles[suitIndex].card_count].setSuit(card.getSuit());
-        suitPiles[suitIndex].cards[suitPiles[suitIndex].card_count].setRank(card.getRank());
+        Card &suitCard = suitPiles[suitIndex].cards[suitPiles[suitIndex].card_count];
+        suitCard.setSuit(card.getSuit());
+        suitCard.setRank(card.getRank());
         suitPiles[suitIndex].card_count++;
 
     }

@@ -704,9 +704,6 @@ void play_Update() {
                 }
                 else {
 
-
-                    // Serial.println("My turn");
-
                     if (justPressed == LEFT_BUTTON && selectedCard > 0) {
                         selectedCard--;
                         game.players[gameRound.getCurrentPlayer()].clearSelection();

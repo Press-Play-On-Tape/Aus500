@@ -32,6 +32,21 @@ struct Card {
 
         uint8_t getCardIndex() {
 
+            if (this->getRank() == Rank::Joker) {
+
+                switch (this->getSuit()) {
+
+                    case Suit::Spades ... Suit::Hearts:
+                        return (44 + static_cast<uint8_t>(this->getSuit())) * 3;
+                        break;
+
+                    default:
+                        return 0;
+
+                }
+
+            }
+
             return (3 * ((static_cast<uint8_t>(this->getSuit()) * 11) + (static_cast<uint8_t>(this->getRank()) - 4)));
             
         }

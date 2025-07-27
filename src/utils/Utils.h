@@ -125,37 +125,41 @@ void DEBUG_PRINT_TRISTATE(TriState tristate) {
 
 void DEBUG_PRINT_BID(BidType bidType, Suit suit, uint8_t level) {
 
-    switch (bidType) {
-    
-        case BidType::No_Trumps:
-            DEBUG_PRINT(level);
-            DEBUG_PRINT(F("NT"));
-            break;
-    
-        case BidType::Misere:
-            DEBUG_PRINT(F("Misere"));
-            break;
-
-        #ifdef OPEN_MISERE
-            case BidType::Open_Misere:
-                DEBUG_PRINT(F("Open Misere"));
+    #ifdef DEBUG
+        
+        switch (bidType) {
+        
+            case BidType::No_Trumps:
+                DEBUG_PRINT(level);
+                DEBUG_PRINT(F("NT"));
                 break;
-        #endif
-    
-        case BidType::Suit:
-            DEBUG_PRINT(level);
-            DEBUG_PRINT_SUIT(suit);
-            break;
-    
-        case BidType::Pass:
-            DEBUG_PRINT(F("Pass"));
-            break;
-    
-        case BidType::None:
-            DEBUG_PRINT(F("None"));
-            break;
+        
+            case BidType::Misere:
+                DEBUG_PRINT(F("Misere"));
+                break;
 
-    }
+            #ifdef OPEN_MISERE
+                case BidType::Open_Misere:
+                    DEBUG_PRINT(F("Open Misere"));
+                    break;
+            #endif
+        
+            case BidType::Suit:
+                DEBUG_PRINT(level);
+                DEBUG_PRINT_SUIT(suit);
+                break;
+        
+            case BidType::Pass:
+                DEBUG_PRINT(F("Pass"));
+                break;
+        
+            case BidType::None:
+                DEBUG_PRINT(F("None"));
+                break;
+
+        }
+
+    #endif
 
 }
 

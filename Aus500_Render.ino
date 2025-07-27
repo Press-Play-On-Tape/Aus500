@@ -360,24 +360,26 @@ void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
         
     if (winningHand != 3 || (winningHand == 3 && game.getFrameCount(48))) {
 
-        if (game.gameRound->getHand(3)->getRank() != Rank::None)  {
+        Card *card = game.gameRound->getHand(3);
 
-            uint8_t idx = game.gameRound->getHand(3)->getCardIndex();
+        if (card->getRank() != Rank::None)  {
 
-            if (game.gameRound->getHand(3)->getRank() == Rank::Joker) {
+            uint8_t idx = card->getCardIndex();
 
-                switch (game.gameRound->getHand(3)->getSuit()) {
+            // if (card->getRank() == Rank::Joker) {
 
-                    case Suit::Spades ... Suit::Hearts:
-                        idx = (44 + static_cast<uint8_t>(game.gameRound->getHand(3)->getSuit())) * 3;
-                        break;
+            //     switch (card->getSuit()) {
 
-                    default:
-                        idx = 0;
+            //         case Suit::Spades ... Suit::Hearts:
+            //             idx = (44 + static_cast<uint8_t>(card->getSuit())) * 3;
+            //             break;
 
-                }
+            //         default:
+            //             idx = 0;
 
-            }
+            //     }
+
+            // }
             
             SpritesU::drawPlusMaskFX(38, 9, Images::Cards_Bottom, idx + currentPlane); 
         }
@@ -386,50 +388,54 @@ void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
         
     if (winningHand != 1 || (winningHand == 1 && game.getFrameCount(48))) {
 
-        if (game.gameRound->getHand(1)->getRank() != Rank::None)  {
+        Card *card = game.gameRound->getHand(1);
 
-            uint8_t idx = game.gameRound->getHand(1)->getCardIndex();
+        if (card->getRank() != Rank::None)  {
 
-            if (game.gameRound->getHand(1)->getRank() == Rank::Joker) {
+            uint8_t idx = card->getCardIndex();
 
-                switch (game.gameRound->getHand(1)->getSuit()) {
+            // if (card->getRank() == Rank::Joker) {
 
-                    case Suit::Spades ... Suit::Hearts:
-                        idx = (44 + static_cast<uint8_t>(game.gameRound->getHand(1)->getSuit())) * 3;
-                        break;
+            //     switch (card->getSuit()) {
 
-                    default:
-                        idx = 0;
+            //         case Suit::Spades ... Suit::Hearts:
+            //             idx = (44 + static_cast<uint8_t>(card->getSuit())) * 3;
+            //             break;
 
-                }
+            //         default:
+            //             idx = 0;
 
-            }
+            //     }
+
+            // }
 
             SpritesU::drawPlusMaskFX(49, 19, Images::Cards_Bottom, idx + currentPlane); 
         }
-        
+
     }
             
     if (winningHand != 0 || (winningHand == 0 && game.getFrameCount(48))) {
 
-        if (game.gameRound->getHand(0)->getRank() != Rank::None)  {
+        Card *card = game.gameRound->getHand(0);
 
-            uint8_t idx = game.gameRound->getHand(0)->getCardIndex();
+        if (card->getRank() != Rank::None)  {
 
-            if (game.gameRound->getHand(0)->getRank() == Rank::Joker) {
+            uint8_t idx = card->getCardIndex();
 
-                switch (game.gameRound->getHand(0)->getSuit()) {
+            // if (card->getRank() == Rank::Joker) {
 
-                    case Suit::Spades ... Suit::Hearts:
-                        idx = (44 + static_cast<uint8_t>(game.gameRound->getHand(0)->getSuit())) * 3;
-                        break;
+            //     switch (card->getSuit()) {
 
-                    default:
-                        idx = 0;
+            //         case Suit::Spades ... Suit::Hearts:
+            //             idx = (44 + static_cast<uint8_t>(card->getSuit())) * 3;
+            //             break;
 
-                }
+            //         default:
+            //             idx = 0;
 
-            }
+            //     }
+
+            // }
 
             SpritesU::drawPlusMaskFX(60, 13, Images::Cards_Right, idx + currentPlane); 
         }
@@ -438,26 +444,29 @@ void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
         
     if (winningHand != 2 || (winningHand == 2 && game.getFrameCount(48))) {
 
-        if (game.gameRound->getHand(2)->getRank() != Rank::None)  {
+        Card *card = game.gameRound->getHand(2);
 
-            uint8_t idx = game.gameRound->getHand(2)->getCardIndex();
+        if (card->getRank() != Rank::None)  {
 
-            if (game.gameRound->getHand(2)->getRank() == Rank::Joker) {
+            uint8_t idx = card->getCardIndex();
 
-                switch (game.gameRound->getHand(2)->getSuit()) {
+            // if (card->getRank() == Rank::Joker) {
 
-                    case Suit::Spades ... Suit::Hearts:
-                        idx = (44 + static_cast<uint8_t>(game.gameRound->getHand(2)->getSuit())) * 3;
-                        break;
+            //     switch (card->getSuit()) {
 
-                    default:
-                        idx = 0;
+            //         case Suit::Spades ... Suit::Hearts:
+            //             idx = (44 + static_cast<uint8_t>(card->getSuit())) * 3;
+            //             break;
 
-                }
+            //         default:
+            //             idx = 0;
 
-            }
+            //     }
+
+            // }
 
             SpritesU::drawPlusMaskFX(20, 21, Images::Cards_Left, idx + currentPlane); 
+
         }
 
     }
