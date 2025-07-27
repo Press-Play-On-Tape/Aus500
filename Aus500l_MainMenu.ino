@@ -40,6 +40,8 @@ void title(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
     uint8_t currentPlane = a.currentPlane();
 
-    SpritesU::drawOverwriteFX(0, 0, Images::Title500, currentPlane);
+    uint8_t idx = 0;
+    if ((game.getFrameCount() % 192) < 14) idx = game.getFrameCount() % 192;
+    SpritesU::drawOverwriteFX(0, 0, Images::Title500, (idx * 3) + currentPlane);
 
 }

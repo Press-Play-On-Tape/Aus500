@@ -479,18 +479,20 @@ void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
 
     if (displayCard && !displayWinningBid) {
 
-        SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, currentPlane);
+        renderHUD_Top(currentPlane, 0, false, false);
+        renderHUD_Bottom(currentPlane, 6, true, true);
 
     }
     else if (!displayCard && !displayWinningBid) {
 
-        SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, 3 + currentPlane);
+        renderHUD_Top(currentPlane, 3, false, false);
+        renderHUD_Bottom(currentPlane, 6, true, true);
 
     }
     else if (!displayCard && displayWinningBid) {
 
         switch (gameState) {
-        
+
             case GameState::Play_EndOfHand:
             case GameState::Play_EndOfRound:
             case GameState::Play_EndOfGame:
@@ -499,44 +501,76 @@ void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
 
                     if (game.getFrameCount(48)) {
 
-                        SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, 6 + currentPlane);
-                        SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
+                        renderHUD_Top(currentPlane, 6, true, true);
     
                     }
                     else {
                     
-                        SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, 9 + currentPlane);
+                        renderHUD_Top(currentPlane, 9, false, true);
 
                     }
-
-                    SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);
                 
                 }
                 else {
 
                     if (game.getFrameCount(48)) {
 
-                        SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, 6 + currentPlane);
-                        SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
-                        SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);
+                        renderHUD_Top(currentPlane, 6, true, true);
     
                     }
                     else {
-                    
-                        SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, 12 + currentPlane);
-                        SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
+
+                        renderHUD_Top(currentPlane, 12, true, false);
 
                     }
 
 
                 }
 
+                if (gameState != GameState::Play_EndOfHand) {
+
+                    if (game.gameRound->getWinningBid_Team() == Constants::HumanTeam) {
+
+                        if (game.getFrameCount(48)) {
+
+                            renderHUD_Bottom(currentPlane, 6, true, true);
+        
+                        }
+                        else {
+                        
+                            renderHUD_Bottom(currentPlane, 9, false, true);
+
+                        }
+                    
+                    }
+                    else {
+
+                        if (game.getFrameCount(48)) {
+
+                            renderHUD_Bottom(currentPlane, 6, true, true);
+        
+                        }
+                        else {
+
+                            renderHUD_Bottom(currentPlane, 12, true, false);
+
+                        }
+
+
+                    }
+
+                }
+                else {
+
+                    renderHUD_Bottom(currentPlane, 6, true, true);
+
+                }
+
                 break;
 
             default:
-                SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, 6 + currentPlane);
-                SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
-                SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);
+                renderHUD_Top(currentPlane, 6, true, true);
+                renderHUD_Bottom(currentPlane, 6, true, true);
                 break;
 
         }
@@ -544,30 +578,49 @@ void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
 
         SpritesU::drawOverwriteFX(107, 29, Images::Bid_Result_Narrow, (game.gameRound->getHighestBid().getImageIndex() * 3) + currentPlane);
 
-        int16_t score = game.gameRound->getScore(1);
-        uint16_t idx = abs(score) / 10;
-        if (idx > 99) idx = 99;
+        // int16_t score = game.gameRound->getScore(1);
+        // uint16_t idx = abs(score) / 10;
+        // if (idx > 99) idx = 99;
 
-        if (score < 0) idx = idx + 100;
-        SpritesU::drawOverwriteFX(113, 51, Images::HUD_Game_Score, (idx * 3) + currentPlane);
+        // if (score < 0) idx = idx + 100;
+        // SpritesU::drawOverwriteFX(113, 51, Images::HUD_Game_Score, (idx * 3) + currentPlane);
 
-        score = game.gameRound->getScore(0);
-        idx = abs(score) / 10;
-        if (idx > 99) idx = 99;
+        // score = game.gameRound->getScore(0);
+        // idx = abs(score) / 10;
+        // if (idx > 99) idx = 99;
 
-        if (score < 0) idx = idx + 100;
-        SpritesU::drawOverwriteFX(113, 58, Images::HUD_Game_Score, (idx * 3) + currentPlane);
+        // if (score < 0) idx = idx + 100;
+        // SpritesU::drawOverwriteFX(113, 58, Images::HUD_Game_Score, (idx * 3) + currentPlane);
 
     }
 
 }
 
-// void renderHUD_Top(uint8_) {
+void renderHUD_Top(uint8_t currentPlane, uint8_t backgroundIdx, bool showTeam0, bool showTeam1) {
 
-//     SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, currentPlane);
-//     SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
-//     SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);
+    SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, backgroundIdx + currentPlane);
+    if (showTeam0)    SpritesU::drawOverwriteFX(118, 8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
+    if (showTeam1)    SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);
+
+}
 
 
+void renderHUD_Bottom(uint8_t currentPlane, uint8_t backgroundIdx, bool showTeam0, bool showTeam1) {
 
-// }
+    SpritesU::drawOverwriteFX(105, 32, Images::HUD_Bottom, backgroundIdx + currentPlane);
+
+    int16_t score = game.gameRound->getScore(1);
+    uint16_t idx = abs(score) / 10;
+    if (idx > 99) idx = 99;
+
+    if (score < 0) idx = idx + 100;
+    if (showTeam0) SpritesU::drawOverwriteFX(113, 51, Images::HUD_Game_Score, (idx * 3) + currentPlane);
+
+    score = game.gameRound->getScore(0);
+    idx = abs(score) / 10;
+    if (idx > 99) idx = 99;
+
+    if (score < 0) idx = idx + 100;
+    if (showTeam1) SpritesU::drawOverwriteFX(113, 58, Images::HUD_Game_Score, (idx * 3) + currentPlane);
+
+}
