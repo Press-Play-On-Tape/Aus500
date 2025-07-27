@@ -131,7 +131,8 @@ convert_header(IMAGES + 'Titles/Sound_Checkbox.png',                            
 convert_header(IMAGES + 'Titles/Title.png',                                                    BASE + 'Images.hpp', 'Title', 4, 48, 40, maskImage=False)
 
 
-convert_header(IMAGES + 'HUD/HUD.png',                                                         BASE + 'Images.hpp', 'HUD', 4, 23, 64)
+convert_header(IMAGES + 'HUD/HUD_Top.png',                                                     BASE + 'Images.hpp', 'HUD_Top', 4, 23, 32)
+convert_header(IMAGES + 'HUD/HUD_Bottom.png',                                                  BASE + 'Images.hpp', 'HUD_Bottom', 4, 23, 32)
 convert_header(IMAGES + 'HUD/Score_Numbers_Bottom.png',                                        BASE + 'Images.hpp', 'Score_Numbers_Bottom', 4, 7, 8)
 convert_header(IMAGES + 'HUD/Score_Numbers_Left.png',                                          BASE + 'Images.hpp', 'Score_Numbers_Left', 4, 7, 8)
 convert_header(IMAGES + 'HUD/Score_Numbers_Right.png',                                         BASE + 'Images.hpp', 'Score_Numbers_Right', 4, 7, 8)
