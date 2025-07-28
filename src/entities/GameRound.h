@@ -834,7 +834,7 @@ struct GameRound {
 
                             Card &card = this->hand[i];
 
-                            if (card.getRank() > rank) {
+                            if (card.getSuit() == cardLedSuit && card.getRank() > rank) {
 
                                 rank = card.getRank();
                                 returnIdx = i;

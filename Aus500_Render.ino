@@ -13,7 +13,35 @@ void renderPlayerHands(uint8_t currentPlane, bool blinkSelected, bool blinkRaise
 
         if (rank != Rank::None) {
 
-            uint8_t y = 47 - (card.isSelected() ? 4 : 0);
+            // uint8_t y = 47 - (card.isSelected() ? 4 : 0);
+            uint8_t y = 47;
+
+
+            // Raise cards only when the player is throwing cards from the kitty or its his turn ..
+
+            switch (gameState){
+            
+                case GameState::Play_01:
+
+                    if (gameRound.getCurrentPlayer() == Constants::HumanPlayer) {
+                        
+                        y = 47 - (card.isSelected() ? 4 : 0);
+
+                    }
+
+                    break;
+
+                case GameState::Handle_Kitty:
+
+                    if (game.gameRound->getHighestBid().getPlayerIdx() == Constants::HumanPlayer) {
+                        
+                        y = 47 - (card.isSelected() ? 4 : 0);
+
+                    }
+
+                    break;
+
+            }
 
             if ((blinkRaised && card.isSelected() || (blinkSelected && i == selectedCard)) && game.getFrameCount(48)) {
             
@@ -614,13 +642,13 @@ void renderHUD_Bottom(uint8_t currentPlane, uint8_t backgroundIdx, bool showTeam
     if (idx > 99) idx = 99;
 
     if (score < 0) idx = idx + 100;
-    if (showTeam0) SpritesU::drawOverwriteFX(113, 51, Images::HUD_Game_Score, (idx * 3) + currentPlane);
+    if (showTeam0) SpritesU::drawOverwriteFX(114, 51, Images::HUD_Game_Score, (idx * 3) + currentPlane);
 
     score = game.gameRound->getScore(0);
     idx = abs(score) / 10;
     if (idx > 99) idx = 99;
 
     if (score < 0) idx = idx + 100;
-    if (showTeam1) SpritesU::drawOverwriteFX(113, 58, Images::HUD_Game_Score, (idx * 3) + currentPlane);
+    if (showTeam1) SpritesU::drawOverwriteFX(114, 58, Images::HUD_Game_Score, (idx * 3) + currentPlane);
 
 }

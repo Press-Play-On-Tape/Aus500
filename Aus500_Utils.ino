@@ -206,4 +206,6 @@ void play_CardSelected() {
         
     }
 
+    game.setFrameCount(0);
+
 }

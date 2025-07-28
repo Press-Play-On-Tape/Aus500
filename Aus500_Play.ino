@@ -71,10 +71,6 @@ void play_Init() {
     #endif
     randomSeed(3750);
 
-    #ifdef DEBUG_CRASH
-        game.setCardCount(9);
-    #endif
-
 }
 
 void populateRotateDetails(uint8_t card) {
@@ -625,6 +621,7 @@ void play_Update() {
 
             if (selectedCard >= game.players[1].getCardCount()) selectedCard--;
             game.players[1].getCard(selectedCard).setSelected(true);
+            game.setFrameCount(0);
             gameState++;
 
             break;
@@ -637,69 +634,73 @@ void play_Update() {
 // if (gameRound.getRound() == 1 || gameRound.getRound() == 10) {
 //    DEBUG_BREAK   //
 //}
-                    switch (gameRound.winningBid_Type()) {
-                    
-                        case BidType::Suit:
+                    if (game.getFrameCount() == 32) {
 
-                            if (gameRound.getFirstPlayer() == gameRound.getCurrentPlayer()) {
-                                game.players[gameRound.getCurrentPlayer()].playSuit_Lead();
+                        switch (gameRound.winningBid_Type()) {
+                        
+                            case BidType::Suit:
+
+                                if (gameRound.getFirstPlayer() == gameRound.getCurrentPlayer()) {
+                                    game.players[gameRound.getCurrentPlayer()].playSuit_Lead();
+                                }
+                                else {
+                                    game.players[gameRound.getCurrentPlayer()].playSuit_Follow();
+                                }
+
+                                break;
+                        
+                            case BidType::No_Trumps:
+
+                                if (gameRound.getFirstPlayer() == gameRound.getCurrentPlayer()) {
+                                    game.players[gameRound.getCurrentPlayer()].playNoTrumps_Lead();
+                                }
+                                else {
+                                    game.players[gameRound.getCurrentPlayer()].playNoTrumps_Follow();
+                                }
+
+                                break;
+
+                            case BidType::Misere:
+
+                                if (gameRound.getFirstPlayer() == gameRound.getCurrentPlayer()) {
+                                    game.players[gameRound.getCurrentPlayer()].playMisere_Lead();
+                                }
+                                else {
+                                    game.players[gameRound.getCurrentPlayer()].playMisere_Follow();
+                                }
+
+                                break;
+
+                        }
+
+                        #ifdef DEBUG_BASIC
+                            DEBUG_PRINT(F("99. Player "));
+                            DEBUG_PRINT(gameRound.getCurrentPlayer());
+                            DEBUG_PRINT(F(" played "));
+                        #endif
+
+                        Card &card = game.players[gameRound.getCurrentPlayer()].cardJustPlayed;
+
+                        #ifdef DEBUG_BASIC
+
+                            if (card.getRank() == Rank::Joker) {
+                                
+                                DEBUG_PRINT(F("JOKER"));
+
                             }
                             else {
-                                game.players[gameRound.getCurrentPlayer()].playSuit_Follow();
+
+                                DEBUG_PRINT_CARD(card.getSuit(), card.getRank());
+
                             }
 
-                            break;
-                    
-                        case BidType::No_Trumps:
+                            DEBUG_PRINTLN();
 
-                            if (gameRound.getFirstPlayer() == gameRound.getCurrentPlayer()) {
-                                game.players[gameRound.getCurrentPlayer()].playNoTrumps_Lead();
-                            }
-                            else {
-                                game.players[gameRound.getCurrentPlayer()].playNoTrumps_Follow();
-                            }
+                        #endif
 
-                            break;
-
-                        case BidType::Misere:
-
-                            if (gameRound.getFirstPlayer() == gameRound.getCurrentPlayer()) {
-                                game.players[gameRound.getCurrentPlayer()].playMisere_Lead();
-                            }
-                            else {
-                                game.players[gameRound.getCurrentPlayer()].playMisere_Follow();
-                            }
-
-                            break;
+                        play_CardSelected();
 
                     }
-
-                    #ifdef DEBUG_BASIC
-                        DEBUG_PRINT(F("99. Player "));
-                        DEBUG_PRINT(gameRound.getCurrentPlayer());
-                        DEBUG_PRINT(F(" played "));
-                    #endif
-
-                    Card &card = game.players[gameRound.getCurrentPlayer()].cardJustPlayed;
-
-                    #ifdef DEBUG_BASIC
-
-                        if (card.getRank() == Rank::Joker) {
-                            
-                            DEBUG_PRINT(F("JOKER"));
-
-                        }
-                        else {
-
-                            DEBUG_PRINT_CARD(card.getSuit(), card.getRank());
-
-                        }
-
-                        DEBUG_PRINTLN();
-
-                    #endif
-
-                    play_CardSelected();
 
                 }
                 else {
@@ -944,6 +945,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
         case GameState::Handle_Kitty:
 
+            renderDealer(currentPlane);
             if (game.gameRound->getHighestBid().getPlayerIdx() == Constants::HumanPlayer) {
                 SpritesU::drawOverwriteFX(21, 15, Images::KittyInstructions, currentPlane);
                 renderPlayerHands(currentPlane, true, false);
@@ -954,7 +956,6 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
             renderDealer(currentPlane);
             renderHUD(currentPlane, false, true);
-            renderDealer(currentPlane);
 
             break;
 

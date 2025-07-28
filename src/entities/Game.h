@@ -11,6 +11,7 @@ struct Game {
 
     private:
 
+        uint16_t randomSeed = 0;
         uint16_t frameCount = 0;
         uint8_t selecteCard = 255;
         GameState prevGameState = GameState::SplashScreen_Start;
@@ -26,6 +27,7 @@ struct Game {
         uint8_t getSelectedCard()                       { return this->selecteCard; }
         GameState getPrevGameState()                    { return this->prevGameState; }
 
+        void setRandomSeed(uint16_t val)                { this->randomSeed = val; }
         void setFrameCount(uint16_t val)                { this->frameCount = val; }
         void setSelectedCard(uint8_t val)               { this->selecteCard = val; }
         void setPrevGameState(GameState val)            { this->prevGameState = val; }
