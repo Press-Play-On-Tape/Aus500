@@ -23,51 +23,6 @@ uint8_t getPressedButtons() {
 }
 
 
-void saveCookie(bool enableLEDs) {
-
-    #ifdef USE_LED
-    if (enableLEDs) {
-        #ifndef MICROCADE
-            a.setRGBled(RED_LED, 32);
-        #else
-            a.setRGBledGreenOff();
-            a.setRGBledBlueOff();
-        #endif
-    }
-    #endif
-
-    // FX::saveGameState(cookie);
-
-    #ifdef USE_LED
-    if (enableLEDs) {
-        #ifndef MICROCADE
-            a.setRGBled(RED_LED, 0);
-            a.setRGBled(GREEN_LED, 32);
-        #else
-            a.setRGBledRedOff();
-            a.setRGBledGreenOn();
-        #endif
-    }
-    #endif
-
-}
-
-
-void deactivateLEDs() {
-
-    #ifdef USE_LED
-        #ifndef MICROCADE
-            a.setRGBled(0, 0, 0);
-        #else
-            a.setRGBledRedOff();
-            a.setRGBledGreenOff();
-            a.setRGBledBlueOff();
-        #endif
-    #endif
-
-}
-
-
 void play_CardSelected() {
 
     gameRound.setCurrentPlayer((gameRound.getCurrentPlayer() + 1) % 4);
