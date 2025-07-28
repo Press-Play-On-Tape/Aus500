@@ -101,25 +101,38 @@ void renderDealer(uint8_t currentPlane) {
 
     uint8_t dealer = game.gameRound->getDealer_Idx();
     
+    uint8_t x;
+    uint8_t y;
+
     switch (dealer) {
 
         case 0:
-            SpritesU::drawOverwriteFX(91, 23, Images::Dealer, currentPlane); 
+            x = 91;
+            y = 23;
+            // SpritesU::drawOverwriteFX(91, 23, Images::Dealer, currentPlane); 
             break;
 
         case 1:
-            SpritesU::drawOverwriteFX(52, 40, Images::Dealer, currentPlane); 
+            x = 52;
+            y = 40;
+            // SpritesU::drawOverwriteFX(52, 40, Images::Dealer, currentPlane); 
             break;
 
         case 2:
-            SpritesU::drawOverwriteFX(8, 23, Images::Dealer, currentPlane);                  
+            x = 8;
+            y = 23;
+            // SpritesU::drawOverwriteFX(8, 23, Images::Dealer, currentPlane);                  
             break;
 
         case 3:
-            SpritesU::drawOverwriteFX(52, 6, Images::Dealer, currentPlane); 
+            x = 52;
+            y = 6;
+            // SpritesU::drawOverwriteFX(52, 6, Images::Dealer, currentPlane); 
             break;
 
     }
+
+    SpritesU::drawOverwriteFX(x, y, Images::Dealer, currentPlane); 
 
 }
 
