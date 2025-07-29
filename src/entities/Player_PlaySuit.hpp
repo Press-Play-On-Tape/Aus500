@@ -362,7 +362,8 @@ void playSuit_Lead() {
                 else if (this->playTop_NonTrump_AllSuit(trumps))                                                return; // Play a wining ace ..
                 else if (this->playLowest_NonTrump_WithSecondHighest_AllSuit(trumps))                           return; // Play a small card from any other suit where you hold the second largest card in that suit.
                 else if (this->playLowest_NonTrump_ExcludeSuit(trumps, suit1, suit2))                           return; // Play a small card from any other suit that the other team did not call.
-                else this->playLowest_NonTrump_AllSuit(trumps);                                                 return; // Play a small card from any other suit.
+                else if (this->playLowest_NonTrump_AllSuit(trumps))                                             return; // Play a small card from any other suit.
+                else this->playLowest_Trump(trumps);                                                            return; // Play a small card from any other suit.
 
             }
             else {                                                                                                      // Neither of your opponents have trumps ..

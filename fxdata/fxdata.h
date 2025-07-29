@@ -7,7 +7,7 @@ using uint24_t = __uint24;
 // Initialize FX hardware using  FX::begin(FX_DATA_PAGE); in the setup() function.
 
 constexpr uint16_t FX_DATA_PAGE  = 0xfa7e;
-constexpr uint24_t FX_DATA_BYTES = 356817;
+constexpr uint24_t FX_DATA_BYTES = 356838;
 
 constexpr uint16_t FX_SAVE_PAGE  = 0xfff0;
 constexpr uint24_t FX_SAVE_BYTES = 2;
@@ -67,23 +67,23 @@ namespace Images
   constexpr uint24_t Numbers_3x5 = 0x0378DE;
   constexpr uint24_t HighScores = 0x03A694;
   constexpr uint24_t HUD_Trick_Score = 0x03B086;
-  constexpr uint24_t HUD_Game_Score = 0x03B15A;
-  constexpr uint24_t Hand_Full = 0x03D22C;
-  constexpr uint24_t Hand_Full_Grey = 0x03D2C7;
-  constexpr uint24_t Rotate = 0x03D362;
-  constexpr uint24_t Flip = 0x0438A4;
-  constexpr uint24_t Bid_Panel = 0x044AA6;
-  constexpr uint24_t Bid_Suits = 0x046098;
-  constexpr uint24_t Bid_Numbers = 0x0461A8;
-  constexpr uint24_t Bid_Bottom = 0x04627C;
-  constexpr uint24_t Bid_Left = 0x0472AA;
-  constexpr uint24_t Bid_Right = 0x04838C;
-  constexpr uint24_t Bid_Result = 0x04946E;
-  constexpr uint24_t Bid_Result_Narrow = 0x04A118;
-  constexpr uint24_t Title500 = 0x04A7BF;
-  constexpr uint24_t Dealer = 0x0567C1;
-  constexpr uint24_t EveryonePassed = 0x0567D2;
-  constexpr uint24_t KittyInstructions = 0x0568B2;
-  constexpr uint24_t ChooseSuit = 0x056AEB;
+  constexpr uint24_t HUD_Game_Score = 0x03B16F;
+  constexpr uint24_t Hand_Full = 0x03D241;
+  constexpr uint24_t Hand_Full_Grey = 0x03D2DC;
+  constexpr uint24_t Rotate = 0x03D377;
+  constexpr uint24_t Flip = 0x0438B9;
+  constexpr uint24_t Bid_Panel = 0x044ABB;
+  constexpr uint24_t Bid_Suits = 0x0460AD;
+  constexpr uint24_t Bid_Numbers = 0x0461BD;
+  constexpr uint24_t Bid_Bottom = 0x046291;
+  constexpr uint24_t Bid_Left = 0x0472BF;
+  constexpr uint24_t Bid_Right = 0x0483A1;
+  constexpr uint24_t Bid_Result = 0x049483;
+  constexpr uint24_t Bid_Result_Narrow = 0x04A12D;
+  constexpr uint24_t Title500 = 0x04A7D4;
+  constexpr uint24_t Dealer = 0x0567D6;
+  constexpr uint24_t EveryonePassed = 0x0567E7;
+  constexpr uint24_t KittyInstructions = 0x0568C7;
+  constexpr uint24_t ChooseSuit = 0x056B00;
 }
 

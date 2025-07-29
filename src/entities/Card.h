@@ -53,17 +53,8 @@ struct Card {
 
         Suit getSuit(Suit trumps) {
         
-            if (this->getRank() == Rank::Joker) return trumps;
-
-            if (isLeftBower(trumps))    { 
-           
-                if (trumps == Suit::Spades)     return Suit::Clubs;
-                if (trumps == Suit::Clubs)      return Suit::Spades;
-                if (trumps == Suit::Diamonds)   return Suit::Hearts;
-                if (trumps == Suit::Hearts)     return Suit::Diamonds;
-            
-            }
-
+            if (this->getRank() == Rank::Joker)     return trumps;
+            if (this->isLeftBower(trumps))          return trumps;
             return this->suit; 
          
         }

@@ -47,6 +47,7 @@ void continueBidding() {
     else if (passes == 3 && bids == 1) {
 
         gameState++;    
+        game.setFrameCount(0);
 
     }
     else {
@@ -69,7 +70,7 @@ void play_Init() {
     DEBUG_PRINTLN(r);
     randomSeed(r);
     #endif
-    randomSeed(3750);
+    randomSeed(1811);
 
 }
 
@@ -465,23 +466,27 @@ void play_Update() {
 
         case GameState::Bid_Finished:
             {
-                game.gameRound->setWinningBid_Idx(winningBidIdx);
-                game.gameRound->setFirstPlayer(winningBidIdx);
-                game.gameRound->setCurrentPlayer(winningBidIdx);
+                if (game.getFrameCount() == 32) {
 
-                game.players[winningBidIdx].addCard(game.gameRound->getKitty(0));
-                game.players[winningBidIdx].addCard(game.gameRound->getKitty(1));
-                game.players[winningBidIdx].addCard(game.gameRound->getKitty(2));
+                    game.gameRound->setWinningBid_Idx(winningBidIdx);
+                    game.gameRound->setFirstPlayer(winningBidIdx);
+                    game.gameRound->setCurrentPlayer(winningBidIdx);
 
-                #ifdef OPEN_MISERE
-                if (game.gameRound->getWinningBid().getBidType() == BidType::Misere || game.gameRound->getWinningBid().getBidType() == BidType::Open_Misere) {
-                #else
-                if (game.gameRound->getWinningBid().getBidType() == BidType::Misere) {
-                #endif
-                    game.players[(winningBidIdx + 2) % 4].setPlaying(false);
+                    game.players[winningBidIdx].addCard(game.gameRound->getKitty(0));
+                    game.players[winningBidIdx].addCard(game.gameRound->getKitty(1));
+                    game.players[winningBidIdx].addCard(game.gameRound->getKitty(2));
+
+                    #ifdef OPEN_MISERE
+                    if (game.gameRound->getWinningBid().getBidType() == BidType::Misere || game.gameRound->getWinningBid().getBidType() == BidType::Open_Misere) {
+                    #else
+                    if (game.gameRound->getWinningBid().getBidType() == BidType::Misere) {
+                    #endif
+                        game.players[(winningBidIdx + 2) % 4].setPlaying(false);
+                    }
+
+                    gameState = GameState::Handle_Kitty;
+
                 }
-
-                gameState = GameState::Handle_Kitty;
 
             }
 
@@ -732,6 +737,7 @@ void play_Update() {
                             case BidType::Suit:
 
                                 if (cardLed.getSuit(trumps) != cardPlayed.getSuit(trumps) && game.players[gameRound.getCurrentPlayer()].hasSuit(cardLed.getSuit(trumps))) {
+
                                     return;
                                 }
 
@@ -919,7 +925,6 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
             renderKitty(currentPlane);
             renderBids(currentPlane);
             renderHUD(currentPlane, false, false);
-            renderDealer(currentPlane);
 
             break;
 
