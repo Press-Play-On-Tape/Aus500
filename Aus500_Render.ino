@@ -3,63 +3,67 @@
 
 void renderPlayerHands(uint8_t currentPlane, bool blinkSelected, bool blinkRaised) {
 
-    uint8_t cardCount = game.players[Constants::HumanPlayer].getCardCount();
-    int8_t xStart = 48 - (cardCount * 4) + (cardCount > 10 ? 3 : 0);
+    if (game.players[Constants::HumanPlayer].isPlaying()) {
+        
+        uint8_t cardCount = game.players[Constants::HumanPlayer].getCardCount();
+        int8_t xStart = 48 - (cardCount * 4) + (cardCount > 10 ? 3 : 0);
 
-    for (uint8_t i = 0; i < cardCount; i++) {
+        for (uint8_t i = 0; i < cardCount; i++) {
 
-        Card &card = game.players[Constants::HumanPlayer].getCard(i);
-        Rank rank = card.getRank();
+            Card &card = game.players[Constants::HumanPlayer].getCard(i);
+            Rank rank = card.getRank();
 
-        if (rank != Rank::None) {
+            if (rank != Rank::None) {
 
-            // uint8_t y = 47 - (card.isSelected() ? 4 : 0);
-            uint8_t y = 47;
+                // uint8_t y = 47 - (card.isSelected() ? 4 : 0);
+                uint8_t y = 47;
 
 
-            // Raise cards only when the player is throwing cards from the kitty or its his turn ..
+                // Raise cards only when the player is throwing cards from the kitty or its his turn ..
 
-            switch (gameState){
-            
-                case GameState::Play_01:
+                switch (gameState){
+                
+                    case GameState::Play_01:
 
-                    if (gameRound.getCurrentPlayer() == Constants::HumanPlayer) {
-                        
-                        y = 47 - (card.isSelected() ? 4 : 0);
+                        if (gameRound.getCurrentPlayer() == Constants::HumanPlayer) {
+                            
+                            y = 47 - (card.isSelected() ? 4 : 0);
 
+                        }
+
+                        break;
+
+                    case GameState::Handle_Kitty:
+
+                        if (game.gameRound->getHighestBid().getPlayerIdx() == Constants::HumanPlayer) {
+                            
+                            y = 47 - (card.isSelected() ? 4 : 0);
+
+                        }
+
+                        break;
+
+                }
+
+                if ((blinkRaised && card.isSelected() || (blinkSelected && i == selectedCard)) && game.getFrameCount(48)) {
+                
+                    if (rank != Rank::Joker) {
+                        SpritesU::drawPlusMaskFX(xStart + (i * 8), y, Images::Cards_Bottom_Grey, game.players[Constants::HumanPlayer].getCard(i).getCardIndex() + currentPlane);
+                    }
+                    else {
+                        SpritesU::drawPlusMaskFX(xStart + (i * 8), y,  Images::Cards_Bottom_Grey, currentPlane);
                     }
 
-                    break;
+                }
+                else {
 
-                case GameState::Handle_Kitty:
-
-                    if (game.gameRound->getHighestBid().getPlayerIdx() == Constants::HumanPlayer) {
-                        
-                        y = 47 - (card.isSelected() ? 4 : 0);
-
+                    if (rank != Rank::Joker) {
+                        SpritesU::drawPlusMaskFX(xStart + (i * 8), y, Images::Cards_Bottom, game.players[Constants::HumanPlayer].getCard(i).getCardIndex() + currentPlane);
+                    }
+                    else {
+                        SpritesU::drawPlusMaskFX(xStart + (i * 8), y,  Images::Cards_Bottom, currentPlane);
                     }
 
-                    break;
-
-            }
-
-            if ((blinkRaised && card.isSelected() || (blinkSelected && i == selectedCard)) && game.getFrameCount(48)) {
-            
-                if (rank != Rank::Joker) {
-                    SpritesU::drawPlusMaskFX(xStart + (i * 8), y, Images::Cards_Bottom_Grey, game.players[Constants::HumanPlayer].getCard(i).getCardIndex() + currentPlane);
-                }
-                else {
-                    SpritesU::drawPlusMaskFX(xStart + (i * 8), y,  Images::Cards_Bottom_Grey, currentPlane);
-                }
-
-            }
-            else {
-
-                if (rank != Rank::Joker) {
-                    SpritesU::drawPlusMaskFX(xStart + (i * 8), y, Images::Cards_Bottom, game.players[Constants::HumanPlayer].getCard(i).getCardIndex() + currentPlane);
-                }
-                else {
-                    SpritesU::drawPlusMaskFX(xStart + (i * 8), y,  Images::Cards_Bottom, currentPlane);
                 }
 
             }
@@ -69,15 +73,15 @@ void renderPlayerHands(uint8_t currentPlane, bool blinkSelected, bool blinkRaise
     }
 
 
-    if (game.players[2].getCardCount() > 0) {
+    if (game.players[2].getCardCount() > 0 && game.players[2].isPlaying()) {
         SpritesU::drawOverwriteFX(0, 4, Images::Hand_Left, (game.players[2].getCardCount() * 3) + currentPlane);
     }
 
-    if (game.players[3].getCardCount() > 0) {
+    if (game.players[3].getCardCount() > 0 && game.players[3].isPlaying()) {
         SpritesU::drawOverwriteFX(31, -3, Images::Hand_Top, (game.players[3].getCardCount() * 3) + currentPlane);
     }
 
-    if (game.players[0].getCardCount() > 0) {
+    if (game.players[0].getCardCount() > 0 && game.players[0].isPlaying()) {
         SpritesU::drawOverwriteFX(100, 4, Images::Hand_Right, (game.players[0].getCardCount() * 3) + currentPlane);
     }
 
@@ -660,6 +664,7 @@ void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
 
 void renderHUD_Top(uint8_t currentPlane, uint8_t backgroundIdx, bool showTeam0, bool showTeam1) {
 
+    backgroundIdx = backgroundIdx + (backgroundIdx >= 6 ? game.gameRound->getFirstPlayer() * 9 : 0);
     SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, backgroundIdx + currentPlane);
     if (showTeam0)    SpritesU::drawOverwriteFX(118,  8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
     if (showTeam1)    SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);

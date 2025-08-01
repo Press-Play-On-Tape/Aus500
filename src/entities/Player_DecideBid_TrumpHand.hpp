@@ -164,9 +164,9 @@ uint8_t evaluateNoTrumpHand() {
 
 uint8_t getBidLevelFromScore_NoTrumps(uint8_t score) {
 
-    if (score >= 60) return 10;
-    if (score >= 55) return 9;
-    if (score >= 50) return 8;
+    if (score >= 90) return 10;
+    if (score >= 75) return 9;
+    if (score >= 60) return 8;
     if (score >= 40) return 7;
     if (score >= 25) return 6;
     return 0; // Not enough points to bid

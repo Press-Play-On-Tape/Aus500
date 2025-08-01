@@ -157,7 +157,7 @@ convert_header(IMAGES + 'Bid/Bid_Left.png',                                     
 convert_header(IMAGES + 'Bid/Bid_Right.png',                                                   BASE + 'Images.hpp', 'Bid_Right', 4, 8, 24)
 convert_header(IMAGES + 'Bid/Bid_Result.png',                                                  BASE + 'Images.hpp', 'Bid_Result', 4, 40, 8)
 convert_header(IMAGES + 'Bid/Bid_Result_Narrow.png',                                           BASE + 'Images.hpp', 'Bid_Result_Narrow', 4, 21, 8)
-convert_header(IMAGES + 'Titles/Title500.png',                                                 BASE + 'Images.hpp', 'Title500', 4, 128, 64)
+convert_header(IMAGES + 'Titles/Title500_4.png',                                               BASE + 'Images.hpp', 'Title500', 4, 128, 64)
 convert_header(IMAGES + 'Dealer.png',                                                          BASE + 'Images.hpp', 'Dealer', 4)
 convert_header(IMAGES + 'EveryonePassed.png',                                                  BASE + 'Images.hpp', 'EveryonePassed', 4)
 convert_header(IMAGES + 'KittyInstructions.png',                                               BASE + 'Images.hpp', 'KittyInstructions', 4)

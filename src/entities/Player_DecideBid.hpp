@@ -131,7 +131,6 @@ Bid bid(Bid &previousBid, Bid&partnersBid, Bid &bestInRound) {
 
     }
 
-
     return decideBid(bestInRound);
 
 }
@@ -162,7 +161,7 @@ Bid elevatePartnersHand(Bid &partnersBid, Bid &bestInRound) {
 
     bool isBestInRoundPartners = (partnersBid.getPlayerIdx() == bestInRound.getPlayerIdx());
 
-    #if defined(DEBUG) && defined(DEBUG_EVALUATE_NOTRUMPS)
+    #if defined(DEBUG) && defined(DEBUG_ELEVPART_EVALUATE)
         DEBUG_PRINT(F("   = score "));
         DEBUG_PRINTLN(score);
     #endif
@@ -170,7 +169,7 @@ Bid elevatePartnersHand(Bid &partnersBid, Bid &bestInRound) {
 
     switch (score) {
     
-        case 6 ... 10:
+        case 6 ... 11:
             {
 
                 uint8_t elev = random(isBestInRoundPartners ? 8 : 4);
@@ -186,12 +185,12 @@ Bid elevatePartnersHand(Bid &partnersBid, Bid &bestInRound) {
 
             break;
 
-        case 11 ... 17:
+        case 12 ... 19:
             {
                 uint8_t elev = random(isBestInRoundPartners ? 4 : 2);
 
                 #if defined(DEBUG) && defined(DEBUG_ELEVPART_EVALUATE)
-                    DEBUG_PRINT(F("case 12 ... 17, "));
+                    DEBUG_PRINT(F("case 12 ... 19, "));
                     DEBUG_PRINTLN(elev);
                 #endif
 
@@ -201,20 +200,20 @@ Bid elevatePartnersHand(Bid &partnersBid, Bid &bestInRound) {
 
             break;
 
-        case 18 ... 255:
+        case 20 ... 255:
             {
                 uint8_t inc = random(11 - partnersBid.getLevel());
 
                 #if defined(DEBUG) && defined(DEBUG_ELEVPART_EVALUATE)
-                    DEBUG_PRINT(F("case 18 ... 255, "));
+                    DEBUG_PRINT(F("case 20 ... 255, "));
                     DEBUG_PRINTLN(inc);
                 #endif
 
                 if (partnersBid.getLevel() < 10) {
 
                     Bid currentBid;
-                    currentBid.setBidType(BidType::No_Trumps);
-                    currentBid.setSuit(Suit::No_Trumps);
+                    currentBid.setBidType(partnersBid.getBidType());
+                    currentBid.setSuit(partnersBid.getSuit());
                     currentBid.setLevel(partnersBid.getLevel() + inc);
                     currentBid.setBidScore(score);
 
@@ -470,7 +469,7 @@ Bid decideBid(Bid &bestInRound) {
                     DEBUG_PRINTLN(randomReduction);
                 #endif
 
-                if (randomReduction == 0) { 
+                if (randomReduction == 0 && bestBid.getLevel() > 6) { 
                     
                     switch (bestBid.getBidType()) {
 
@@ -480,10 +479,7 @@ Bid decideBid(Bid &bestInRound) {
 
                                 Bid testBid;
                                 testBid.setBid(bestBid);
-                                // testBid.setBidType(bestBid.getBidType());
-                                // testBid.setSuit(bestBid.getSuit());
                                 testBid.setLevel(bestBid.getLevel() - 1);
-                                // testBid.setBidScore(bestBid.getBidScore());
 
                                 if (testBid.isHigherThan(bestInRound)) {
 
@@ -502,10 +498,6 @@ Bid decideBid(Bid &bestInRound) {
 
                                     Bid testBid;
                                     testBid.setBid(bestBid);
-                                    // testBid.setBidType(BidType::Misere);
-                                    // testBid.setSuit(bestBid.getSuit());
-                                    // testBid.setLevel(bestBid.getLevel());
-                                    // testBid.setBidScore(bestBid.getBidScore());
 
                                     if (testBid.isHigherThan(bestInRound)) {
 
@@ -521,6 +513,11 @@ Bid decideBid(Bid &bestInRound) {
 
                     }
 
+                }
+                else {
+// Serial.print("no redc ");
+// DEBUG_PRINT_BID(bestBid.getBidType(), bestBid.getSuit(), bestBid.getLevel());
+// Serial.println(".");                
                 }
 
             }

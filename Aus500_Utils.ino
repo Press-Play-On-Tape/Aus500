@@ -141,13 +141,13 @@ void play_CardSelected() {
             if (game.gameRound->getWinningBid_Idx() == game.gameRound->getWinningHand(BidType::No_Trumps)) {
 
                 gameRound.setRound(10);
-                gameState = GameState::Play_EndOfHand;// SJH should be end of round but results written on end of hand
+                // gameState = GameState::Play_EndOfHand;// SJH should be end of round but results written on end of hand
             
             }
             else {
 
                 game.gameRound->resetHand(game.gameRound->getWinningHand(BidType::No_Trumps));
-                gameState = GameState::Play_EndOfHand;
+                // gameState = GameState::Play_EndOfHand;
 
             }
 
@@ -155,12 +155,39 @@ void play_CardSelected() {
         else {
 
             game.gameRound->resetHand(game.gameRound->getWinningHand());
-            gameState = GameState::Play_EndOfHand;
+            // gameState = GameState::Play_EndOfHand;
 
         }
         
+        gameState = GameState::Play_EndOfHand;
+
     }
 
     game.setFrameCount(0);
+    highlightSuitInHand();
+
+}
+
+void highlightSuitInHand() {
+
+    Suit trumpsSuit = game.gameRound->winningBid_Suit();
+    Card &cardLed = game.gameRound->getCardLed();
+
+    for (uint8_t i = 0; i < game.players[Constants::HumanPlayer].getCardCount(); i++) {
+
+        if (game.players[Constants::HumanPlayer].getCard(i).getSuit(trumpsSuit) ==  cardLed.getSuit(trumpsSuit)) {
+        
+            selectedCard = i;
+            game.players[Constants::HumanPlayer].clearSelection();
+            game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);            
+            return;
+
+        }
+
+    }
+
+    selectedCard = 0;
+    game.players[gameRound.getCurrentPlayer()].clearSelection();
+    game.players[gameRound.getCurrentPlayer()].getCard(selectedCard).setSelected(true);
 
 }

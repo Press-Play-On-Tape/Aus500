@@ -64,13 +64,13 @@ void play_Init() {
     game.resetFrameCount();
     gameState = GameState::Play_Shuffle;
 
-    #ifdef DEBUG_RAND
+    // #ifdef DEBUG_RAND
     uint16_t r = random(8000);
-    DEBUG_PRINT("Rand ");
-    DEBUG_PRINTLN(r);
+    // DEBUG_PRINT("Rand ");
+    // DEBUG_PRINTLN(r);
     randomSeed(r);
-    #endif
-    randomSeed(1811);
+    // #endif
+    // randomSeed(1780);
 
 }
 
@@ -476,6 +476,10 @@ void play_Update() {
                     game.players[winningBidIdx].addCard(game.gameRound->getKitty(1));
                     game.players[winningBidIdx].addCard(game.gameRound->getKitty(2));
 
+                    game.players[winningBidIdx].getCard(10).setSelected(true);
+                    game.players[winningBidIdx].getCard(11).setSelected(true);
+                    game.players[winningBidIdx].getCard(12).setSelected(true);
+
                     #ifdef OPEN_MISERE
                     if (game.gameRound->getWinningBid().getBidType() == BidType::Misere || game.gameRound->getWinningBid().getBidType() == BidType::Open_Misere) {
                     #else
@@ -484,6 +488,10 @@ void play_Update() {
                         game.players[(winningBidIdx + 2) % 4].setPlaying(false);
                     }
 
+                    for (uint8_t i = 0; i < 4; i++) {
+                        game.players[i].sort();
+                    }
+                    
                     gameState = GameState::Handle_Kitty;
 
                 }
@@ -578,7 +586,7 @@ void play_Update() {
 
                     game.players[Constants::HumanPlayer].sort();
                     game.gameRound->setRound(0);
-                    selectedCard = 0;
+                    highlightSuitInHand();
                     gameState++;
                 
                 }
@@ -590,7 +598,7 @@ void play_Update() {
                 game.gameRound->clearKitty();
                 game.players[game.gameRound->getWinningBid_Idx()].handleKitty();
                 game.players[game.gameRound->getWinningBid_Idx()].sort();
-                selectedCard = 0;
+                highlightSuitInHand();
                 gameState++;
 
             }
@@ -625,7 +633,7 @@ void play_Update() {
             // Select card in players hand ..
 
             if (selectedCard >= game.players[1].getCardCount()) selectedCard--;
-            game.players[1].getCard(selectedCard).setSelected(true);
+            game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
             game.setFrameCount(0);
             gameState++;
 
@@ -712,15 +720,15 @@ void play_Update() {
 
                     if (justPressed == LEFT_BUTTON && selectedCard > 0) {
                         selectedCard--;
-                        game.players[gameRound.getCurrentPlayer()].clearSelection();
-                        game.players[gameRound.getCurrentPlayer()].getCard(selectedCard).setSelected(true);
+                        game.players[Constants::HumanPlayer].clearSelection();
+                        game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
 
                     }
 
                     if (justPressed == RIGHT_BUTTON && selectedCard < game.players[gameRound.getCurrentPlayer()].getCardCount() - 1) {
                         selectedCard++;
-                        game.players[gameRound.getCurrentPlayer()].clearSelection();
-                        game.players[gameRound.getCurrentPlayer()].getCard(selectedCard).setSelected(true);
+                        game.players[Constants::HumanPlayer].clearSelection();
+                        game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
 
                     }
 
@@ -950,16 +958,15 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
         case GameState::Handle_Kitty:
 
-            renderDealer(currentPlane);
             if (game.gameRound->getHighestBid().getPlayerIdx() == Constants::HumanPlayer) {
                 SpritesU::drawOverwriteFX(21, 15, Images::KittyInstructions, currentPlane);
                 renderPlayerHands(currentPlane, true, false);
             }
             else {
+                renderDealer(currentPlane);
                 renderPlayerHands(currentPlane, false, false);
             }
 
-            renderDealer(currentPlane);
             renderHUD(currentPlane, false, true);
 
             break;

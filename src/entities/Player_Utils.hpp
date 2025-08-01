@@ -951,10 +951,12 @@ void sort() {
                 Card card;
                 card.setSuit(cards[i].getSuit());
                 card.setRank(cards[i].getRank());
+                card.setSelected(cards[i].isSelected());
 
                 this->cards[i] = this->cards[j];
                 this->cards[j].setSuit(card.getSuit());
                 this->cards[j].setRank(card.getRank());
+                this->cards[j].setSelected(card.isSelected());
 
             }
             
