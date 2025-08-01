@@ -22,6 +22,7 @@ void playSuit_Follow() {
     Suit trumps = this->gameRound->winningBid_Suit();
     Card largestTrump = this->gameRound->getLargestTrumpInPlay(trumps);
     Card cardLed = this->gameRound->getCardLed();
+    Suit cardLedSuit = cardLed.getSuit();
 
     if (this->gameRound->hasPlayedCard(partnerIdx)) {   
 
@@ -125,7 +126,7 @@ void playSuit_Follow() {
                             DEBUG_PRINTLN(F("11. Hand has been trumped."));
                         #endif
 
-                        if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                                    return; // Follow suit if we can ..
+                        if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                          return; // Follow suit if we can ..
                         else if (this->playNextHighest_Trump_LargerThan(trumps, largestTrump.getRank()))            return; // Over trump of we can..
                         else this->playLowest_NonTrump_AllSuit(trumps);                                             return; // Throw rubbish ..
 
@@ -144,33 +145,33 @@ void playSuit_Follow() {
                                 DEBUG_PRINTLN(F("13. Partner has played top card."));
                             #endif
 
-                                if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                            return; // Follow suit with lowest card ..
+                                if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                  return; // Follow suit with lowest card ..
                                 else if (this->playLowest_NonTrump_AllSuit(trumps))                                 return; // Throw rubbish ..
                                 else this->playLowest_Trump(trumps);                                                return; // Trump the hand with a small one ..
 
                         }
                         else {
 
-                            uint8_t noOfUnplayedTrumps = this->numberOfUnplayedCards_InSuit(cardLed.getSuit(), largestTrump.getRank());
+                            uint8_t noOfUnplayedTrumps = this->numberOfUnplayedCards_InSuit(cardLedSuit, largestTrump.getRank());
                             
                             #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
                                 DEBUG_PRINT(F("14. No of unplayed cards in suit "));
-                                DEBUG_PRINT_SUIT(cardLed.getSuit());
+                                DEBUG_PRINT_SUIT(cardLedSuit);
                                 DEBUG_PRINT_SPACE();
                                 DEBUG_PRINTLN(noOfUnplayedTrumps);
                             #endif
                             
                             if (noOfUnplayedTrumps > 3) {
 
-                                if (this->playHighest_NonTrump_InSuit(cardLed.getSuit()))                           return; // Plenty out there so throw a large card ..
-                                else if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                       return; // Follow suit with lowest card ..
+                                if (this->playHighest_NonTrump_InSuit(cardLedSuit))                                 return; // Plenty out there so throw a large card ..
+                                else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                             return; // Follow suit with lowest card ..
                                 else if (this->playLowest_Trump(trumps))                                            return; // Trump the hand with a small one ..
                                 else this->playLowest_NonTrump_AllSuit(trumps);                                     return; // Throw rubbish ..
 
                             }
                             else {
 
-                                if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                            return; // Follow suit with lowest card ..
+                                if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                  return; // Follow suit with lowest card ..
                                 else if (this->playLowest_Trump(trumps))                                            return; // Trump the hand with a small one ..
                                 else this->playLowest_NonTrump_AllSuit(trumps);                                     return; // Throw rubbish ..
 
@@ -210,7 +211,7 @@ void playSuit_Follow() {
                         DEBUG_PRINTLN(F("17. Hand has been trumped."));
                     #endif
 
-                    if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                                    return; // Win hand  ..
+                    if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                          return; // Win hand  ..
                     else if (this->playNextHighest_Trump_LargerThan(trumps, largestTrump.getRank()))            return; // Over trump ..
                     else this->playLowest_NonTrump_AllSuit(trumps);                                             return; // Throw rubbish ..
 
@@ -221,7 +222,7 @@ void playSuit_Follow() {
                         DEBUG_PRINTLN(F("18. Hand has not been trumped."));
                     #endif
 
-                    if (this->playHighest_NonTrump_InSuit(cardLed.getSuit()))                                   return; // Win hand  ..
+                    if (this->playHighest_NonTrump_InSuit(cardLedSuit))                                         return; // Win hand  ..
                     else if (this->playLowest_Trump(trumps))                                                    return; // Trump the hand with a small one ..
                     else this->playLowest_NonTrump_AllSuit(trumps);                                             return; // Throw rubbish ..
 
@@ -262,7 +263,7 @@ void playSuit_Follow() {
                     DEBUG_PRINTLN(F("22. Hand has been trumped."));
                 #endif
                 
-                if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                                        return; // Follow suit  ..
+                if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                              return; // Follow suit  ..
                 else if (this->playNextHighest_Trump_LargerThan(trumps, largestTrump.getRank()))                return; // Over trump ..
                 else this->playLowest_NonTrump_AllSuit(trumps);                                                 return; // Throw rubbish ..
 
@@ -273,10 +274,10 @@ void playSuit_Follow() {
                     DEBUG_PRINTLN(F("23. Hand has not been trumped."));
                 #endif
 
-                Card largestCard = this->gameRound->getLargestCardInPlay(cardLed.getSuit());
+                Card &largestCard = this->gameRound->getLargestCardInPlay(cardLedSuit);
 
-                if (this->playNextHighest_NonTrump_LargerThan(cardLed.getSuit(), largestCard.getRank()))        return; // Play a slighlty higher card ..
-                else if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                                   return; // Trump the hand with a small one ..
+                if (this->playNextHighest_NonTrump_LargerThan(cardLedSuit, largestCard.getRank()))              return; // Play a slighlty higher card ..
+                else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                         return; // Trump the hand with a small one ..
                 else if (this->playLowest_Trump(trumps))                                                        return; // Trump the hand with a small one ..
                 else this->playLowest_NonTrump_AllSuit(trumps);                                                 return; // Throw rubbish ..
 
@@ -302,6 +303,7 @@ void playSuit_Lead() {
 
     Suit trumps = this->gameRound->winningBid_Suit();
     Card cardLed = this->gameRound->getCardLed();
+    Suit cardLedSuit = cardLed.getSuit();
 
     Suit suit1 = this->gameRound->getHand(playerBeforeIdx)->getSuit(); // played by competitor 1
     Suit suit2 = this->gameRound->getHand(playerAfterIdx)->getSuit(); // played by competitor 2
@@ -350,7 +352,7 @@ void playSuit_Lead() {
                 if (this->playJoker())  { 
 
                     if (hasJoker) {
-                        this->gameRound->setJokerSuit(cardLed.getSuit()); 
+                        this->gameRound->setJokerSuit(cardLedSuit); 
                         
                     }
                     return; 
@@ -412,7 +414,7 @@ void playSuit_Lead() {
                 DEBUG_PRINTLN(F("5. Play Joker."));
             #endif
             
-            this->gameRound->setJokerSuit(cardLed.getSuit()); 
+            this->gameRound->setJokerSuit(cardLedSuit); 
             return; 
 
         } 

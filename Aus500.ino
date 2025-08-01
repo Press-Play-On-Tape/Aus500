@@ -18,7 +18,6 @@
 #include "src/entities/Game.h"
 #include "fxdata/fxdata.h"
 #include "fxdata/images/Images.h"
-// #include "src/entities/Entities.h"
 #include "src/utils/Random.h"
 
 #define SPRITESU_OVERWRITE
@@ -51,18 +50,9 @@ GameState gameState = GameState::Title_Init;
 uint8_t titleCounter = 0;
 int16_t instructions_Y = 0;
 uint8_t jokerIndex = 0;
-DealPhysics dealPhysics;
-
-#ifdef DEBUG_FIXED_RAND
-uint16_t seed = 72;
-#endif
-
-
-
-
 uint8_t selectedCard = 0;
 
-
+DealPhysics dealPhysics;
 BidInput bidInput;
 
 void setup() {

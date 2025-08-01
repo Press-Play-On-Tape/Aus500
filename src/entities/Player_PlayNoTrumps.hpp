@@ -18,8 +18,9 @@ void playNoTrumps_Follow() {
     uint8_t playerBeforeIdx = (this->getPlayerNumber() + 3) % 4;
     uint8_t playerAfterIdx = (this->getPlayerNumber() + 1) % 4;
 
-    Card largestCardInPlay = this->gameRound->getLargestCardInPlay(Suit::None);
-    Card cardLed = this->gameRound->getCardLed();
+    Card &largestCardInPlay = this->gameRound->getLargestCardInPlay(Suit::None);
+    Card &cardLed = this->gameRound->getCardLed();
+    Suit cardLedSuit = cardLed.getSuit();
 
     if (this->gameRound->hasPlayedCard(partnerIdx)) {                                                                                   // Has your partner played? 
 
@@ -37,11 +38,11 @@ void playNoTrumps_Follow() {
                 DEBUG_PRINTLN(F("2. Partner is winning."));
             #endif
 
-            if (this->hasSuit(cardLed.getSuit())) {
+            if (this->hasSuit(cardLedSuit)) {
 
                 #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                     DEBUG_PRINT(F("3. Player has suit "));
-                    DEBUG_PRINT_SUIT(cardLed.getSuit());
+                    DEBUG_PRINT_SUIT(cardLedSuit);
                     DEBUG_PRINTLN();
                 #endif
 
@@ -49,38 +50,38 @@ void playNoTrumps_Follow() {
 
                     #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                         DEBUG_PRINT(F("4. Player small suit "));
-                        DEBUG_PRINT_SUIT(cardLed.getSuit());
+                        DEBUG_PRINT_SUIT(cardLedSuit);
                         DEBUG_PRINTLN();
                     #endif
 
-                    this->playLowest_NonTrump_InSuit(cardLed.getSuit());                                                            return; // Follow suit ..
+                    this->playLowest_NonTrump_InSuit(cardLedSuit);                                                              return; // Follow suit ..
 
                 }
                 else {
 
                     uint8_t noOfLargeCards = getNumberOfCards_InSuit(partnerCard->getSuit(), partnerCard->getRank());
-                    TriState nextPlayerHasSuit = this->gameRound->canPlayerFollowSuit(cardLed.getSuit(), playerAfterIdx);
+                    TriState nextPlayerHasSuit = this->gameRound->canPlayerFollowSuit(cardLedSuit, playerAfterIdx);
 
                     if (noOfLargeCards >= 1 && nextPlayerHasSuit != TriState::False) {
                         
                         #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                             DEBUG_PRINT(F("5. Competitor plays next, has suit."));
-                            DEBUG_PRINT_SUIT(cardLed.getSuit());
+                            DEBUG_PRINT_SUIT(cardLedSuit);
                             DEBUG_PRINTLN();
                         #endif
 
-                        this->playHighest_NonTrump_InSuit(cardLed.getSuit());          
+                        this->playHighest_NonTrump_InSuit(cardLedSuit);          
                         
                     }
                     else {
                         
                         #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                             DEBUG_PRINT(F("6. Competitor plays next, does not have suit."));
-                            DEBUG_PRINT_SUIT(cardLed.getSuit());
+                            DEBUG_PRINT_SUIT(cardLedSuit);
                             DEBUG_PRINTLN();
                         #endif
 
-                        this->playLowest_NonTrump_InSuit(cardLed.getSuit());          
+                        this->playLowest_NonTrump_InSuit(cardLedSuit);          
                     
                     }
                
@@ -93,7 +94,7 @@ void playNoTrumps_Follow() {
 
                 #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                     DEBUG_PRINT(F("7. Player does not have suit "));
-                    DEBUG_PRINT_SUIT(cardLed.getSuit());
+                    DEBUG_PRINT_SUIT(cardLedSuit);
                     DEBUG_PRINTLN();
                 #endif
             
@@ -121,11 +122,11 @@ void playNoTrumps_Follow() {
                 DEBUG_PRINTLN(F("9. Partner is not winning."));
             #endif
 
-            if (this->hasSuit(cardLed.getSuit())) { // Can you follow suit?
+            if (this->hasSuit(cardLedSuit)) { // Can you follow suit?
             
                 #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                     DEBUG_PRINT(F("10. Player has suit "));
-                    DEBUG_PRINT_SUIT(cardLed.getSuit());
+                    DEBUG_PRINT_SUIT(cardLedSuit);
                     DEBUG_PRINTLN();                    
                 #endif
 
@@ -133,11 +134,11 @@ void playNoTrumps_Follow() {
 
                     #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                         DEBUG_PRINT(F("11. Player is last player of round "));
-                        DEBUG_PRINTLN((uint8_t)cardLed.getSuit());
+                        DEBUG_PRINTLN((uint8_t)cardLedSuit);
                     #endif
                     
-                    if (this->playHighest_NonTrump_LargerThan(cardLed.getSuit(), largestCardInPlay.getRank()))                  return; // Win or at least force th other player to play big ..
-                    else (this->playLowest_NonTrump_InSuit(cardLed.getSuit()));                                                 return; // Follow suit ..
+                    if (this->playHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                        return; // Win or at least force th other player to play big ..
+                    else (this->playLowest_NonTrump_InSuit(cardLedSuit));                                                       return; // Follow suit ..
 
                 }
                 else { // Not last player ..
@@ -153,15 +154,15 @@ void playNoTrumps_Follow() {
 
                     if (this->gameRound->getUnplayedCountofHigherCards_InSuit(cardLed) > 4) {
 
-                        if (this->playNextHighest_NonTrump_LargerThan(cardLed.getSuit(), largestCardInPlay.getRank()))          return; // Yes, play a card slightly larger than current, winning card.
-                        else if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                                           return; // No, play the largest on-suit card you have.
+                        if (this->playNextHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                return; // Yes, play a card slightly larger than current, winning card.
+                        else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                                 return; // No, play the largest on-suit card you have.
                         else (this->playLowest_NonTrump_AllSuit());                                                             return; // No, play the smallest off-suit card you have.
 
                     }
                     else {
 
-                        if (this->playHighest_NonTrump_LargerThan(cardLed.getSuit(), largestCardInPlay.getRank()))              return; // No, play the largest on-suit card you have bigger than winning card.
-                        else if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                                           return; // No, play the smallest on-suit card you have.
+                        if (this->playHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                    return; // No, play the largest on-suit card you have bigger than winning card.
+                        else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                                 return; // No, play the smallest on-suit card you have.
                         else (this->playLowest_NonTrump_AllSuit());                                                             return; // No, play the smallest off-suit card you have.
 
                     }
@@ -173,12 +174,12 @@ void playNoTrumps_Follow() {
                    
                 #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                     DEBUG_PRINT(F("14. Player does not have suit "));
-                    DEBUG_PRINT_SUIT(cardLed.getSuit());
+                    DEBUG_PRINT_SUIT(cardLedSuit);
                     DEBUG_PRINTLN();
                 #endif
 
                 if (this->playJoker())  { 
-                    this->gameRound->setJokerSuit(cardLed.getSuit());                                                                   // Win this hand with the Joker.
+                    this->gameRound->setJokerSuit(cardLedSuit);                                                                         // Win this hand with the Joker.
                     return; 
                 } 
             
@@ -208,16 +209,16 @@ void playNoTrumps_Follow() {
             DEBUG_PRINTLN(F("16. Partner has not played."));
         #endif
         
-        if (this->hasSuit(cardLed.getSuit())) {                                                                                         // Can you follow suit?
+        if (this->hasSuit(cardLedSuit)) {                                                                                               // Can you follow suit?
 
             #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                 DEBUG_PRINT(F("17. Player has suit "));
-                DEBUG_PRINT_SUIT(cardLed.getSuit());
+                DEBUG_PRINT_SUIT(cardLedSuit);
                 DEBUG_PRINTLN();
             #endif
 
-            if (this->playNextHighest_NonTrump_LargerThan(cardLed.getSuit(), largestCardInPlay.getRank()))                      return; // Yes, play a card slightly larger than current, winning card.
-            else if (this->playLowest_NonTrump_InSuit(cardLed.getSuit()))                                                       return; // No, play the largest on-suit card you have.
+            if (this->playNextHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                            return; // Yes, play a card slightly larger than current, winning card.
+            else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                                             return; // No, play the largest on-suit card you have.
             else (this->playLowest_NonTrump_AllSuit());                                                                         return; // No, play the smallest off-suit card you have.
 
         }
@@ -225,22 +226,22 @@ void playNoTrumps_Follow() {
 
             #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                 DEBUG_PRINT(F("18. Player does not have suit "));
-                DEBUG_PRINT_SUIT(cardLed.getSuit());
+                DEBUG_PRINT_SUIT(cardLedSuit);
                 DEBUG_PRINTLN();
             #endif
 
-            TriState doesPartnerHaveSuit = this->gameRound->canPlayerFollowSuit(cardLed.getSuit(), partnerIdx);
+            TriState doesPartnerHaveSuit = this->gameRound->canPlayerFollowSuit(cardLedSuit, partnerIdx);
 
             if (doesPartnerHaveSuit == TriState::False) {
 
                 #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                     DEBUG_PRINT(F("19. Partner does not have suit "));
-                    DEBUG_PRINT_SUIT(cardLed.getSuit());
+                    DEBUG_PRINT_SUIT(cardLedSuit);
                     DEBUG_PRINTLN();
                 #endif
 
                 if (this->playJoker())  {                                                                                               // Win this hand with the Joker.
-                    this->gameRound->setJokerSuit(cardLed.getSuit()); 
+                    this->gameRound->setJokerSuit(cardLedSuit); 
                     return; 
                 }         
 
@@ -249,7 +250,7 @@ void playNoTrumps_Follow() {
 
                 #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                     DEBUG_PRINT(F("20. Partner has suit "));
-                    DEBUG_PRINT_SUIT(cardLed.getSuit());
+                    DEBUG_PRINT_SUIT(cardLedSuit);
                     DEBUG_PRINTLN();
                 #endif
 
@@ -311,8 +312,9 @@ bool playNoTrumps_Lead() {
     uint8_t playerBeforeIdx = (this->getPlayerNumber() + 3) % 4;
     uint8_t playerAfterIdx = (this->getPlayerNumber() + 1) % 4;
 
-    Card largestCardInPlay = this->gameRound->getLargestCardInPlay(Suit::None);
-    Card cardLed = this->gameRound->getCardLed();
+    Card &largestCardInPlay = this->gameRound->getLargestCardInPlay(Suit::None);
+    Card &cardLed = this->gameRound->getCardLed();
+    Suit cardLedSuit = cardLed.getSuit();
 
     Suit suit1 = this->gameRound->getHand(playerBeforeIdx)->getSuit(); // played by competitor 1
     Suit suit2 = this->gameRound->getHand(playerAfterIdx)->getSuit(); // played by competitor 2
