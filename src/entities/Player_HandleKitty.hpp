@@ -141,7 +141,7 @@ void handleKitty() {
                             if (numberDiscarded == 3) break;
 
                             uint8_t countOfSuit = this->getNumberOfCards_InSuit(suit);
-                            uint8_t idx = this->getLowest_NonTrump_InSuit(suit);
+                            uint8_t idx = this->getLowest_InSuit(suit);
 
                             if (idx != Constants::No_Card) {
 
@@ -210,7 +210,7 @@ void handleKitty() {
 
             while (numberDiscarded < 3) {
 
-                uint8_t idx = this->getLowest_NonTrump_AllSuit();
+                uint8_t idx = this->getLowest_AllSuit();
 
                 if (idx != Constants::No_Card) {
                 
@@ -357,7 +357,7 @@ void handleKitty() {
 
                         if (numberDiscarded == 3) continue;
                         
-                        uint8_t idx = this->getHighest_NonTrump_InSuit(suit);
+                        uint8_t idx = this->getHighest_InSuit(suit);
 
                         if (idx != Constants::No_Card) {
 

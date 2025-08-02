@@ -540,6 +540,22 @@ void play_Update() {
                     }
 
                     for (uint8_t i = 0; i < 4; i++) {
+
+                        for (uint8_t j = 0; j < game.players[i].getCardCount(); j++) {
+                        
+                            switch (gameRound.getWinningBid().getBidType()) {
+
+                                case BidType::Misere:
+                                case BidType::No_Trumps:
+                                    game.players[i].getCard(j).setTrumps(Suit::None);
+                                    break;
+
+                                default:
+                                    game.players[i].getCard(j).setTrumps(gameRound.getWinningBid().getSuit());
+                                    break;
+                            
+                            }
+                        }
                         game.players[i].sort();
                     }
                     
@@ -637,6 +653,8 @@ void play_Update() {
 
                             gameRound.getKitty(kittyIndex)->setSuit(game.players[Constants::HumanPlayer].getCard(i).getSuit());
                             gameRound.getKitty(kittyIndex)->setRank(game.players[Constants::HumanPlayer].getCard(i).getRank());
+                            gameRound.getKitty(kittyIndex)->setOrigSuit(game.players[Constants::HumanPlayer].getCard(i).getOrigSuit());
+                            gameRound.getKitty(kittyIndex)->setOrigRank(game.players[Constants::HumanPlayer].getCard(i).getOrigRank());
                             gameRound.getKitty(kittyIndex)->setSelected(false);
                             game.players[Constants::HumanPlayer].getCard(i).reset();
                             kittyIndex++;
@@ -814,7 +832,7 @@ void play_Update() {
                         
                             case BidType::Suit:
 
-                                if (cardLed.getSuit(trumps) != cardPlayed.getSuit(trumps) && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit(trumps))) {
+                                if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
 
                                     return;
                                 }

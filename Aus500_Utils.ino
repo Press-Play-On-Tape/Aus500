@@ -175,7 +175,7 @@ void highlightSuitInHand() {
 
     for (uint8_t i = 0; i < game.players[Constants::HumanPlayer].getCardCount(); i++) {
 
-        if (game.players[Constants::HumanPlayer].getCard(i).getSuit(trumpsSuit) ==  cardLed.getSuit(trumpsSuit)) {
+        if (game.players[Constants::HumanPlayer].getCard(i).getSuit() ==  cardLed.getSuit()) {
         
             selectedCard = i;
             game.players[Constants::HumanPlayer].clearSelection();

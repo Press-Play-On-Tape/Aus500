@@ -41,9 +41,9 @@ void playMisere_Follow() {
             DEBUG_PRINTLN(F("1. I called so need to lose."));
         #endif    
 
-        if (this->playNextLowest_NonTrump_SmallerThan(winningCard->getSuit(), winningCard->getRank()))                              return; // Something immediately lower than the leader ..
-        else if (this->playLowest_NonTrump_InSuit(winningCard->getSuit()))                                                          return; // Lowest card following suit
-        else if (this->playHighest_NonTrump_LargerThan_AllSuit(Rank::None))                                                         return; // Lowest card in another suit
+        if (this->playNextLowest_SmallerThan(winningCard->getSuit(), winningCard->getRank()))                                       return; // Something immediately lower than the leader ..
+        else if (this->playLowest_InSuit(winningCard->getSuit()))                                                                   return; // Lowest card following suit
+        else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                                  return; // Lowest card in another suit
         else if (this->playJoker())                                                                                                 return; // Play joker if you have it.
 
     }
@@ -77,9 +77,9 @@ void playMisere_Follow() {
                             DEBUG_PRINTLN(F("5. The bidder has followed suit."));
                         #endif    
                         
-                        if (this->playNextLowest_NonTrump_SmallerThan(winningCard->getSuit(), winningCard->getRank()))              return; // Something immediately lower than the leader ..
-                        else if (this->playHighest_NonTrump_InSuit(winningCard->getSuit()))                                         return; // Lowest card following suit
-                        else if (this->playHighest_NonTrump_LargerThan_AllSuit(Rank::None))                                         return; // Lowest card in another suit
+                        if (this->playNextLowest_SmallerThan(winningCard->getSuit(), winningCard->getRank()))                       return; // Something immediately lower than the leader ..
+                        else if (this->playHighest_InSuit(winningCard->getSuit()))                                                  return; // Lowest card following suit
+                        else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                  return; // Lowest card in another suit
                         else if (this->playJoker())                                                                                 return; // Play joker if you have it.
 
                     }
@@ -89,8 +89,8 @@ void playMisere_Follow() {
                             DEBUG_PRINTLN(F("6. The bidder has not followed suit."));
                         #endif    
 
-                        if (this->playHighest_NonTrump_InSuit(winningCard->getSuit()))                                              return; // Lowest card following suit
-                        else if (this->playHighest_NonTrump_LargerThan_AllSuit(Rank::None))                                         return; // Lowest card in another suit
+                        if (this->playHighest_InSuit(winningCard->getSuit()))                                                       return; // Lowest card following suit
+                        else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                  return; // Lowest card in another suit
                         else if (this->playJoker())                                                                                 return; // Lowest card in another suit
 
                     }
@@ -102,9 +102,9 @@ void playMisere_Follow() {
                         DEBUG_PRINTLN(F("7. The bidder has not played."));
                     #endif    
 
-                    if (this->playNextLowest_NonTrump_SmallerThan(losingCard->getSuit(), losingCard->getRank()))                    return; // Something immediately lower than the leader ..
-                    else if (this->playLowest_NonTrump_InSuit(losingCard->getSuit()))                                               return; // Lowest card following suit
-                    else if (this->playHighest_NonTrump_LargerThan_AllSuit(Rank::None))                                             return; // Lowest card in another suit
+                    if (this->playNextLowest_SmallerThan(losingCard->getSuit(), losingCard->getRank()))                             return; // Something immediately lower than the leader ..
+                    else if (this->playLowest_InSuit(losingCard->getSuit()))                                                        return; // Lowest card following suit
+                    else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                      return; // Lowest card in another suit
                     else if (this->playJoker())                                                                                     return; // Play joker if you have it.
 
                 }
@@ -116,8 +116,8 @@ void playMisere_Follow() {
                     DEBUG_PRINTLN(F("8. Partner is not winning."));
                 #endif   
 
-                if (this->playHighest_NonTrump_InSuit(winningCard->getSuit()))                                                      return; // Lowest card following suit
-                else if (this->playHighest_NonTrump_LargerThan_AllSuit(Rank::None))                                                 return; // Lowest card in another suit
+                if (this->playHighest_InSuit(winningCard->getSuit()))                                                               return; // Highest card following suit
+                else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                          return; // Lowest card in another suit
                 else if (this->playJoker())                                                                                         return; // Play joker if you have it.
 
             }
@@ -129,9 +129,9 @@ void playMisere_Follow() {
                 DEBUG_PRINTLN(F("9. Partner has not played."));
             #endif    
 
-            if (this->playNextLowest_NonTrump_SmallerThan(winningCard->getSuit(), winningCard->getRank()))                          return; // Something immediately lower than the leader ..
-            else if (this->playHighest_NonTrump_InSuit(winningCard->getSuit()))                                                     return; // Lowest card following suit
-            else if (this->playHighest_NonTrump_LargerThan_AllSuit(Rank::None))                                                     return; // Lowest card in another suit
+            if (this->playNextLowest_SmallerThan(winningCard->getSuit(), winningCard->getRank()))                                   return; // Something immediately lower than the leader ..
+            else if (this->playHighest_InSuit(winningCard->getSuit()))                                                              return; // Lowest card following suit
+            else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                              return; // Lowest card in another suit
             else if (this->playJoker())                                                                                             return; // Play joker if you have it.
 
         }
@@ -160,8 +160,8 @@ void playMisere_Lead() {
             DEBUG_PRINTLN(F("1. Round one, I called."));
         #endif    
 
-        if (this->playBottom_NonTrump_AllSuit())                                                                                    return; // Play a bottom card if we have one ..
-        else this->playLowest_NonTrump_AllSuit(Suit::None);                                                                         return; // Play a small card from any other suit.
+        if (this->playBottom_AllSuit())                                                                                             return; // Play a bottom card if we have one ..
+        else this->playLowest_AllSuit(Suit::None);                                                                                  return; // Play a small card from any other suit.
     
     }
     else {
@@ -177,7 +177,7 @@ void playMisere_Lead() {
 
             if (hasSuit != TriState::False) {
 
-                if (this->playBottom_NonTrump_InSuit(suit))                                                                         return; //  Play a bottom card if we have one ..
+                if (this->playBottom_InSuit(suit))                                                                                  return; //  Play a bottom card if we have one ..
 
             }
 
@@ -192,7 +192,7 @@ void playMisere_Lead() {
 
             if (hasSuit != TriState::False) {
 
-                if (this->playLowest_NonTrump_InSuit(suit))                                                                         return; // PLay a low card in that suit
+                if (this->playLowest_InSuit(suit))                                                                                  return; // PLay a low card in that suit
 
             }
 
@@ -201,7 +201,7 @@ void playMisere_Lead() {
 
         // Lead the smallest card we have ..
 
-        if (this->playLowest_NonTrump_AllSuit())                                                                                    return; // Try to pass control to your partner ..
+        if (this->playLowest_AllSuit())                                                                                             return; // Try to pass control to your partner ..
         else if (this->playJoker())                                                                                                 return; // Play joker if you have it.
 
     }

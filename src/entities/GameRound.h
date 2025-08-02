@@ -667,9 +667,9 @@ struct GameRound {
                         DEBUG_PRINT_SPACE();
                     #endif
 
-                    if (card.getSuit() == trumps && card.getRank(trumps) > rank) {
+                    if (card.getSuit() == trumps && card.getRank() > rank) {
 
-                        rank = card.getRank(trumps);
+                        rank = card.getRank();
                         returnIdx = i;
 
                     }
@@ -814,9 +814,9 @@ struct GameRound {
 
                             Card &card = this->hand[i];
 
-                            if (card.isTrump(trumps) && card.getRank(trumps) > rank) {
+                            if (card.isTrump(trumps) && card.getRank() > rank) {
 
-                                rank = card.getRank(trumps);
+                                rank = card.getRank();
                                 returnIdx = i;
 
                             }
