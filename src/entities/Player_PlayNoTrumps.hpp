@@ -176,10 +176,7 @@ void playNoTrumps_Follow() {
                     DEBUG_PRINTLN();
                 #endif
 
-                if (this->playJoker())  { 
-                    this->gameRound->setJokerSuit(cardLedSuit);                                                                         // Win this hand with the Joker.
-                    return; 
-                } 
+                if (this->playJoker())                                                                                          return; // Win this hand with the Joker.
             
                 Suit shortSuit = this->canShortSuit();                                                                                  // Can you short suit yourself in any suit?
 
@@ -238,10 +235,7 @@ void playNoTrumps_Follow() {
                     DEBUG_PRINTLN();
                 #endif
 
-                if (this->playJoker())  {                                                                                               // Win this hand with the Joker.
-                    this->gameRound->setJokerSuit(cardLedSuit); 
-                    return; 
-                }         
+                if (this->playJoker())                                                                                          return; // Win this hand with the Joker.
 
             }
             else {
@@ -426,7 +420,7 @@ bool playNoTrumps_Lead() {
 
         }
         
-        this->gameRound->setJokerSuit(suit); 
+        this->cards[this->getCard(Rank::Joker)].setSuit(suit);
         this->playJoker();                                                                                                              // Play Joker and Win!
         return; 
 

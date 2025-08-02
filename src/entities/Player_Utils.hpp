@@ -66,16 +66,25 @@ void playCard(uint8_t idx) {
     Card &card = this->cards[idx];
     Suit trumps = this->gameRound->winningBid_Suit();
 
-    if (card.getRank() == Rank::Joker) {
-        card.setSuit(this->gameRound->getJokerSuit());
-    }
+    // if (card.getRank() == Rank::Joker) {
+    // DEBUG_BREAK
+    //     card.setSuit(this->gameRound->getJokerSuit());
+    // }
 
     copyCard(card, this->cardJustPlayed);
     // this->cardJustPlayed.setSuit(card.getSuit());
     // this->cardJustPlayed.setRank(card.getRank());
 
     this->gameRound->markCardPlayed(card.getSuit(), card.getRank());
+    
+    Serial.println((uint8_t)card.getSuit());
+    Serial.println((uint8_t)card.getRank());
+
     copyCard(card, this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx()));
+    if (card.getRank() == Rank::Joker) {
+        DEBUG_BREAK
+     
+    }    
     // this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setSuit(card.getSuit());
     // this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setRank(card.getRank());
     // this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setOrigSuit(card.getOrigSuit());

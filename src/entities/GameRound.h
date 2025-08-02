@@ -20,7 +20,7 @@ struct GameRound {
         uint16_t playedCards[Constants::Suit_Count];
         TriState hasSuitInHand[Constants::Player_Count][Constants::Suit_Count];  // [player][suit];
 
-        Suit jokerSuit = Suit::None;
+        // Suit jokerSuit = Suit::None;
 
         uint8_t kittyPointer = 0;
         uint8_t round = 0;
@@ -36,7 +36,7 @@ struct GameRound {
 
         Card *getHand(uint8_t playerIdx)                            { return &this->hand[playerIdx]; }
         Card *getKitty(uint8_t idx)                                 { return &this->kitty[idx]; }
-        Suit getJokerSuit()                                         { return this->jokerSuit; }
+        // Suit getJokerSuit()                                         { return this->jokerSuit; }
         Bid &getBid(uint8_t playerIdx)                              { return this->bid[playerIdx]; }
         Bid &getHighestBid()                                        { return this->highestBid; }
         uint8_t getKittyPointer()                                   { return this->kittyPointer; }
@@ -49,7 +49,7 @@ struct GameRound {
         uint8_t getDealer_Idx()                                     { return this->dealerIdx; }
         bool getPlayedJoker()                                       { return this->playedJoker; }
 
-        void setJokerSuit(Suit val)                                 { this->jokerSuit = val; }
+        // void setJokerSuit(Suit val)                                 { this->jokerSuit = val; }
         void setKitty(uint8_t idx, Card &kitty)                     { this->kitty[idx].setSuit(kitty.getSuit()); this->kitty[idx].setRank(kitty.getRank()); }
         void setKittyPointer(uint8_t idx)                           { this->kittyPointer = idx; }
         void setScore(uint8_t teamIdx, int16_t val)                 { this->score[teamIdx] = val; }
@@ -257,7 +257,7 @@ struct GameRound {
             this->winningBidIdx = 255;
             this->firstPlayer = 0;
             this->currentPlayer = 0;
-            this->jokerSuit = Suit::None;
+            // this->jokerSuit = Suit::None;
             this->playedJoker = false;
             this->handCount = 10;
             this->highestBid.reset(Constants::No_Player);

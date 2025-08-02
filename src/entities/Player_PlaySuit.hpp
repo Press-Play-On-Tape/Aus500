@@ -322,11 +322,7 @@ void playSuit_Lead() {
                 DEBUG_PRINTLN(F("2. First round."));
             #endif
 
-            if (this->playJoker()) {                                                                                    // Conventional lead .. 
-                this->gameRound->setJokerSuit(trumps); 
-                return; 
-            } 
-
+            if (this->playJoker())                                                                              return;  // Conventional lead .. 
             else if (this->playLowest_Trump_LowerThan(trumps, Rank::Ten))                                       return; // Defer to partner with little trump ..
             else if (this->playTop_AllSuit(trumps))                                                             return; // Play a wining ace ..
             else if (this->playLowest_WithSecondHighest_AllSuit(trumps))                                        return; // Play a small card from any other suit where you hold the second largest card in that suit.
@@ -352,15 +348,7 @@ void playSuit_Lead() {
                 
                 bool hasJoker = this->getCard(Rank::Joker);                                                             // If you have the joker then play it ..
 
-                if (this->playJoker())  { 
-
-                    if (hasJoker) {
-                        this->gameRound->setJokerSuit(cardLedSuit); 
-                        
-                    }
-                    return; 
-
-                } 
+                if (this->playJoker())                                                                          return;
                 else if (this->playTop_Trump(trumps))                                                           return; // Play the top trump if you have it ..
                 else if (partnerHasTrumps != TriState::False && 
                          this->playLowest_Trump_LowerThan(trumps, Rank::Ten))                                   return; // If your partner has trumps, play a small trump (< 10) otherwise.
@@ -417,7 +405,6 @@ void playSuit_Lead() {
                 DEBUG_PRINTLN(F("5. Play Joker."));
             #endif
             
-            this->gameRound->setJokerSuit(cardLedSuit); 
             return; 
 
         } 

@@ -891,11 +891,12 @@ void play_Update() {
 
             if (justPressed == A_BUTTON) {
 
+                game.players[Constants::HumanPlayer].getCard(selectedCard).setSuit(static_cast<Suit>(jokerIndex));
                 gameState = GameState::Play_01;
                 game.players[Constants::HumanPlayer].playCard(selectedCard);
-                gameRound.setJokerSuit(static_cast<Suit>(jokerIndex));
+                // gameRound.setJokerSuit(static_cast<Suit>(jokerIndex));
                 play_CardSelected();
-                gameRound.getHand(Constants::HumanPlayer)->setSuit(static_cast<Suit>(jokerIndex));
+                // gameRound.getHand(Constants::HumanPlayer)->setSuit(static_cast<Suit>(jokerIndex));
 
             }
 
