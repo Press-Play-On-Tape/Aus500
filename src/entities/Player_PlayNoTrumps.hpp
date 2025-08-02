@@ -87,8 +87,6 @@ void playNoTrumps_Follow() {
                
                 }
  
-                // if (noOfLargeCards >=)
-
             }
             else {
 
@@ -156,14 +154,14 @@ void playNoTrumps_Follow() {
 
                         if (this->playNextHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                return; // Yes, play a card slightly larger than current, winning card.
                         else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                                 return; // No, play the largest on-suit card you have.
-                        else (this->playLowest_NonTrump_AllSuit());                                                             return; // No, play the smallest off-suit card you have.
+                        else (this->playLowest_NonTrump_AllSuit());                                                             return; // Should not get here as we have the suit.
 
                     }
                     else {
 
                         if (this->playHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                    return; // No, play the largest on-suit card you have bigger than winning card.
                         else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                                 return; // No, play the smallest on-suit card you have.
-                        else (this->playLowest_NonTrump_AllSuit());                                                             return; // No, play the smallest off-suit card you have.
+                        else (this->playLowest_NonTrump_AllSuit());                                                             return; // Should not get here as we have the suit.
 
                     }
 

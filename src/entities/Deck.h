@@ -34,6 +34,7 @@ struct Deck {
             deck[deckSize].setSuit(Suit::No_Trumps);
             deck[deckSize].setRank(Rank::Joker);
             deck[deckSize].setSelected(false);
+            deckSize++;
             deckPointer = 0;
 
         }

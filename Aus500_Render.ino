@@ -25,7 +25,7 @@ void renderPlayerHands(uint8_t currentPlane, bool blinkSelected, bool blinkRaise
                 
                     case GameState::Play_01:
 
-                        if (gameRound.getCurrentPlayer() == Constants::HumanPlayer) {
+                        if (gameRound.getCurrentPlayer_Idx() == Constants::HumanPlayer) {
                             
                             y = 47 - (card.isSelected() ? 4 : 0);
 
@@ -35,7 +35,7 @@ void renderPlayerHands(uint8_t currentPlane, bool blinkSelected, bool blinkRaise
 
                     case GameState::Handle_Kitty:
 
-                        if (game.gameRound->getHighestBid().getPlayerIdx() == Constants::HumanPlayer) {
+                        if (gameRound.getHighestBid().getPlayerIdx() == Constants::HumanPlayer) {
                             
                             y = 47 - (card.isSelected() ? 4 : 0);
 
@@ -92,7 +92,7 @@ void renderKitty(uint8_t currentPlane) {
     
     for (uint8_t i = 0; i < 3; i++) {
     
-        if (game.gameRound->getKitty(i)->getRank() != Rank::None) {
+        if (gameRound.getKitty(i)->getRank() != Rank::None) {
             SpritesU::drawOverwriteFX(38 + (i * 6), 16, Images::Hand_Full, currentPlane); 
         }
 
@@ -103,7 +103,7 @@ void renderKitty(uint8_t currentPlane) {
 
 void renderDealer(uint8_t currentPlane) {
 
-    uint8_t dealer = game.gameRound->getDealer_Idx();
+    uint8_t dealer = gameRound.getDealer_Idx();
     
     uint8_t x;
     uint8_t y;
@@ -139,13 +139,13 @@ void renderDealer(uint8_t currentPlane) {
 
 void renderBids(uint8_t currentPlane) {
     
-    uint8_t dealer = game.gameRound->getDealer_Idx();
+    uint8_t dealer = gameRound.getDealer_Idx();
     uint8_t bidder_X = 0;
     uint8_t bidder_Y;
 
     { // Player 0
 
-        Bid &bid = game.gameRound->getBid(0);
+        Bid &bid = gameRound.getBid(0);
 
         switch (bid.getBidType()) {
 
@@ -220,7 +220,7 @@ void renderBids(uint8_t currentPlane) {
 
     { // Player 1
 
-        Bid &bid = game.gameRound->getBid(1);
+        Bid &bid = gameRound.getBid(1);
 
         switch (bid.getBidType()) {
 
@@ -293,7 +293,7 @@ void renderBids(uint8_t currentPlane) {
 
     { // Player 2
 
-        Bid &bid = game.gameRound->getBid(2);
+        Bid &bid = gameRound.getBid(2);
 
         switch (bid.getBidType()) {
 
@@ -365,7 +365,7 @@ void renderBids(uint8_t currentPlane) {
 
     { // Player 3
 
-        Bid &bid = game.gameRound->getBid(3);
+        Bid &bid = gameRound.getBid(3);
 
         switch (bid.getBidType()) {
 
@@ -448,7 +448,7 @@ void renderBids(uint8_t currentPlane) {
 void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
 
    
-//     uint8_t firstPlayer = game.gameRound->getFirstPlayer();
+//     uint8_t firstPlayer = gameRound.getFirstPlayer_Idx();
 //     for (uint8_t playerIdx = firstPlayer; playerIdx < firstPlayer + 4; playerIdx++) {
 // Serial.print(playerIdx % 4);    
 
@@ -477,7 +477,7 @@ void renderTableCards_00(uint8_t currentPlane, uint8_t winningHand) {
 
     if (winningHand != 0 || (winningHand == 0 && game.getFrameCount(48))) {
 
-        Card *card = game.gameRound->getHand(0);
+        Card *card = gameRound.getHand(0);
 
         if (card->getRank() != Rank::None)  {
 
@@ -494,7 +494,7 @@ void renderTableCards_01(uint8_t currentPlane, uint8_t winningHand) {
 
     if (winningHand != 1 || (winningHand == 1 && game.getFrameCount(48))) {
 
-        Card *card = game.gameRound->getHand(1);
+        Card *card = gameRound.getHand(1);
 
         if (card->getRank() != Rank::None)  {
 
@@ -511,7 +511,7 @@ void renderTableCards_02(uint8_t currentPlane, uint8_t winningHand) {
 
     if (winningHand != 2 || (winningHand == 2 && game.getFrameCount(48))) {
 
-        Card *card = game.gameRound->getHand(2);
+        Card *card = gameRound.getHand(2);
 
         if (card->getRank() != Rank::None)  {
 
@@ -528,7 +528,7 @@ void renderTableCards_03(uint8_t currentPlane, uint8_t winningHand) {
         
     if (winningHand != 3 || (winningHand == 3 && game.getFrameCount(48))) {
 
-        Card *card = game.gameRound->getHand(3);
+        Card *card = gameRound.getHand(3);
 
         if (card->getRank() != Rank::None)  {
 
@@ -563,7 +563,7 @@ void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
             case GameState::Play_EndOfRound:
             case GameState::Play_EndOfGame:
 
-                if (game.gameRound->getWinningHand() == 1 || game.gameRound->getWinningHand() == 3) {
+                if (gameRound.getWinningHand() == 1 || gameRound.getWinningHand() == 3) {
 
                     if (game.getFrameCount(48)) {
 
@@ -595,7 +595,7 @@ void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
 
                 if (gameState != GameState::Play_EndOfHand) {
 
-                    if (game.gameRound->getWinningBid_Team() == Constants::HumanTeam) {
+                    if (gameRound.getWinningBid_Team() == Constants::HumanTeam) {
 
                         if (game.getFrameCount(48)) {
 
@@ -642,16 +642,16 @@ void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
         }
 
 
-        SpritesU::drawOverwriteFX(107, 29, Images::Bid_Result_Narrow, (game.gameRound->getHighestBid().getImageIndex() * 3) + currentPlane);
+        SpritesU::drawOverwriteFX(107, 29, Images::Bid_Result_Narrow, (gameRound.getHighestBid().getImageIndex() * 3) + currentPlane);
 
-        // int16_t score = game.gameRound->getScore(1);
+        // int16_t score = gameRound.getScore(1);
         // uint16_t idx = abs(score) / 10;
         // if (idx > 99) idx = 99;
 
         // if (score < 0) idx = idx + 100;
         // SpritesU::drawOverwriteFX(113, 51, Images::HUD_Game_Score, (idx * 3) + currentPlane);
 
-        // score = game.gameRound->getScore(0);
+        // score = gameRound.getScore(0);
         // idx = abs(score) / 10;
         // if (idx > 99) idx = 99;
 
@@ -664,26 +664,30 @@ void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
 
 void renderHUD_Top(uint8_t currentPlane, uint8_t backgroundIdx, bool showTeam0, bool showTeam1) {
 
-    backgroundIdx = backgroundIdx + (backgroundIdx >= 6 ? game.gameRound->getFirstPlayer() * 9 : 0);
+    backgroundIdx = backgroundIdx + (backgroundIdx >= 6 ? gameRound.getFirstPlayer_Idx() * 9 : 0);
     SpritesU::drawOverwriteFX(105, 0, Images::HUD_Top, backgroundIdx + currentPlane);
-    if (showTeam0)    SpritesU::drawOverwriteFX(118,  8, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(1) * 3) + currentPlane);
-    if (showTeam1)    SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (game.gameRound->getTeam_TrickCount(0) * 3) + currentPlane);
+    if (showTeam0)    SpritesU::drawOverwriteFX(118,  8, Images::HUD_Trick_Score, (gameRound.getTeam_TrickCount(1) * 3) + currentPlane);
+    if (showTeam1)    SpritesU::drawOverwriteFX(118, 15, Images::HUD_Trick_Score, (gameRound.getTeam_TrickCount(0) * 3) + currentPlane);
 
 }
 
 
 void renderHUD_Bottom(uint8_t currentPlane, uint8_t backgroundIdx, bool showTeam0, bool showTeam1) {
 
+    if (backgroundIdx >= 6) {
+        backgroundIdx = backgroundIdx + (gameRound.getWinningBid_Idx() == 255 ? 4 * 9 : gameRound.getWinningBid_Idx() * 9);
+    }
+
     SpritesU::drawOverwriteFX(105, 32, Images::HUD_Bottom, backgroundIdx + currentPlane);
 
-    int16_t score = game.gameRound->getScore(1);
+    int16_t score = gameRound.getScore(1);
     uint16_t idx = abs(score) / 10;
     if (idx > 99) idx = 99;
 
     if (score < 0) idx = idx + 100;
     if (showTeam0) SpritesU::drawOverwriteFX(114, 51, Images::HUD_Game_Score, (idx * 3) + currentPlane);
 
-    score = game.gameRound->getScore(0);
+    score = gameRound.getScore(0);
     idx = abs(score) / 10;
     if (idx > 99) idx = 99;
 

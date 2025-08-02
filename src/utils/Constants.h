@@ -4,7 +4,7 @@
 
 #define _DEBUG_PRINT    Serial.print
 #define _DEBUG_PRINTLN  Serial.println
-#define _DEBUG_BREAK    asm volatile("break\n");
+#define DEBUG_BREAK    asm volatile("break\n");
 
 #define _DEBUG
 #define _DEBUG_BASIC

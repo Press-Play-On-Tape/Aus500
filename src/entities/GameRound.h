@@ -42,8 +42,8 @@ struct GameRound {
         uint8_t getKittyPointer()                                   { return this->kittyPointer; }
         int16_t getScore(uint8_t teamIdx)                           { return this->score[teamIdx]; }
         uint8_t getRound()                                          { return this->round; }
-        uint8_t getFirstPlayer()                                    { return this->firstPlayer; }
-        uint8_t getCurrentPlayer()                                  { return this->currentPlayer; }
+        uint8_t getFirstPlayer_Idx()                                { return this->firstPlayer; }
+        uint8_t getCurrentPlayer_Idx()                              { return this->currentPlayer; }
         uint8_t getHandCount()                                      { return this->handCount; }
         uint8_t getWinningBid_Idx()                                 { return this->winningBidIdx; }
         uint8_t getDealer_Idx()                                     { return this->dealerIdx; }
@@ -54,8 +54,8 @@ struct GameRound {
         void setKittyPointer(uint8_t idx)                           { this->kittyPointer = idx; }
         void setScore(uint8_t teamIdx, int16_t val)                 { this->score[teamIdx] = val; }
         void setRound(uint8_t val)                                  { this->round = val; }
-        void setFirstPlayer(uint8_t val)                            { this->firstPlayer = val; }
-        void setCurrentPlayer(uint8_t val)                          { this->currentPlayer = val; }
+        void setFirstPlayer_Idx(uint8_t val)                        { this->firstPlayer = val; }
+        void setCurrentPlayer_Idx(uint8_t val)                      { this->currentPlayer = val; }
         void setHandCount(uint8_t val)                              { this->handCount = val; }
         void setWinningBid_Idx(uint8_t val)                         { this->winningBidIdx = val; }
         void setDealer_Idx(uint8_t val)                             { this->dealerIdx = val % 4; }

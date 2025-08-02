@@ -74,8 +74,8 @@ void playCard(uint8_t idx) {
     this->cardJustPlayed.setRank(card.getRank());
 
     this->gameRound->markCardPlayed(card.getSuit(), card.getRank());
-    this->gameRound->getHand(this->gameRound->getCurrentPlayer())->setSuit(card.getSuit());
-    this->gameRound->getHand(this->gameRound->getCurrentPlayer())->setRank(card.getRank());
+    this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setSuit(card.getSuit());
+    this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setRank(card.getRank());
     
     card.reset();
     this->sort();

@@ -51,6 +51,7 @@ uint8_t titleCounter = 0;
 int16_t instructions_Y = 0;
 uint8_t jokerIndex = 0;
 uint8_t selectedCard = 0;
+uint8_t kittyHighlight = 0;
 
 DealPhysics dealPhysics;
 BidInput bidInput;
@@ -119,7 +120,7 @@ void dealCard(uint8_t player) {
 
 void dealKitty() {
 
-  game.gameRound->addKitty(game.deck.getCard());
+  gameRound.addKitty(game.deck.getCard());
 
 }
 
@@ -149,9 +150,9 @@ void DEBUG_PRINT_HAND(uint8_t player) {
 
                 DEBUG_PRINT(F("K  "));
 
-                for (uint8_t i = 0; i < game.gameRound->getKittyPointer(); i++) {
-                    if (game.gameRound->getKitty(i)->getRank() != Rank::Ten) DEBUG_PRINT_SPACE();
-                    DEBUG_PRINT_CARD(game.gameRound->getKitty(i)->getSuit(), game.gameRound->getKitty(i)->getRank());
+                for (uint8_t i = 0; i < gameRound.getKittyPointer(); i++) {
+                    if (gameRound.getKitty(i)->getRank() != Rank::Ten) DEBUG_PRINT_SPACE();
+                    DEBUG_PRINT_CARD(gameRound.getKitty(i)->getSuit(), gameRound.getKitty(i)->getRank());
                     DEBUG_PRINT_SPACE();
                 }
 
@@ -170,7 +171,7 @@ void DEBUG_PRINT_HANDS() {
 
         DEBUG_PRINTLN(F("      1   2   3   4   5   6   7   8   9  10"));
 
-        for (uint8_t i = gameRound.getCurrentPlayer(); i < gameRound.getCurrentPlayer() + 4; i++) {
+        for (uint8_t i = gameRound.getCurrentPlayer_Idx(); i < gameRound.getCurrentPlayer_Idx() + 4; i++) {
             
             uint8_t playerIdx = i % 4;
 
