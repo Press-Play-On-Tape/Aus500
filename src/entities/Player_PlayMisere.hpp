@@ -41,7 +41,7 @@ void playMisere_Follow() {
             DEBUG_PRINTLN(F("1. I called so need to lose."));
         #endif    
 
-        if (this->playNextLowest_SmallerThan(winningCard->getSuit(), winningCard->getRank()))                                       return; // Something immediately lower than the leader ..
+        if (this->playNextLowest_SmallerThan_InSuit(winningCard->getSuit(), winningCard->getRank()))                                return; // Something immediately lower than the leader ..
         else if (this->playLowest_InSuit(winningCard->getSuit()))                                                                   return; // Lowest card following suit
         else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                                  return; // Lowest card in another suit
         else if (this->playJoker())                                                                                                 return; // Play joker if you have it.
@@ -77,7 +77,7 @@ void playMisere_Follow() {
                             DEBUG_PRINTLN(F("5. The bidder has followed suit."));
                         #endif    
                         
-                        if (this->playNextLowest_SmallerThan(winningCard->getSuit(), winningCard->getRank()))                       return; // Something immediately lower than the leader ..
+                        if (this->playNextLowest_SmallerThan_InSuit(winningCard->getSuit(), winningCard->getRank()))                return; // Something immediately lower than the leader ..
                         else if (this->playHighest_InSuit(winningCard->getSuit()))                                                  return; // Lowest card following suit
                         else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                  return; // Lowest card in another suit
                         else if (this->playJoker())                                                                                 return; // Play joker if you have it.
@@ -102,7 +102,7 @@ void playMisere_Follow() {
                         DEBUG_PRINTLN(F("7. The bidder has not played."));
                     #endif    
 
-                    if (this->playNextLowest_SmallerThan(losingCard->getSuit(), losingCard->getRank()))                             return; // Something immediately lower than the leader ..
+                    if (this->playNextLowest_SmallerThan_InSuit(losingCard->getSuit(), losingCard->getRank()))                      return; // Something immediately lower than the leader ..
                     else if (this->playLowest_InSuit(losingCard->getSuit()))                                                        return; // Lowest card following suit
                     else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                      return; // Lowest card in another suit
                     else if (this->playJoker())                                                                                     return; // Play joker if you have it.
@@ -129,7 +129,7 @@ void playMisere_Follow() {
                 DEBUG_PRINTLN(F("9. Partner has not played."));
             #endif    
 
-            if (this->playNextLowest_SmallerThan(winningCard->getSuit(), winningCard->getRank()))                                   return; // Something immediately lower than the leader ..
+            if (this->playNextLowest_SmallerThan_InSuit(winningCard->getSuit(), winningCard->getRank()))                            return; // Something immediately lower than the leader ..
             else if (this->playHighest_InSuit(winningCard->getSuit()))                                                              return; // Lowest card following suit
             else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                              return; // Lowest card in another suit
             else if (this->playJoker())                                                                                             return; // Play joker if you have it.

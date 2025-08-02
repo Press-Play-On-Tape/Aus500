@@ -135,7 +135,7 @@ void playNoTrumps_Follow() {
                         DEBUG_PRINTLN((uint8_t)cardLedSuit);
                     #endif
                     
-                    if (this->playHighest_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                                 return; // Win or at least force th other player to play big ..
+                    if (this->playHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                          return; // Win or at least force th other player to play big ..
                     else (this->playLowest_InSuit(cardLedSuit));                                                                return; // Follow suit ..
 
                 }
@@ -152,14 +152,14 @@ void playNoTrumps_Follow() {
 
                     if (this->gameRound->getUnplayedCountofHigherCards_InSuit(cardLed) > 4) {
 
-                        if (this->playNextHighest_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                         return; // Yes, play a card slightly larger than current, winning card.
+                        if (this->playNextHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                  return; // Yes, play a card slightly larger than current, winning card.
                         else if (this->playLowest_InSuit(cardLedSuit))                                                          return; // No, play the largest on-suit card you have.
                         else (this->playLowest_AllSuit());                                                                      return; // Should not get here as we have the suit.
 
                     }
                     else {
 
-                        if (this->playHighest_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                             return; // No, play the largest on-suit card you have bigger than winning card.
+                        if (this->playHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                      return; // No, play the largest on-suit card you have bigger than winning card.
                         else if (this->playLowest_InSuit(cardLedSuit))                                                          return; // No, play the smallest on-suit card you have.
                         else (this->playLowest_AllSuit());                                                                      return; // Should not get here as we have the suit.
 
@@ -212,7 +212,7 @@ void playNoTrumps_Follow() {
                 DEBUG_PRINTLN();
             #endif
 
-            if (this->playNextHighest_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                                     return; // Yes, play a card slightly larger than current, winning card.
+            if (this->playNextHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                              return; // Yes, play a card slightly larger than current, winning card.
             else if (this->playLowest_InSuit(cardLedSuit))                                                                      return; // No, play the largest on-suit card you have.
             else (this->playLowest_AllSuit());                                                                                  return; // No, play the smallest off-suit card you have.
 

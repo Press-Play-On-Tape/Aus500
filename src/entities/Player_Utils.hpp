@@ -198,93 +198,93 @@ uint8_t getCard(Suit suit, Rank rank) {
 // Trump cards ----------------------------------------------------------------------------------------
 
 
-// Return the highest trump in the player's hand ..
+// // Return the highest trump in the player's hand ..
 
-uint8_t getHighestTrump(Suit trumps) {
+// uint8_t getHighestTrump(Suit trumps) {
 
-    return this->getHighestTrump(trumps, Rank::None);
+//     return this->getHighestTrump(trumps, Rank::None);
 
-}
+// }
 
 
-// Return the highest trump in the player's hand which is above the specified rank ..
+// // Return the highest trump in the player's hand which is above the specified rank ..
 
-uint8_t getHighestTrump(Suit trumps, Rank highestRank) {
+// uint8_t getHighestTrump(Suit trumps, Rank highestRank) {
 
-    uint8_t foundIdx = Constants::No_Card;
+//     uint8_t foundIdx = Constants::No_Card;
 
-    for (uint8_t i = 0; i < this->cardCount; i++) {
+//     for (uint8_t i = 0; i < this->cardCount; i++) {
     
-        Card &card = this->cards[i];
+//         Card &card = this->cards[i];
 
-        if (card.getRank() == Rank::Joker) {
+//         if (card.getRank() == Rank::Joker) {
 
-            highestRank = Rank::Joker;
-            foundIdx = i;
-            break;
+//             highestRank = Rank::Joker;
+//             foundIdx = i;
+//             break;
 
-        }
+//         }
 
-        if (card.getSuit() == trumps) {
+//         if (card.getSuit() == trumps) {
 
-            if (card.getRank() > highestRank) {
+//             if (card.getRank() > highestRank) {
 
-                highestRank = card.getRank();
-                foundIdx = i;
+//                 highestRank = card.getRank();
+//                 foundIdx = i;
 
-            }                
+//             }                
 
-        }
+//         }
 
-    }
+//     }
 
-    return foundIdx;
+//     return foundIdx;
 
-}
+// }
 
 
 // Return the lowest trump in the player's hand ..
 
-uint8_t getLowestTrump(Suit trumps) {
+// uint8_t getLowestTrump(Suit trumps) {
 
-   return this->getLowestTrump(trumps, Rank::Joker);
+//    return this->getLowestTrump(trumps, Rank::Joker);
 
-}
+// }
 
 
-// Return the lowest trump in the player's hand which is above the specified rank ..
+// // Return the lowest trump in the player's hand which is above the specified rank ..
 
-uint8_t getLowestTrump(Suit trumps, Rank lowestRank) {
+// uint8_t getLowestTrump(Suit trumps, Rank lowestRank) {
 
-    uint8_t foundIdx = Constants::No_Card;
+//     uint8_t foundIdx = Constants::No_Card;
 
-    for (uint8_t i = 0; i < this->cardCount; i++) {
+//     for (uint8_t i = 0; i < this->cardCount; i++) {
     
-        Card &card = this->cards[i];
+//         Card &card = this->cards[i];
 
-        if (card.getRank() == Rank::Joker) {
+//         if (card.getRank() == Rank::Joker) {
 
-            lowestRank = Rank::Joker;
-            foundIdx = i;
+//             lowestRank = Rank::Joker;
+//             foundIdx = i;
 
-        }
+//         }
 
-        if (card.getSuit() == trumps) {
+//         if (card.getSuit() == trumps) {
 
-            if (card.getRank() < lowestRank) {
+//             if (card.getRank() < lowestRank) {
 
-                lowestRank = card.getRank();
-                foundIdx = i;
+//                 lowestRank = card.getRank();
+//                 foundIdx = i;
 
-            }                
+//             }                
 
-        }
+//         }
 
-    }
+//     }
 
-    return foundIdx;
+//     return foundIdx;
 
-}
+// }
 
 
 

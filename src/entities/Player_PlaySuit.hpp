@@ -48,7 +48,7 @@ void playSuit_Follow() {
                     DEBUG_PRINTLN(F("4. Trump has been led."));
                     #endif
 
-                    if (this->playLowest_Trump(trumps))                                                         return; // Do not over trump ..
+                    if (this->playLowest_InSuit(trumps))                                                         return; // Do not over trump ..
                     else this->playLowest_AllSuit(trumps);                                                      return; // Throw rubbish ..
 
                 }
@@ -59,7 +59,7 @@ void playSuit_Follow() {
                     #endif
 
                     if (this->playLowest_AllSuit(trumps))                                                       return; // Throw rubbish ..
-                    else this->playLowest_Trump(trumps);                                                        return; // Do not over trump ..
+                    else this->playLowest_InSuit(trumps);                                                        return; // Do not over trump ..
 
                 }
 
@@ -93,14 +93,14 @@ void playSuit_Follow() {
                         
                         if (noOfUnplayedTrumps > 3) {
 
-                            if (this->playHighest_Trump_LargerThan(trumps, largestTrump.getRank()))                 return; // Win or at least force the other player to play big ..  
-                            else if (this->playLowest_Trump(trumps))                                                return; // Follow suit ..
+                            if (this->playHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))                return; // Win or at least force the other player to play big ..  
+                            else if (this->playLowest_InSuit(trumps))                                               return; // Follow suit ..
                             else this->playLowest_AllSuit(trumps);                                                  return;
                         
                         }
                         else {
 
-                            if (this->playLowest_Trump(trumps))                                                     return; // Follow suit ..
+                            if (this->playLowest_InSuit(trumps))                                                    return; // Follow suit ..
                             else this->playLowest_AllSuit(trumps);                                                  return;
 
                         }
@@ -112,8 +112,8 @@ void playSuit_Follow() {
                             DEBUG_PRINTLN(F("10. Next player can follow suit."));
                         #endif
 
-                        if (this->playNextHighest_Trump_LargerThan(trumps, largestTrump.getRank()))                 return; // Win hand with lowest possible trump ..
-                        else if (this->playLowest_Trump(trumps))                                                    return; // Follow suit ..
+                        if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))                return; // Win hand with lowest possible trump ..
+                        else if (this->playLowest_InSuit(trumps))                                                   return; // Follow suit ..
                         else this->playLowest_AllSuit(trumps);                                                      return; // Throw rubbish ..
                     
                     }
@@ -128,9 +128,9 @@ void playSuit_Follow() {
                         #endif
 
                         if (this->playLowest_InSuit(cardLedSuit))                                                   return; // Follow suit if we can ..
-                        else if (this->playNextHighest_Trump_LargerThan(trumps, largestTrump.getRank()))            return; // Over trump of we can..
+                        else if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))           return; // Over trump of we can..
                         else if (this->playLowest_AllSuit(trumps))                                                  return; // Throw rubbish ..
-                        else this->playLowest_Trump(trumps);                                                        return; // Follow suit ..
+                        else this->playLowest_InSuit(trumps);                                                       return; // Follow suit ..
 
                     }
                     else {
@@ -149,7 +149,7 @@ void playSuit_Follow() {
 
                                 if (this->playLowest_InSuit(cardLedSuit))                                           return; // Follow suit with lowest card ..
                                 else if (this->playLowest_AllSuit(trumps))                                          return; // Throw rubbish ..
-                                else this->playLowest_Trump(trumps);                                                return; // Trump the hand with a small one ..
+                                else this->playLowest_InSuit(trumps);                                               return; // Trump the hand with a small one ..
 
                         }
                         else {
@@ -167,14 +167,14 @@ void playSuit_Follow() {
 
                                 if (this->playHighest_InSuit(cardLedSuit))                                          return; // Plenty out there so throw a large card ..
                                 else if (this->playLowest_InSuit(cardLedSuit))                                      return; // Follow suit with lowest card ..
-                                else if (this->playLowest_Trump(trumps))                                            return; // Trump the hand with a small one ..
+                                else if (this->playLowest_InSuit(trumps))                                           return; // Trump the hand with a small one ..
                                 else this->playLowest_AllSuit(trumps);                                              return; // Throw rubbish ..
 
                             }
                             else {
 
                                 if (this->playLowest_InSuit(cardLedSuit))                                           return; // Follow suit with lowest card ..
-                                else if (this->playLowest_Trump(trumps))                                            return; // Trump the hand with a small one ..
+                                else if (this->playLowest_InSuit(trumps))                                           return; // Trump the hand with a small one ..
                                 else this->playLowest_AllSuit(trumps);                                              return; // Throw rubbish ..
 
                             }
@@ -196,8 +196,8 @@ void playSuit_Follow() {
                     DEBUG_PRINTLN(F("15. Trump has been led."));
                 #endif
 
-                if (this->playNextHighest_Trump_LargerThan(trumps, largestTrump.getRank()))                     return; // Win hand with lowest possible trump ..
-                else if (this->playLowest_Trump(trumps))                                                        return; // Follow suit ..
+                if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))                    return; // Win hand with lowest possible trump ..
+                else if (this->playLowest_InSuit(trumps))                                                       return; // Follow suit ..
                 else this->playLowest_AllSuit(trumps);                                                          return; // Throw rubbish ..
 
             }
@@ -214,9 +214,9 @@ void playSuit_Follow() {
                     #endif
 
                     if (this->playLowest_InSuit(cardLedSuit))                                                   return; // Win hand  ..
-                    else if (this->playNextHighest_Trump_LargerThan(trumps, largestTrump.getRank()))            return; // Over trump ..
+                    else if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))           return; // Over trump ..
                     else if (this->playLowest_AllSuit(trumps))                                                  return; // Throw rubbish ..
-                    else this->playLowest_Trump(trumps);                                                        return; // Follow suit ..
+                    else this->playLowest_InSuit(trumps);                                                       return; // Follow suit ..
                 }
                 else {
 
@@ -225,7 +225,7 @@ void playSuit_Follow() {
                     #endif
 
                     if (this->playHighest_InSuit(cardLedSuit))                                                  return; // Win hand  ..
-                    else if (this->playLowest_Trump(trumps))                                                    return; // Trump the hand with a small one ..
+                    else if (this->playLowest_InSuit(trumps))                                                   return; // Trump the hand with a small one ..
                     else this->playLowest_AllSuit(trumps);                                                      return; // Throw rubbish ..
 
                 }
@@ -247,9 +247,9 @@ void playSuit_Follow() {
                 DEBUG_PRINTLN(F("20. Trump has been led."));
             #endif
 
-            if (this->playTop_Trump(trumps))                                                                    return; // If we have the winning trump then play it ..
-            else if (this->playNextHighest_Trump_LargerThan(trumps, largestTrump.getRank()))                    return; // Win hand with lowest possible trump ..
-            else if (this->playLowest_Trump(trumps))                                                            return; // Follow suit ..
+            if (this->playTop_InSuit(trumps))                                                                   return; // If we have the winning trump then play it ..
+            else if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))                   return; // Win hand with lowest possible trump ..
+            else if (this->playLowest_InSuit(trumps))                                                           return; // Follow suit ..
             else this->playLowest_AllSuit(trumps);                                                              return; // Throw rubbish ..
 
         }
@@ -266,7 +266,7 @@ void playSuit_Follow() {
                 #endif
                 
                 if (this->playLowest_InSuit(cardLedSuit))                                                       return; // Follow suit  ..
-                else if (this->playNextHighest_Trump_LargerThan(trumps, largestTrump.getRank()))                return; // Over trump ..
+                else if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))               return; // Over trump ..
                 else this->playLowest_AllSuit(trumps);                                                          return; // Throw rubbish ..
 
             }
@@ -278,9 +278,9 @@ void playSuit_Follow() {
 
                 Card &largestCard = this->gameRound->getLargestCardInPlay(cardLedSuit);
 
-                if (this->playNextHighest_LargerThan(cardLedSuit, largestCard.getRank()))                       return; // Play a slighlty higher card ..
+                if (this->playNextHighest_LargerThan_InSuit(cardLedSuit, largestCard.getRank()))                return; // Play a slighlty higher card ..
                 else if (this->playLowest_InSuit(cardLedSuit))                                                  return; // Trump the hand with a small one ..
-                else if (this->playLowest_Trump(trumps))                                                        return; // Trump the hand with a small one ..
+                else if (this->playLowest_InSuit(trumps))                                                       return; // Trump the hand with a small one ..
                 else this->playLowest_AllSuit(trumps);                                                          return; // Throw rubbish ..
 
             }
@@ -323,12 +323,12 @@ void playSuit_Lead() {
             #endif
 
             if (this->playJoker())                                                                              return;  // Conventional lead .. 
-            else if (this->playLowest_Trump_LowerThan(trumps, Rank::Ten))                                       return; // Defer to partner with little trump ..
+            else if (this->playLowest_LowerThan_InSuit(trumps, Rank::Ten))                                      return; // Defer to partner with little trump ..
             else if (this->playTop_AllSuit(trumps))                                                             return; // Play a wining ace ..
             else if (this->playLowest_WithSecondHighest_AllSuit(trumps))                                        return; // Play a small card from any other suit where you hold the second largest card in that suit.
             else if (this->playLowest_ExcludeSuit(trumps, suit1, suit2))                                        return; // Play a small card from any other suit that the other team did not call.
             else if (this->playLowest_AllSuit(trumps))                                                          return; // Play a small card from any other suit.
-            else this->playLowest_Trump(trumps);                                                                return; // Trump the hand with a small one ..
+            else this->playLowest_InSuit(trumps);                                                               return; // Trump the hand with a small one ..
         }
         else {
 
@@ -349,14 +349,14 @@ void playSuit_Lead() {
                 bool hasJoker = this->getCard(Rank::Joker);                                                             // If you have the joker then play it ..
 
                 if (this->playJoker())                                                                          return;
-                else if (this->playTop_Trump(trumps))                                                           return; // Play the top trump if you have it ..
+                else if (this->playTop_InSuit(trumps))                                                          return; // Play the top trump if you have it ..
                 else if (partnerHasTrumps != TriState::False && 
-                         this->playLowest_Trump_LowerThan(trumps, Rank::Ten))                                   return; // If your partner has trumps, play a small trump (< 10) otherwise.
+                         this->playLowest_LowerThan_InSuit(trumps, Rank::Ten))                                  return; // If your partner has trumps, play a small trump (< 10) otherwise.
                 else if (this->playTop_AllSuit(trumps))                                                         return; // Play a wining ace ..
                 else if (this->playLowest_WithSecondHighest_AllSuit(trumps))                                    return; // Play a small card from any other suit where you hold the second largest card in that suit.
                 else if (this->playLowest_ExcludeSuit(trumps, suit1, suit2))                                    return; // Play a small card from any other suit that the other team did not call.
                 else if (this->playLowest_AllSuit(trumps))                                                      return; // Play a small card from any other suit.
-                else this->playLowest_Trump(trumps);                                                            return; // Play a small card from any other suit.
+                else this->playLowest_InSuit(trumps);                                                           return; // Play a small card from any other suit.
 
             }
             else {                                                                                                      // Neither of your opponents have trumps ..
@@ -369,7 +369,7 @@ void playSuit_Lead() {
                 else if (this->playLowest_WithSecondHighest_AllSuit(trumps))                                    return; // Play a small card from any other suit where you hold the second largest card in that suit.
                 else if (this->playLowest_ExcludeSuit(trumps, suit1, suit2))                                    return; // Play a small card from any other suit that the other team did not call.
                 else if (partnerHasTrumps != TriState::False && 
-                         this->playLowest_Trump_LowerThan(trumps, Rank::Ten))                                   return; // If your partner has trumps, play a small trump (< 10) otherwise.
+                         this->playLowest_LowerThan_InSuit(trumps, Rank::Ten))                                  return; // If your partner has trumps, play a small trump (< 10) otherwise.
                 else {
 
                     for (Suit suit = Suit::Spades; suit <= Suit::Hearts; suit++) {                                      // Play a small card from any other suit where your partner may have cards.
@@ -387,7 +387,7 @@ void playSuit_Lead() {
                 }
 
                 if (this->playLowest_AllSuit(trumps))                                                           return; // Play a small card from any other suit.
-                else this->playLowest_Trump(trumps);                                                            return;
+                else this->playLowest_InSuit(trumps);                                                           return;
 
             }
         }
@@ -507,7 +507,7 @@ void playSuit_Lead() {
         
         if (this->playLowest_WithSecondHighest_AllSuit(trumps))                                                 return; // Play a small card from any other suit where you hold the second largest card in that suit.
         else if (this->playLowest_AllSuit(trumps))                                                              return; // Play a small card from any other suit.
-        else this->playLowest_Trump(trumps);                                                                    return; // Play your smallest trump.
+        else this->playLowest_InSuit(trumps);                                                                   return; // Play your smallest trump.
 
     }
 
