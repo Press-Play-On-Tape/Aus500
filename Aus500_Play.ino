@@ -71,7 +71,7 @@ void play_Init() {
     randomSeed(r);
     game.setRandomSeed(r);
     // #endif
-    randomSeed(6073);
+    randomSeed(7000);
 
 }
 
@@ -786,14 +786,17 @@ void play_Update() {
                                 if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
 
                                     return;
+
                                 }
 
                                 break;
                         
                             case BidType::No_Trumps:
 
-                                if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
+                                if (cardLed.getSuit() != Suit::None && cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
+                                    
                                     return;
+
                                 }
 
                                 if (cardPlayed.getRank() == Rank::Joker && gameRound.getFirstPlayer_Idx() == Constants::HumanPlayer) {
@@ -801,6 +804,12 @@ void play_Update() {
                                     jokerIndex = 0;
                                     gameState = GameState::Play_02;
                                     return;
+
+                                }
+                                else if (cardPlayed.getRank() == Rank::Joker) {
+                                
+                                    cardPlayed.setSuit(cardLed.getSuit());
+
                                 }
 
                                 break;
@@ -808,7 +817,9 @@ void play_Update() {
                             case BidType::Misere:
 
                                 if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
+                                    
                                     return;
+
                                 }
 
                                 break;
@@ -1022,7 +1033,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
             renderPlayerHands(currentPlane, false, false);
             renderTableCards(currentPlane, Constants::NoWinner);
             renderHUD(currentPlane, false, true);
-            SpritesU::drawOverwriteFX(21, 15, Images::ChooseSuit, (jokerIndex * 3) + currentPlane);
+            SpritesU::drawOverwriteFX(28, 15, Images::ChooseSuit, (jokerIndex * 3) + currentPlane);
 
             break;
 

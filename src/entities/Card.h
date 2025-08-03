@@ -57,14 +57,15 @@ struct Card {
 
         }
 
+
         uint8_t getCardIndex() {
 
             if (this->getRank() == Rank::Joker) {
 
-                switch (this->getOrigSuit()) {
+                switch (this->getSuit()) {
 
                     case Suit::Spades ... Suit::Hearts:
-                        return (44 + static_cast<uint8_t>(this->getOrigSuit())) * 3;
+                        return (44 + static_cast<uint8_t>(this->getSuit())) * 3;
                         break;
 
                     default:
@@ -78,22 +79,6 @@ struct Card {
             
         }
 
-        // Suit getSuit(Suit trumps) {
-        
-        //     if (this->getRank() == Rank::Joker)     return trumps;
-        //     if (this->isLeftBower(trumps))          return trumps;
-        //     return this->suit; 
-         
-        // }
-
-        // Rank getRank(Suit trumps) {
-        
-        //     if (isRightBower(trumps))   { return Rank::Right_Bower; }
-        //     if (isLeftBower(trumps))    { return Rank::Left_Bower; }
-
-        //     return this->rank; 
-         
-        // }
 
         uint8_t getSortValue(BidType bidType, uint8_t seq[4]) {
 

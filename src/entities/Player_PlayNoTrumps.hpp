@@ -209,7 +209,7 @@ void playNoTrumps_Follow() {
         #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
             DEBUG_PRINTLN(F("16. Partner has not played."));
         #endif
-        
+        Serial.println((uint8_t)cardLedSuit);
         if (this->hasSuit(cardLedSuit)) {                                                                                               // Can you follow suit?
 
             #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)

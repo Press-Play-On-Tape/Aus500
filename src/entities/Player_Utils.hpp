@@ -65,8 +65,11 @@ void playCard(uint8_t idx) {
 
     Card &card = this->cards[idx];
     copyCard(card, this->cardJustPlayed);
+
     this->gameRound->markCardPlayed(card.getOrigSuit(), card.getOrigRank());
     copyCard(card, this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx()));
+
+
     card.reset();
     this->sort();
 
