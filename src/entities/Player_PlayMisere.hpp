@@ -44,7 +44,7 @@ void playMisere_Follow() {
         if (this->playNextLowest_SmallerThan_InSuit(winningCard->getSuit(), winningCard->getRank()))                                return; // Something immediately lower than the leader ..
         else if (this->playLowest_InSuit(winningCard->getSuit()))                                                                   return; // Lowest card following suit
         else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                                  return; // Lowest card in another suit
-        else if (this->playJoker())                                                                                                 return; // Play joker if you have it.
+        else if (this->playJoker(winningCard->getSuit()))                                                                           return; // Play joker if you have it.
 
     }
     else {
@@ -80,7 +80,7 @@ void playMisere_Follow() {
                         if (this->playNextLowest_SmallerThan_InSuit(winningCard->getSuit(), winningCard->getRank()))                return; // Something immediately lower than the leader ..
                         else if (this->playHighest_InSuit(winningCard->getSuit()))                                                  return; // Lowest card following suit
                         else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                  return; // Lowest card in another suit
-                        else if (this->playJoker())                                                                                 return; // Play joker if you have it.
+                        else if (this->playJoker(winningCard->getSuit()))                                                           return; // Play joker if you have it.
 
                     }
                     else {
@@ -91,7 +91,7 @@ void playMisere_Follow() {
 
                         if (this->playHighest_InSuit(winningCard->getSuit()))                                                       return; // Lowest card following suit
                         else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                  return; // Lowest card in another suit
-                        else if (this->playJoker())                                                                                 return; // Lowest card in another suit
+                        else if (this->playJoker(winningCard->getSuit()))                                                           return; // Lowest card in another suit
 
                     }
 
@@ -105,7 +105,7 @@ void playMisere_Follow() {
                     if (this->playNextLowest_SmallerThan_InSuit(losingCard->getSuit(), losingCard->getRank()))                      return; // Something immediately lower than the leader ..
                     else if (this->playLowest_InSuit(losingCard->getSuit()))                                                        return; // Lowest card following suit
                     else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                      return; // Lowest card in another suit
-                    else if (this->playJoker())                                                                                     return; // Play joker if you have it.
+                    else if (this->playJoker(losingCard->getSuit()))                                                                return; // Play joker if you have it.
 
                 }
 
@@ -118,7 +118,7 @@ void playMisere_Follow() {
 
                 if (this->playHighest_InSuit(winningCard->getSuit()))                                                               return; // Highest card following suit
                 else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                          return; // Lowest card in another suit
-                else if (this->playJoker())                                                                                         return; // Play joker if you have it.
+                else if (this->playJoker(winningCard->getSuit()))                                                                   return; // Play joker if you have it.
 
             }
 
@@ -132,7 +132,7 @@ void playMisere_Follow() {
             if (this->playNextLowest_SmallerThan_InSuit(winningCard->getSuit(), winningCard->getRank()))                            return; // Something immediately lower than the leader ..
             else if (this->playHighest_InSuit(winningCard->getSuit()))                                                              return; // Lowest card following suit
             else if (this->playHighest_LargerThan_AllSuit(Rank::None))                                                              return; // Lowest card in another suit
-            else if (this->playJoker())                                                                                             return; // Play joker if you have it.
+            else if (this->playJoker(winningCard->getSuit()))                                                                       return; // Play joker if you have it.
 
         }
     
@@ -161,7 +161,7 @@ void playMisere_Lead() {
         #endif    
 
         if (this->playBottom_AllSuit())                                                                                             return; // Play a bottom card if we have one ..
-        else this->playLowest_AllSuit(Suit::None);                                                                                  return; // Play a small card from any other suit.
+        else if (this->playLowest_AllSuit(Suit::None))                                                                              return; // Play a small card from any other suit.
     
     }
     else {
@@ -202,8 +202,9 @@ void playMisere_Lead() {
         // Lead the smallest card we have ..
 
         if (this->playLowest_AllSuit())                                                                                             return; // Try to pass control to your partner ..
-        else if (this->playJoker())                                                                                                 return; // Play joker if you have it.
 
     }
+
+    this->playJoker(static_cast<Suit>(random(4)));                                                                                                              return; // Play joker if you have it.
 
 }

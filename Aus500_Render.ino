@@ -15,7 +15,6 @@ void renderPlayerHands(uint8_t currentPlane, bool blinkSelected, bool blinkRaise
 
             if (rank != Rank::None) {
 
-                // uint8_t y = 47 - (card.isSelected() ? 4 : 0);
                 uint8_t y = 47;
 
 
@@ -158,7 +157,6 @@ void renderBids(uint8_t currentPlane) {
                     if (dealer == 0) {
                         bidder_X = 92;
                         bidder_Y = 35 + (bid.getLevel() == 10 ? 2 : 0);
-                        // SpritesU::drawOverwriteFX(92, 35 + (bid.getLevel() == 10 ? 2 : 0), Images::Dealer, currentPlane); 
                     }
                 
                 }
@@ -173,7 +171,6 @@ void renderBids(uint8_t currentPlane) {
                     if (dealer == 0) {
                         bidder_X = 92;
                         bidder_Y = 36 + (bid.getLevel() == 10 ? 2 : 0);
-                        // SpritesU::drawOverwriteFX(92, 36 + (bid.getLevel() == 10 ? 2 : 0), Images::Dealer, currentPlane); 
                     }
                 
                 }
@@ -186,7 +183,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == 0) {
                     bidder_X = 92;
                     bidder_Y = 38;
-                    // SpritesU::drawOverwriteFX(92, 38, Images::Dealer, currentPlane); 
                 }
 
                 break;
@@ -198,7 +194,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == 0) {
                     bidder_X = 92;
                     bidder_Y = 40;                
-                    // SpritesU::drawOverwriteFX(92, 40, Images::Dealer, currentPlane); 
                 }
 
                 break;
@@ -208,7 +203,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == 0) {
                     bidder_X = 91;
                     bidder_Y = 23;                  
-                    // SpritesU::drawOverwriteFX(91, 23, Images::Dealer, currentPlane); 
                 }
 
                 break;
@@ -232,7 +226,6 @@ void renderBids(uint8_t currentPlane) {
                     if (dealer == Constants::HumanPlayer) {
                         bidder_X = 39 - (bid.getLevel() == 10 ? 2 : 0);
                         bidder_Y = 40;                       
-                        // SpritesU::drawOverwriteFX(39 - (bid.getLevel() == 10 ? 2 : 0), 40, Images::Dealer, currentPlane); 
                     }
 
                 }
@@ -246,7 +239,6 @@ void renderBids(uint8_t currentPlane) {
                     if (dealer == Constants::HumanPlayer) {
                         bidder_X = 38 - (bid.getLevel() == 10 ? 2 : 0);
                         bidder_Y = 40;                       
-                        // SpritesU::drawOverwriteFX(38 - (bid.getLevel() == 10 ? 2 : 0), 40, Images::Dealer, currentPlane); 
                     }
 
                 }
@@ -259,7 +251,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == Constants::HumanPlayer) {
                     bidder_X = 36;
                     bidder_Y = 40;                       
-                    // SpritesU::drawOverwriteFX(36, 40, Images::Dealer, currentPlane); 
                 }
 
                 break;
@@ -271,7 +262,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == Constants::HumanPlayer) {
                     bidder_X = 34;
                     bidder_Y = 40;                       
-                    // SpritesU::drawOverwriteFX(34, 40, Images::Dealer, currentPlane); 
                 }
 
                 break;
@@ -281,7 +271,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == Constants::HumanPlayer) {
                     bidder_X = 52;
                     bidder_Y = 40;                       
-                    // SpritesU::drawOverwriteFX(52, 40, Images::Dealer, currentPlane); 
                 }
 
                 break;
@@ -305,7 +294,6 @@ void renderBids(uint8_t currentPlane) {
                     if (dealer == 2) {
                         bidder_X = 8;
                         bidder_Y = 13 - (bid.getLevel() == 10 ? 2 : 0);                       
-                        // SpritesU::drawOverwriteFX(8, 13 - (bid.getLevel() == 10 ? 2 : 0), Images::Dealer, currentPlane);                  
                     }
 
                 }
@@ -319,7 +307,6 @@ void renderBids(uint8_t currentPlane) {
                     if (dealer == 2) {
                         bidder_X = 8;
                         bidder_Y = 12 - (bid.getLevel() == 10 ? 2 : 0);                       
-                        // SpritesU::drawOverwriteFX(8, 12 - (bid.getLevel() == 10 ? 2 : 0), Images::Dealer, currentPlane);                  
                     }
 
                 }
@@ -332,7 +319,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == 2) {
                     bidder_X = 8;
                     bidder_Y = 10;                       
-                    // SpritesU::drawOverwriteFX(8, 10, Images::Dealer, currentPlane);                  
                 }
 
                 break;
@@ -344,7 +330,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == 2) {
                     bidder_X = 8;
                     bidder_Y = 8;                       
-                    // SpritesU::drawOverwriteFX(8, 8, Images::Dealer, currentPlane);                  
                 }
 
                 break;
@@ -354,7 +339,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == 2) {
                     bidder_X = 8;
                     bidder_Y = 23;                       
-                    // SpritesU::drawOverwriteFX(8, 23, Images::Dealer, currentPlane);                  
                 }
 
                 break;
@@ -377,7 +361,6 @@ void renderBids(uint8_t currentPlane) {
                     if (dealer == 3) {
                         bidder_X = 61 + (bid.getLevel() == 10 ? 1 : 0);
                         bidder_Y = 6;                       
-                        // SpritesU::drawOverwriteFX(61 + (bid.getLevel() == 10 ? 1 : 0), 6, Images::Dealer, currentPlane); 
                     }
                     
                 }
@@ -391,7 +374,6 @@ void renderBids(uint8_t currentPlane) {
                     if (dealer == 3) {
                         bidder_X = 62 + (bid.getLevel() == 10 ? 2 : 0);
                         bidder_Y = 6;                       
-                        // SpritesU::drawOverwriteFX(62 + (bid.getLevel() == 10 ? 2 : 0), 6, Images::Dealer, currentPlane); 
 
                     }
 
@@ -405,7 +387,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == 3) {
                     bidder_X = 64;
                     bidder_Y = 6;                       
-                    // SpritesU::drawOverwriteFX(64, 6, Images::Dealer, currentPlane); 
                 }
 
                 break;
@@ -417,7 +398,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == 3) {
                     bidder_X = 66;
                     bidder_Y = 6;                       
-                    // SpritesU::drawOverwriteFX(66, 6, Images::Dealer, currentPlane); 
                 }
 
                 break;
@@ -427,7 +407,6 @@ void renderBids(uint8_t currentPlane) {
                 if (dealer == 3) {
                     bidder_X = 53;
                     bidder_Y = 6;                       
-                    // SpritesU::drawOverwriteFX(52, 6, Images::Dealer, currentPlane); 
                 }
 
                 break;
@@ -445,24 +424,8 @@ void renderBids(uint8_t currentPlane) {
 
 }
 
+
 void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
-
-   
-//     uint8_t firstPlayer = gameRound.getFirstPlayer_Idx();
-//     for (uint8_t playerIdx = firstPlayer; playerIdx < firstPlayer + 4; playerIdx++) {
-// Serial.print(playerIdx % 4);    
-
-//         switch (playerIdx % 4) {
-        
-//             case 0: renderTableCards_00(currentPlane, winningHand);
-//             case 1: renderTableCards_01(currentPlane, winningHand);
-//             case 2: renderTableCards_02(currentPlane, winningHand);
-//             case 3: renderTableCards_03(currentPlane, winningHand);
-
-//         }
-
-//     }
-// Serial.println();
 
     renderTableCards_03(currentPlane, winningHand);
     renderTableCards_01(currentPlane, winningHand);
@@ -470,7 +433,6 @@ void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
     renderTableCards_02(currentPlane, winningHand);
 
 }
-
 
 
 void renderTableCards_00(uint8_t currentPlane, uint8_t winningHand) {   
@@ -641,22 +603,7 @@ void renderHUD(uint8_t currentPlane, bool displayCard, bool displayWinningBid) {
 
         }
 
-
         SpritesU::drawOverwriteFX(107, 29, Images::Bid_Result_Narrow, (gameRound.getHighestBid().getImageIndex() * 3) + currentPlane);
-
-        // int16_t score = gameRound.getScore(1);
-        // uint16_t idx = abs(score) / 10;
-        // if (idx > 99) idx = 99;
-
-        // if (score < 0) idx = idx + 100;
-        // SpritesU::drawOverwriteFX(113, 51, Images::HUD_Game_Score, (idx * 3) + currentPlane);
-
-        // score = gameRound.getScore(0);
-        // idx = abs(score) / 10;
-        // if (idx > 99) idx = 99;
-
-        // if (score < 0) idx = idx + 100;
-        // SpritesU::drawOverwriteFX(113, 58, Images::HUD_Game_Score, (idx * 3) + currentPlane);
 
     }
 

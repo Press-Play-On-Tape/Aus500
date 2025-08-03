@@ -12,7 +12,8 @@
 
 // Trump cards -----------------------------------------------------------------
 
-bool playJoker() {
+
+bool playJoker(Suit suit) {
 
     for (uint8_t i = 0; i < this->cardCount; i++) {
     
@@ -20,6 +21,7 @@ bool playJoker() {
 
         if (card.getRank() == Rank::Joker) {
 
+            if (suit != Suit::None) card.setSuit(suit);        
             this->playCard(i);
             return true;
 
@@ -49,100 +51,6 @@ bool isCardInTrick(Suit suit, Rank rank) {
 
 }
 
-// If the player has the top, unplayed trump then play it ..
-
-// bool playTop_Trump(Suit trumps) {
-
-    
-//     // If we have the Joker then play it automatically ..
-
-//     if (this->playJoker())    return true;
-
-
-//     // What is the players highest trump?
-
-//     uint8_t idx = this->getHighest_InSuit(trumps);
-//     if (idx == Constants::No_Card)  return false;
-
-//     Card &playersHighestCard = this->cards[idx];
-
-
-//     // What is the highest unplayed trump?
-
-//     Rank highestUnplayedCard = Rank::None;
-
-//     for (Rank rank = Rank::Four; rank <= Rank::Ace; rank++) {
-
-//         if (!this->gameRound->hasCardBeenPlayed(trumps, rank) && !this->isCardInTrick(trumps, rank)) {
-
-//             highestUnplayedCard = rank;        
-
-//         } 
-
-//     }
-
-
-//     // Test the left bower separately ..
-
-//     if (!this->gameRound->hasCardBeenPlayed(getTrump_AltSuit(trumps), Rank::Jack) && !this->isCardInTrick(getTrump_AltSuit(trumps), Rank::Jack)) {
-
-//         highestUnplayedCard = Rank::Left_Bower;        
-
-//     } 
-
-
-//     // Test the right bower separately ..
-
-//     if (!this->gameRound->hasCardBeenPlayed(trumps, Rank::Jack) && !this->isCardInTrick(trumps, Rank::Jack)) {
-
-//         highestUnplayedCard = Rank::Right_Bower;        
-
-//     } 
-
-
-//     // Test the joker separately ..
-
-//     if (!this->gameRound->getPlayedJoker() && !this->isCardInTrick(trumps, Rank::Joker)) {
-
-//         highestUnplayedCard = Rank::Joker;        
-
-//     } 
-
-
-//     // So are we holding the top card?
-
-//     if (highestUnplayedCard == playersHighestCard.getRank()) {
-
-//         this->playCard(idx);
-//         return true;
-
-//     }
-
-//     return false;
-
-// }
-
-
-// // Play the lowest trump in the player's hand ..
-
-// bool playLowest_Trump(Suit trumps) {
-
-//     uint8_t idx = this->getLowest_InSuit(trumps);
-
-//     if (idx == Constants::No_Card)  {
-    
-//         return false;
-
-//     }
-//     else {
-
-//         this->playCard(idx);
-//         return true;
-
-//     }
-
-// }
-
 
 // Play the lowest trump in the player's hand that is below the specified rank ..
 
@@ -163,74 +71,6 @@ bool playLowest_LowerThan_InSuit(Suit trumps, Rank rank) {
     }
 
 }
-
-
-// Play the highest trump in the player's hand ..
-
-// bool playHighest_Trump(Suit trumps) {
-
-//     uint8_t idx = this->getHighest_InSuit(trumps);
-
-//     if (idx == Constants::No_Card)  {
-    
-//         return false;
-
-//     }
-//     else {
-
-//         this->playCard(idx);
-//         return true;
-
-//     }
-
-// }
-
-
-// Play the highest trump in the player's hand that is above the specified rank ..
-
-// bool playHighest_LargerThan_InSuit(Suit suit, Rank rank) {   
-
-//     uint8_t idx = this->getHighest_InSuit(suit, rank);
-
-//     if (idx == Constants::No_Card)  {
-    
-//         return false;
-
-//     }
-//     else {
-
-//         this->playCard(idx);
-//         return true;
-
-//     }
-
-// }
-
-
-// Play the next highest trump above the specified one ..
-
-// bool playNextHighest_Trump_LargerThan(Suit trumps, Rank rank) {   
-
-//     uint8_t idx = this->getNextHighestTrump(trumps, rank);
-
-//     if (idx == Constants::No_Card)  {
-    
-//         return false;
-
-//     }
-//     else {
-
-//         this->playCard(idx);
-//         return true;
-
-//     }
-
-// }
-
-
-
-
-// Non trump cards ------------------------------------------------------------------------------------
 
 
 // Play the lowest card in the specified suit ..
@@ -413,7 +253,7 @@ bool playTop_AllSuit(Suit excludeTrumps) {
             uint8_t idx = this->getTop_InSuit(suit);
 
             if (idx != Constants::No_Card)  {
-
+Serial.println(idx);
                 this->playCard(idx);
                 return true;
 
@@ -422,6 +262,7 @@ bool playTop_AllSuit(Suit excludeTrumps) {
         }
 
     }
+Serial.println("none");
 
     return false;
 

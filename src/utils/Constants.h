@@ -2,11 +2,12 @@
 #include "../../fxdata/fxdata.h"
 #include "../../fxdata/images/Images.h"
 
-#define _DEBUG_PRINT    Serial.print
-#define _DEBUG_PRINTLN  Serial.println
+#define DEBUG_PRINT    Serial.print
+#define DEBUG_PRINTLN  Serial.println
 #define DEBUG_BREAK    asm volatile("break\n");
 
-#define _DEBUG
+#define DEBUG
+#define _DEBUG_SKIP_DEAL
 #define _DEBUG_BASIC
 #define _DEBUG_RAND
 
@@ -35,7 +36,7 @@
 
 #define _DEBUG_PLAYER_WINNING_HAND
 #define _DEBUG_PLAYNOTRUMPS_LEAD
-#define _DEBUG_PLAYNOTRUMPS_FOLLOW
+#define DEBUG_PLAYNOTRUMPS_FOLLOW
 #define _DEBUG_PLAYSUIT_LEAD;
 #define _DEBUG_PLAYSUIT_FOLLOW;
 #define _DEBUG_PLAYMISERE_LEAD

@@ -64,32 +64,9 @@ Suit canShortSuit() {
 void playCard(uint8_t idx) {
 
     Card &card = this->cards[idx];
-    Suit trumps = this->gameRound->winningBid_Suit();
-
-    // if (card.getRank() == Rank::Joker) {
-    // DEBUG_BREAK
-    //     card.setSuit(this->gameRound->getJokerSuit());
-    // }
-
     copyCard(card, this->cardJustPlayed);
-    // this->cardJustPlayed.setSuit(card.getSuit());
-    // this->cardJustPlayed.setRank(card.getRank());
-
     this->gameRound->markCardPlayed(card.getSuit(), card.getRank());
-    
-    Serial.println((uint8_t)card.getSuit());
-    Serial.println((uint8_t)card.getRank());
-
     copyCard(card, this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx()));
-    if (card.getRank() == Rank::Joker) {
-        DEBUG_BREAK
-     
-    }    
-    // this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setSuit(card.getSuit());
-    // this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setRank(card.getRank());
-    // this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setOrigSuit(card.getOrigSuit());
-    // this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setOrigRank(card.getOrigRank());
-    
     card.reset();
     this->sort();
 
@@ -120,31 +97,7 @@ bool hasSuit(Suit suit) {
     
         Card &card = this->cards[i];
 
-        switch (card.getRank()) {
-
-            case Rank::Four ... Rank::Ten:
-            case Rank::Queen ... Rank::Ace:
-            case Rank::Right_Bower:
-
-                if (card.getSuit() == suit ) {
-                
-                    return true;
-                    
-                }
-
-                break;
-
-            case Rank::Left_Bower:
-        
-                if (getTrump_AltSuit(card.getSuit()) == suit) {
-                
-                    return true;
-                    
-                }
-
-                break;
-        
-        }
+        if (card.getSuit() == suit) return true;
 
     }
 
@@ -193,99 +146,6 @@ uint8_t getCard(Suit suit, Rank rank) {
     return Constants::No_Card;
 
 }
-
-
-// Trump cards ----------------------------------------------------------------------------------------
-
-
-// // Return the highest trump in the player's hand ..
-
-// uint8_t getHighestTrump(Suit trumps) {
-
-//     return this->getHighestTrump(trumps, Rank::None);
-
-// }
-
-
-// // Return the highest trump in the player's hand which is above the specified rank ..
-
-// uint8_t getHighestTrump(Suit trumps, Rank highestRank) {
-
-//     uint8_t foundIdx = Constants::No_Card;
-
-//     for (uint8_t i = 0; i < this->cardCount; i++) {
-    
-//         Card &card = this->cards[i];
-
-//         if (card.getRank() == Rank::Joker) {
-
-//             highestRank = Rank::Joker;
-//             foundIdx = i;
-//             break;
-
-//         }
-
-//         if (card.getSuit() == trumps) {
-
-//             if (card.getRank() > highestRank) {
-
-//                 highestRank = card.getRank();
-//                 foundIdx = i;
-
-//             }                
-
-//         }
-
-//     }
-
-//     return foundIdx;
-
-// }
-
-
-// Return the lowest trump in the player's hand ..
-
-// uint8_t getLowestTrump(Suit trumps) {
-
-//    return this->getLowestTrump(trumps, Rank::Joker);
-
-// }
-
-
-// // Return the lowest trump in the player's hand which is above the specified rank ..
-
-// uint8_t getLowestTrump(Suit trumps, Rank lowestRank) {
-
-//     uint8_t foundIdx = Constants::No_Card;
-
-//     for (uint8_t i = 0; i < this->cardCount; i++) {
-    
-//         Card &card = this->cards[i];
-
-//         if (card.getRank() == Rank::Joker) {
-
-//             lowestRank = Rank::Joker;
-//             foundIdx = i;
-
-//         }
-
-//         if (card.getSuit() == trumps) {
-
-//             if (card.getRank() < lowestRank) {
-
-//                 lowestRank = card.getRank();
-//                 foundIdx = i;
-
-//             }                
-
-//         }
-
-//     }
-
-//     return foundIdx;
-
-// }
-
 
 
 // Return the next highest trump in the player's hand from specified rank ..
@@ -957,20 +817,8 @@ void sort() {
 
                 Card card;
                 copyCard(cards[i], card);
-                // card.setSuit(cards[i].getSuit());
-                // card.setRank(cards[i].getRank());
-                // card.setOrigSuit(cards[i].getOrigSuit());
-                // card.setOrigRank(cards[i].getOrigRank());
-                // card.setSelected(cards[i].isSelected());
-
                 this->cards[i] = this->cards[j];
-
                 copyCard(card, this->cards[j]);
-                // this->cards[j].setSuit(card.getSuit());
-                // this->cards[j].setRank(card.getRank());
-                // this->cards[j].setOrigSuit(card.getOrigSuit());
-                // this->cards[j].setOrigRank(card.getOrigRank());
-                // this->cards[j].setSelected(card.isSelected());
 
             }
             
@@ -983,7 +831,7 @@ void sort() {
     
     for (uint8_t i = 0; i < 13; i++) {
 
-        if (this->cards[i].getSuit() != Suit::None) {
+        if (this->cards[i].getRank() != Rank::None) {
             
             this->cardCount++;
 

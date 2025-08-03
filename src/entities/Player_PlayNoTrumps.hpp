@@ -54,7 +54,7 @@ void playNoTrumps_Follow() {
                         DEBUG_PRINTLN();
                     #endif
 
-                    this->playLowest_InSuit(cardLedSuit);                                                                       return; // Follow suit ..
+                    if (this->playLowest_InSuit(cardLedSuit))                                                                  return; // Follow suit ..
 
                 }
                 else {
@@ -70,7 +70,7 @@ void playNoTrumps_Follow() {
                             DEBUG_PRINTLN();
                         #endif
 
-                        this->playHighest_InSuit(cardLedSuit);          
+                        if (this->playHighest_InSuit(cardLedSuit))                                                              return;
                         
                     }
                     else {
@@ -81,12 +81,12 @@ void playNoTrumps_Follow() {
                             DEBUG_PRINTLN();
                         #endif
 
-                        this->playLowest_InSuit(cardLedSuit);          
-                    
+                        if (this->playLowest_InSuit(cardLedSuit))                                                               return;       
+                
                     }
                
                 }
- 
+
             }
             else {
 
@@ -108,10 +108,12 @@ void playNoTrumps_Follow() {
                     this->playLowest_InSuit(shortSuit);                                                                         return; // Follow suit ..
                 }
                 else {
-                    this->playLowest_AllSuit();                                                                                 return; // Play the lowest card you have.
+                    if (this->playLowest_AllSuit())                                                                             return; // Play the lowest card you have.
                 }
 
             }
+
+            this->playJoker(cardLedSuit);                                                                                       return;
 
         }
         else {  // Partner is not winning ..
@@ -154,18 +156,20 @@ void playNoTrumps_Follow() {
 
                         if (this->playNextHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                  return; // Yes, play a card slightly larger than current, winning card.
                         else if (this->playLowest_InSuit(cardLedSuit))                                                          return; // No, play the largest on-suit card you have.
-                        else (this->playLowest_AllSuit());                                                                      return; // Should not get here as we have the suit.
+                        else if (this->playLowest_AllSuit())                                                                    return; // Should not get here as we have the suit.
 
                     }
                     else {
 
                         if (this->playHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                      return; // No, play the largest on-suit card you have bigger than winning card.
                         else if (this->playLowest_InSuit(cardLedSuit))                                                          return; // No, play the smallest on-suit card you have.
-                        else (this->playLowest_AllSuit());                                                                      return; // Should not get here as we have the suit.
+                        else if (this->playLowest_AllSuit())                                                                    return; // Should not get here as we have the suit.
 
                     }
 
                 }
+
+                this->playJoker(cardLedSuit);                                                                                   return;
                 
             }
             else {                                                                                                                      // Can not follow suit.
@@ -176,7 +180,7 @@ void playNoTrumps_Follow() {
                     DEBUG_PRINTLN();
                 #endif
 
-                if (this->playJoker())                                                                                          return; // Win this hand with the Joker.
+                if (this->playJoker(cardLedSuit))                                                                               return; // Win this hand with the Joker.
             
                 Suit shortSuit = this->canShortSuit();                                                                                  // Can you short suit yourself in any suit?
 
@@ -190,12 +194,14 @@ void playNoTrumps_Follow() {
                     this->playLowest_InSuit(shortSuit);                                                                         return; // Follow suit ..
                 }
                 else {
-                    this->playLowest_AllSuit();                                                                                 return; // Play the lowest card you have.
+                    if (this->playLowest_AllSuit())                                                                             return; // Play the lowest card you have.
                 }
 
             }
 
         }
+
+        this->playJoker(cardLedSuit);                                                                                           return; // Can we even get this far?
 
     }
     else {                                                                                                                              // Partner has not played ..
@@ -214,7 +220,7 @@ void playNoTrumps_Follow() {
 
             if (this->playNextHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                              return; // Yes, play a card slightly larger than current, winning card.
             else if (this->playLowest_InSuit(cardLedSuit))                                                                      return; // No, play the largest on-suit card you have.
-            else (this->playLowest_AllSuit());                                                                                  return; // No, play the smallest off-suit card you have.
+            else if (this->playLowest_AllSuit())                                                                                return; // No, play the smallest off-suit card you have.
 
         }
         else {
@@ -235,7 +241,7 @@ void playNoTrumps_Follow() {
                     DEBUG_PRINTLN();
                 #endif
 
-                if (this->playJoker())                                                                                          return; // Win this hand with the Joker.
+                if (this->playJoker(cardLedSuit))                                                                               return; // Win this hand with the Joker.
 
             }
             else {
@@ -281,7 +287,7 @@ void playNoTrumps_Follow() {
                     DEBUG_PRINT(F("22. Player can not short suit."));
                 #endif
 
-                this->playLowest_AllSuit();                                                                                     return; // Play the lowest card you have.
+                if (this->playLowest_AllSuit())                                                                                 return; // Play the lowest card you have.
                 
             }        
             
@@ -289,6 +295,8 @@ void playNoTrumps_Follow() {
                
     }
            
+    this->playJoker(cardLedSuit);                                                                                               return; // Can we even get this far?
+
 }               
 
 
@@ -305,8 +313,6 @@ bool playNoTrumps_Lead() {
     uint8_t playerAfterIdx = (this->getPlayerNumber() + 1) % 4;
 
     Card &largestCardInPlay = this->gameRound->getLargestCardInPlay(Suit::None);
-    Card &cardLed = this->gameRound->getCardLed();
-    Suit cardLedSuit = cardLed.getSuit();
 
     Suit suit1 = this->gameRound->getHand(playerBeforeIdx)->getSuit(); // played by competitor 1
     Suit suit2 = this->gameRound->getHand(playerAfterIdx)->getSuit(); // played by competitor 2
@@ -337,6 +343,10 @@ bool playNoTrumps_Lead() {
         DEBUG_PRINT_TRISTATE(doesPartnerHaveSuit);
         DEBUG_PRINTLN();
     #endif
+
+    if (partnerCalledSuit == Suit::None) {
+        partnerCalledSuit = Suit::Spades;
+    }
 
     if (doesPartnerHaveSuit == TriState::False) {
         partnerCalledSuit = Suit::Spades;
@@ -420,8 +430,7 @@ bool playNoTrumps_Lead() {
 
         }
         
-        this->cards[this->getCard(Rank::Joker)].setSuit(suit);
-        this->playJoker();                                                                                                              // Play Joker and Win!
+        this->playJoker(suit);                                                                                                          // Play Joker and Win!
         return; 
 
     }
@@ -433,6 +442,7 @@ bool playNoTrumps_Lead() {
     if (this->playHighest_LargerThan_AllSuit(Rank::King))                                                                       return; // Play a king if you have it ..
     else if (this->playHighest_LargerThan_AllSuit(Rank::Queen))                                                                 return; // Play a queen if you have it ..
     else if (this->playHighest_LargerThan_AllSuit(Rank::Jack))                                                                  return; // Play a Jack if you have it ..
-    else (this->playLowest_AllSuit());                                                                                          return; // No, play the largest on-suit card you have.
+    else if (this->playLowest_AllSuit())                                                                                        return; // No, play the largest on-suit card you have.
+    else this->playJoker(static_cast<Suit>(random(4)));                                                                         return;
 
 }
