@@ -13,13 +13,19 @@ struct Card {
         Suit suit;
         Rank rank;
         bool selected = false;
+        Suit origSuit;
+        Rank origRank;
 
         Suit getSuit()                      { return this->suit; }
+        Suit getOrigSuit()                  { return this->origSuit; }
         Rank getRank()                      { return this->rank; }
+        Rank getOrigRank()                  { return this->origRank; }
         bool isSelected()                   { return this->selected; }
 
         void setSuit(Suit val)              { this->suit = val; }
+        void setOrigSuit(Suit val)          { this->origSuit = val; }
         void setRank(Rank val)              { this->rank = val; }
+        void setOrigRank(Rank val)          { this->origRank = val; }
         void setSelected(bool val)          { this->selected = val; }
 
         void reset() {
@@ -29,6 +35,28 @@ struct Card {
             this->setSelected(false);
             
         }
+
+        void setTrumps(Suit trumps) {
+        
+            this->origSuit = this->suit;
+            this->origRank = this->rank;
+
+            if (this->getRank() == Rank::Joker) {
+                this->suit = trumps;
+            }
+
+            if (this->isLeftBower(trumps)) {
+                this->suit = trumps;
+                this->rank = Rank::Left_Bower;
+            }
+
+            if (this->isRightBower(trumps)) {
+                this->suit = trumps;
+                this->rank = Rank::Right_Bower;
+            }
+
+        }
+
 
         uint8_t getCardIndex() {
 
@@ -47,28 +75,12 @@ struct Card {
 
             }
 
-            return (3 * ((static_cast<uint8_t>(this->getSuit()) * 11) + (static_cast<uint8_t>(this->getRank()) - 4)));
+            return (3 * ((static_cast<uint8_t>(this->getOrigSuit()) * 11) + (static_cast<uint8_t>(this->getOrigRank()) - 4)));
             
         }
 
-        Suit getSuit(Suit trumps) {
-        
-            if (this->getRank() == Rank::Joker)     return trumps;
-            if (this->isLeftBower(trumps))          return trumps;
-            return this->suit; 
-         
-        }
 
-        Rank getRank(Suit trumps) {
-        
-            if (isRightBower(trumps))   { return Rank::Right_Bower; }
-            if (isLeftBower(trumps))    { return Rank::Left_Bower; }
-
-            return this->rank; 
-         
-        }
-
-        uint8_t getSortValue(BidType bidType, Suit trumps, uint8_t seq[4]) {
+        uint8_t getSortValue(BidType bidType, uint8_t seq[4]) {
 
             #if defined(DEBUG) && defined(DEBUG_SORT) && defined(DEBUG_SORT_DETAIL)
                 DEBUG_PRINT(F("Card "));
@@ -106,21 +118,49 @@ struct Card {
                         
                     }                    
 
-                    return (seq[static_cast<uint8_t>(this->suit)] * 20) + (uint8_t)getRank(Suit::None);
+                    return (seq[static_cast<uint8_t>(this->suit)] * 20) + (uint8_t)getRank();
 
                 default:
 
-                    if (rank == Rank::Joker) {
+                    // if (rank == Rank::Joker) {
 
-                        #if defined(DEBUG) && defined(DEBUG_SORT) && defined(DEBUG_SORT_DETAIL)
-                            DEBUG_PRINTLN((seq[static_cast<uint8_t>(trumps)] * 20) + (uint8_t)getRank(trumps));
-                        #endif
+                    //     #if defined(DEBUG) && defined(DEBUG_SORT) && defined(DEBUG_SORT_DETAIL)
+                    //         DEBUG_PRINTLN((seq[static_cast<uint8_t>(trumps)] * 20) + (uint8_t)getRank(trumps));
+                    //     #endif
 
-                        return (seq[static_cast<uint8_t>(trumps)] * 20) + (uint8_t)getRank(trumps);
+                    //     return (seq[static_cast<uint8_t>(trumps)] * 20) + (uint8_t)getRank();
 
-                    }
+                    // }
 
-                    else if (suit == Suit::None) {
+                    // else if (suit == Suit::None) {
+
+                    //     #if defined(DEBUG) && defined(DEBUG_SORT) && defined(DEBUG_SORT_DETAIL)
+                    //         DEBUG_PRINTLN(Constants::Sort_None);
+                    //     #endif
+
+                    //     return Constants::Sort_None;
+                        
+                    // }                    
+                    // else if (isLeftBower(trumps)) {
+
+                    //     #if defined(DEBUG) && defined(DEBUG_SORT) && defined(DEBUG_SORT_DETAIL)
+                    //         DEBUG_PRINTLN((seq[static_cast<uint8_t>(getTrump_AltSuit(this->suit))] * 20) + (uint8_t)getRank(trumps));
+                    //     #endif
+
+                    //     return (seq[static_cast<uint8_t>(getTrump_AltSuit(this->suit))] * 20) + (uint8_t)getRank(trumps);
+
+                    // }
+                    // else {
+                      
+                    //     #if defined(DEBUG) && defined(DEBUG_SORT) && defined(DEBUG_SORT_DETAIL)
+                    //         DEBUG_PRINTLN((seq[static_cast<uint8_t>(this->suit)] * 20) + (uint8_t)getRank(trumps));
+                    //     #endif  
+
+                    //     return (seq[static_cast<uint8_t>(this->suit)] * 20) + (uint8_t)getRank(trumps);
+
+                    // }
+
+                    if (suit == Suit::None) {
 
                         #if defined(DEBUG) && defined(DEBUG_SORT) && defined(DEBUG_SORT_DETAIL)
                             DEBUG_PRINTLN(Constants::Sort_None);
@@ -128,27 +168,9 @@ struct Card {
 
                         return Constants::Sort_None;
                         
-                    }                    
-                    else if (isLeftBower(trumps)) {
-
-                        #if defined(DEBUG) && defined(DEBUG_SORT) && defined(DEBUG_SORT_DETAIL)
-                            DEBUG_PRINTLN((seq[static_cast<uint8_t>(getTrump_AltSuit(this->suit))] * 20) + (uint8_t)getRank(trumps));
-                        #endif
-
-                        return (seq[static_cast<uint8_t>(getTrump_AltSuit(this->suit))] * 20) + (uint8_t)getRank(trumps);
-
-                    }
-                    else {
-                      
-                        #if defined(DEBUG) && defined(DEBUG_SORT) && defined(DEBUG_SORT_DETAIL)
-                            DEBUG_PRINTLN((seq[static_cast<uint8_t>(this->suit)] * 20) + (uint8_t)getRank(trumps));
-                        #endif  
-
-                        return (seq[static_cast<uint8_t>(this->suit)] * 20) + (uint8_t)getRank(trumps);
-
                     }
 
-                    break;                
+                    return (seq[static_cast<uint8_t>(this->getSuit())] * 20) + (uint8_t)this->getRank();         
 
             }
 
@@ -160,12 +182,12 @@ struct Card {
             if (this->getSuit() == trumps) {
                 return true;
             }
-            else if (isLeftBower(trumps)) {
-                return true;
-            }
-            else if (this->getRank() == Rank::Joker) {
-                return true;
-            }
+            // else if (isLeftBower(trumps)) {
+            //     return true;
+            // }
+            // else if (this->getRank() == Rank::Joker) {
+            //     return true;
+            // }
 
             return false;
 

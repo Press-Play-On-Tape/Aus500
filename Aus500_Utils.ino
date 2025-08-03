@@ -141,13 +141,11 @@ void play_CardSelected() {
             if (gameRound.getWinningBid_Idx() == gameRound.getWinningHand(BidType::No_Trumps)) {
 
                 gameRound.setRound(10);
-                // gameState = GameState::Play_EndOfHand;// SJH should be end of round but results written on end of hand
             
             }
             else {
 
                 gameRound.resetHand(gameRound.getWinningHand(BidType::No_Trumps));
-                // gameState = GameState::Play_EndOfHand;
 
             }
 
@@ -155,7 +153,6 @@ void play_CardSelected() {
         else {
 
             gameRound.resetHand(gameRound.getWinningHand());
-            // gameState = GameState::Play_EndOfHand;
 
         }
         
@@ -175,7 +172,7 @@ void highlightSuitInHand() {
 
     for (uint8_t i = 0; i < game.players[Constants::HumanPlayer].getCardCount(); i++) {
 
-        if (game.players[Constants::HumanPlayer].getCard(i).getSuit(trumpsSuit) ==  cardLed.getSuit(trumpsSuit)) {
+        if (game.players[Constants::HumanPlayer].getCard(i).getSuit() ==  cardLed.getSuit()) {
         
             selectedCard = i;
             game.players[Constants::HumanPlayer].clearSelection();

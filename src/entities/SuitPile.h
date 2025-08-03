@@ -34,7 +34,7 @@ struct SuitPile {
 
             for (uint8_t j = i + 1; j < 11; j++) {
 
-                if (this->cards[j].getSortValue(BidType::Misere, Suit::None, seq) < this->cards[i].getSortValue(BidType::Misere, Suit::None, seq)) {
+                if (this->cards[j].getSortValue(BidType::Misere, seq) < this->cards[i].getSortValue(BidType::Misere, seq)) {
 
                     Card card;
                     card.setSuit(this->cards[i].getSuit());

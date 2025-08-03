@@ -54,7 +54,7 @@ void playNoTrumps_Follow() {
                         DEBUG_PRINTLN();
                     #endif
 
-                    this->playLowest_NonTrump_InSuit(cardLedSuit);                                                              return; // Follow suit ..
+                    if (this->playLowest_InSuit(cardLedSuit))                                                                  return; // Follow suit ..
 
                 }
                 else {
@@ -70,7 +70,7 @@ void playNoTrumps_Follow() {
                             DEBUG_PRINTLN();
                         #endif
 
-                        this->playHighest_NonTrump_InSuit(cardLedSuit);          
+                        if (this->playHighest_InSuit(cardLedSuit))                                                              return;
                         
                     }
                     else {
@@ -81,12 +81,12 @@ void playNoTrumps_Follow() {
                             DEBUG_PRINTLN();
                         #endif
 
-                        this->playLowest_NonTrump_InSuit(cardLedSuit);          
-                    
+                        if (this->playLowest_InSuit(cardLedSuit))                                                               return;       
+                
                     }
                
                 }
- 
+
             }
             else {
 
@@ -105,13 +105,15 @@ void playNoTrumps_Follow() {
                 #endif
 
                 if (shortSuit != Suit::None) {                                                                                          
-                    this->playLowest_NonTrump_InSuit(shortSuit);                                                                return; // Follow suit ..
+                    this->playLowest_InSuit(shortSuit);                                                                         return; // Follow suit ..
                 }
                 else {
-                    this->playLowest_NonTrump_AllSuit();                                                                        return; // Play the lowest card you have.
+                    if (this->playLowest_AllSuit())                                                                             return; // Play the lowest card you have.
                 }
 
             }
+
+            this->playJoker(cardLedSuit);                                                                                       return;
 
         }
         else {  // Partner is not winning ..
@@ -135,8 +137,8 @@ void playNoTrumps_Follow() {
                         DEBUG_PRINTLN((uint8_t)cardLedSuit);
                     #endif
                     
-                    if (this->playHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                        return; // Win or at least force th other player to play big ..
-                    else (this->playLowest_NonTrump_InSuit(cardLedSuit));                                                       return; // Follow suit ..
+                    if (this->playHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                          return; // Win or at least force th other player to play big ..
+                    else (this->playLowest_InSuit(cardLedSuit));                                                                return; // Follow suit ..
 
                 }
                 else { // Not last player ..
@@ -147,25 +149,27 @@ void playNoTrumps_Follow() {
                     
                     #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
                         DEBUG_PRINT(F("13. Count of high cards "));
-                        DEBUG_PRINTLN(this->gameRound->getUnplayedCountofHigherCards_InSuit(cardLed));
+                        DEBUG_PRINTLN(this->gameRound->getUnplayedCountofHigherCards_InSuit(Suit::None, cardLed));
                     #endif
 
-                    if (this->gameRound->getUnplayedCountofHigherCards_InSuit(cardLed) > 4) {
+                    if (this->gameRound->getUnplayedCountofHigherCards_InSuit(Suit::None, cardLed) > 4) {
 
-                        if (this->playNextHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                return; // Yes, play a card slightly larger than current, winning card.
-                        else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                                 return; // No, play the largest on-suit card you have.
-                        else (this->playLowest_NonTrump_AllSuit());                                                             return; // Should not get here as we have the suit.
+                        if (this->playNextHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                  return; // Yes, play a card slightly larger than current, winning card.
+                        else if (this->playLowest_InSuit(cardLedSuit))                                                          return; // No, play the largest on-suit card you have.
+                        else if (this->playLowest_AllSuit())                                                                    return; // Should not get here as we have the suit.
 
                     }
                     else {
 
-                        if (this->playHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                    return; // No, play the largest on-suit card you have bigger than winning card.
-                        else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                                 return; // No, play the smallest on-suit card you have.
-                        else (this->playLowest_NonTrump_AllSuit());                                                             return; // Should not get here as we have the suit.
+                        if (this->playHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                      return; // No, play the largest on-suit card you have bigger than winning card.
+                        else if (this->playLowest_InSuit(cardLedSuit))                                                          return; // No, play the smallest on-suit card you have.
+                        else if (this->playLowest_AllSuit())                                                                    return; // Should not get here as we have the suit.
 
                     }
 
                 }
+
+                this->playJoker(cardLedSuit);                                                                                   return;
                 
             }
             else {                                                                                                                      // Can not follow suit.
@@ -176,10 +180,7 @@ void playNoTrumps_Follow() {
                     DEBUG_PRINTLN();
                 #endif
 
-                if (this->playJoker())  { 
-                    this->gameRound->setJokerSuit(cardLedSuit);                                                                         // Win this hand with the Joker.
-                    return; 
-                } 
+                if (this->playJoker(cardLedSuit))                                                                               return; // Win this hand with the Joker.
             
                 Suit shortSuit = this->canShortSuit();                                                                                  // Can you short suit yourself in any suit?
 
@@ -190,15 +191,17 @@ void playNoTrumps_Follow() {
                 #endif
 
                 if (shortSuit != Suit::None) {
-                    this->playLowest_NonTrump_InSuit(shortSuit);                                                                return; // Follow suit ..
+                    this->playLowest_InSuit(shortSuit);                                                                         return; // Follow suit ..
                 }
                 else {
-                    this->playLowest_NonTrump_AllSuit();                                                                        return; // Play the lowest card you have.
+                    if (this->playLowest_AllSuit())                                                                             return; // Play the lowest card you have.
                 }
 
             }
 
         }
+
+        this->playJoker(cardLedSuit);                                                                                           return; // Can we even get this far?
 
     }
     else {                                                                                                                              // Partner has not played ..
@@ -206,7 +209,7 @@ void playNoTrumps_Follow() {
         #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
             DEBUG_PRINTLN(F("16. Partner has not played."));
         #endif
-        
+        Serial.println((uint8_t)cardLedSuit);
         if (this->hasSuit(cardLedSuit)) {                                                                                               // Can you follow suit?
 
             #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_FOLLOW)
@@ -215,9 +218,9 @@ void playNoTrumps_Follow() {
                 DEBUG_PRINTLN();
             #endif
 
-            if (this->playNextHighest_NonTrump_LargerThan(cardLedSuit, largestCardInPlay.getRank()))                            return; // Yes, play a card slightly larger than current, winning card.
-            else if (this->playLowest_NonTrump_InSuit(cardLedSuit))                                                             return; // No, play the largest on-suit card you have.
-            else (this->playLowest_NonTrump_AllSuit());                                                                         return; // No, play the smallest off-suit card you have.
+            if (this->playNextHighest_LargerThan_InSuit(cardLedSuit, largestCardInPlay.getRank()))                              return; // Yes, play a card slightly larger than current, winning card.
+            else if (this->playLowest_InSuit(cardLedSuit))                                                                      return; // No, play the largest on-suit card you have.
+            else if (this->playLowest_AllSuit())                                                                                return; // No, play the smallest off-suit card you have.
 
         }
         else {
@@ -238,10 +241,7 @@ void playNoTrumps_Follow() {
                     DEBUG_PRINTLN();
                 #endif
 
-                if (this->playJoker())  {                                                                                               // Win this hand with the Joker.
-                    this->gameRound->setJokerSuit(cardLedSuit); 
-                    return; 
-                }         
+                if (this->playJoker(cardLedSuit))                                                                               return; // Win this hand with the Joker.
 
             }
             else {
@@ -260,8 +260,8 @@ void playNoTrumps_Follow() {
 
             if (shortSuit != Suit::None) {                                                                                              // if the short suit is the highest card in suit do not short.
 
-                uint8_t cardIdx = this->getLowest_NonTrump_InSuit(shortSuit);
-                uint8_t topIdx = this->getTop_NonSuit(shortSuit);
+                uint8_t cardIdx = this->getLowest_InSuit(shortSuit);
+                uint8_t topIdx = this->getTop_InSuit(Suit::None, shortSuit);
 
                 if (topIdx = cardIdx) {                                                                                                 // If the only card in the hand is also the top card then do not short suit ..
 
@@ -279,7 +279,7 @@ void playNoTrumps_Follow() {
                     DEBUG_PRINTLN();
                 #endif
 
-                this->playLowest_NonTrump_InSuit(shortSuit);                                                                    return; // Follow suit ..
+                this->playLowest_InSuit(shortSuit);                                                                             return; // Follow suit ..
             }
             else {
 
@@ -287,7 +287,7 @@ void playNoTrumps_Follow() {
                     DEBUG_PRINT(F("22. Player can not short suit."));
                 #endif
 
-                this->playLowest_NonTrump_AllSuit();                                                                            return; // Play the lowest card you have.
+                if (this->playLowest_AllSuit())                                                                                 return; // Play the lowest card you have.
                 
             }        
             
@@ -295,6 +295,8 @@ void playNoTrumps_Follow() {
                
     }
            
+    this->playJoker(cardLedSuit);                                                                                               return; // Can we even get this far?
+
 }               
 
 
@@ -311,8 +313,6 @@ bool playNoTrumps_Lead() {
     uint8_t playerAfterIdx = (this->getPlayerNumber() + 1) % 4;
 
     Card &largestCardInPlay = this->gameRound->getLargestCardInPlay(Suit::None);
-    Card &cardLed = this->gameRound->getCardLed();
-    Suit cardLedSuit = cardLed.getSuit();
 
     Suit suit1 = this->gameRound->getHand(playerBeforeIdx)->getSuit(); // played by competitor 1
     Suit suit2 = this->gameRound->getHand(playerAfterIdx)->getSuit(); // played by competitor 2
@@ -322,7 +322,7 @@ bool playNoTrumps_Lead() {
         DEBUG_PRINTLN(F("1. Player has top card?"));
     #endif
 
-    if (this->playTop_NonTrump_AllSuit())                                                                                       return; // Play a good lead ..
+    if (this->playTop_AllSuit(Suit::None))                                                                                      return; // Play a good lead ..
 
     #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_LEAD)
         DEBUG_PRINTLN(F("2. No top card played."));
@@ -343,6 +343,10 @@ bool playNoTrumps_Lead() {
         DEBUG_PRINT_TRISTATE(doesPartnerHaveSuit);
         DEBUG_PRINTLN();
     #endif
+
+    if (partnerCalledSuit == Suit::None) {
+        partnerCalledSuit = Suit::Spades;
+    }
 
     if (doesPartnerHaveSuit == TriState::False) {
         partnerCalledSuit = Suit::Spades;
@@ -366,7 +370,7 @@ bool playNoTrumps_Lead() {
 
         if (doesPartnerHaveSuit == TriState::True || doesPartnerHaveSuit == TriState::Maybe) {
 
-            if (this->playLowest_NonTrump_WithSecondHighest_InSuit(suit)) {
+            if (this->playLowest_WithSecondHighest_InSuit(Suit::None, suit)) {
                         
                 #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_LEAD)
                     DEBUG_PRINTLN(F("."));
@@ -390,55 +394,68 @@ bool playNoTrumps_Lead() {
         DEBUG_PRINTLN(F(", play low card."));
     #endif
 
-    if (suitPartnerCalled != Suit::None) {                                                                                              // Did your partner call a suit?
+    // if (suitPartnerCalled != Suit::None) {                                                                                              // Did your partner call a suit?
     
-        if (this->playLowest_NonTrump_InSuit(suitPartnerCalled))                                                                return; // No, play the lowest of the suit your partner called hoping they will play back.
+    //     if (this->playLowest_InSuit(suitPartnerCalled))                                                                         return; // No, play the lowest of the suit your partner called hoping they will play back.
 
-    }
+    // }
 
-    Suit suit = Suit::None;
+    // Suit suit = Suit::None;
 
-    if (this->getCard(Rank::Joker) != Constants::No_Card) {                                                                             // We might play the joker if we have one. What suiit will we call it?
+    // if (this->getCard(Rank::Joker) != Constants::No_Card) {                                                                             // We might play the joker if we have one. What suiit will we call it?
         
-        uint8_t idx = this->getHighest_NonTrump_AllSuit();                                                                              // By default call the suit where you have the highest card.
+    //     uint8_t idx = this->getHighest_AllSuit();                                                                                       // By default call the suit where you have the highest card.
 
-        if (idx != Constants::No_Card) {
+    //     if (idx != Constants::No_Card) {
         
-            Card &card = this->getCard(idx);
-            suit = card.getSuit();
+    //         Card &card = this->getCard(idx);
+    //         suit = card.getSuit();
 
-            #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_LEAD)
-                DEBUG_PRINT(F("5. Play the joker as suit "));
-                DEBUG_PRINT_SUIT(suit);
-                DEBUG_PRINTLN(F("."));          
-            #endif
+    //         #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_LEAD)
+    //             DEBUG_PRINT(F("5. Play the joker as suit "));
+    //             DEBUG_PRINT_SUIT(suit);
+    //             DEBUG_PRINTLN(F("."));          
+    //         #endif
 
-        }
-        else {
+    //     }
+    //     else {
         
-            suit = static_cast<Suit>(random(0, 4));                                                                                    // Select a random suit (should never happen unless on last card).
+    //         suit = static_cast<Suit>(random(0, 4));                                                                                    // Select a random suit (should never happen unless on last card).
             
-            #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_LEAD)
-                DEBUG_PRINT(F("6. Play the joker as random "));
-                DEBUG_PRINT_SUIT(suit);
-                DEBUG_PRINTLN(F("."));          
-            #endif
+    //         #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_LEAD)
+    //             DEBUG_PRINT(F("6. Play the joker as random "));
+    //             DEBUG_PRINT_SUIT(suit);
+    //             DEBUG_PRINTLN(F("."));          
+    //         #endif
 
-        }
+    //     }
         
-        this->gameRound->setJokerSuit(suit); 
-        this->playJoker();                                                                                                              // Play Joker and Win!
-        return; 
+    //     this->playJoker(suit);                                                                                                          // Play Joker and Win!
+    //     return; 
 
-    }
+    // }
 
     #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_LEAD)
         DEBUG_PRINTLN(F("7. Play the King, Queen, Jack or small card."));
     #endif
     
-    if (this->playHighest_NonTrump_LargerThan_AllSuit(Rank::King))                                                              return; // Play a king if you have it ..
-    else if (this->playHighest_NonTrump_LargerThan_AllSuit(Rank::Queen))                                                        return; // Play a queen if you have it ..
-    else if (this->playHighest_NonTrump_LargerThan_AllSuit(Rank::Jack))                                                         return; // Play a Jack if you have it ..
-    else (this->playLowest_NonTrump_AllSuit());                                                                                 return; // No, play the largest on-suit card you have.
+    if (this->playHighest_LargerThan_AllSuit(Rank::King))                                                                       return; // Play a king if you have it ..
+    else if (this->playHighest_LargerThan_AllSuit(Rank::Queen))                                                                 return; // Play a queen if you have it ..
+    else if (this->playHighest_LargerThan_AllSuit(Rank::Jack))                                                                  return; // Play a Jack if you have it ..
+    else if (this->playLowest_AllSuit())                                                                                        return; // No, play the lowest on-suit card you have.
+    //else this->playJoker(static_cast<Suit>(random(4)));                                                                         return;
+
+    Suit suit = static_cast<Suit>(random(0, 4));                                                                                    // Select a random suit (should never happen unless on last card).
+    
+    #if defined(DEBUG) && defined(DEBUG_PLAYNOTRUMPS_LEAD)
+        DEBUG_PRINT(F("6. Play the joker as random "));
+        DEBUG_PRINT_SUIT(suit);
+        DEBUG_PRINTLN(F("."));          
+    #endif
+    
+    suit = static_cast<Suit>(random(0, 4));                                                                                    // Select a random suit (should never happen unless on last card).
+    
+    this->playJoker(suit);                                                                                                          // Play Joker and Win!
+    return; 
 
 }

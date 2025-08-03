@@ -20,7 +20,7 @@ struct GameRound {
         uint16_t playedCards[Constants::Suit_Count];
         TriState hasSuitInHand[Constants::Player_Count][Constants::Suit_Count];  // [player][suit];
 
-        Suit jokerSuit = Suit::None;
+        // Suit jokerSuit = Suit::None;
 
         uint8_t kittyPointer = 0;
         uint8_t round = 0;
@@ -36,7 +36,7 @@ struct GameRound {
 
         Card *getHand(uint8_t playerIdx)                            { return &this->hand[playerIdx]; }
         Card *getKitty(uint8_t idx)                                 { return &this->kitty[idx]; }
-        Suit getJokerSuit()                                         { return this->jokerSuit; }
+        // Suit getJokerSuit()                                         { return this->jokerSuit; }
         Bid &getBid(uint8_t playerIdx)                              { return this->bid[playerIdx]; }
         Bid &getHighestBid()                                        { return this->highestBid; }
         uint8_t getKittyPointer()                                   { return this->kittyPointer; }
@@ -49,7 +49,7 @@ struct GameRound {
         uint8_t getDealer_Idx()                                     { return this->dealerIdx; }
         bool getPlayedJoker()                                       { return this->playedJoker; }
 
-        void setJokerSuit(Suit val)                                 { this->jokerSuit = val; }
+        // void setJokerSuit(Suit val)                                 { this->jokerSuit = val; }
         void setKitty(uint8_t idx, Card &kitty)                     { this->kitty[idx].setSuit(kitty.getSuit()); this->kitty[idx].setRank(kitty.getRank()); }
         void setKittyPointer(uint8_t idx)                           { this->kittyPointer = idx; }
         void setScore(uint8_t teamIdx, int16_t val)                 { this->score[teamIdx] = val; }
@@ -257,7 +257,7 @@ struct GameRound {
             this->winningBidIdx = 255;
             this->firstPlayer = 0;
             this->currentPlayer = 0;
-            this->jokerSuit = Suit::None;
+            // this->jokerSuit = Suit::None;
             this->playedJoker = false;
             this->handCount = 10;
             this->highestBid.reset(Constants::No_Player);
@@ -319,7 +319,7 @@ struct GameRound {
         }
 
 
-        bool hasCardBeenPlayed(Suit suit, Rank rank) {
+        bool hasCardBeenPlayed(Suit trumps, Suit suit, Rank rank) {
 
             uint16_t mask = 1 << static_cast<uint8_t>(rank);
 
@@ -334,6 +334,54 @@ struct GameRound {
                             
                 return playedJoker;
 
+            }
+            else if (rank == Rank::Right_Bower) {
+
+                if (suit == trumps) {
+                    
+                    rank = Rank::Jack;
+
+                    if ((this->playedCards[static_cast<uint8_t>(suit)] & mask) > 0) {
+
+                        return true;        
+
+                    } 
+
+                }
+                else {
+
+                    return false;
+
+                }
+                
+            }
+            else if (rank == Rank::Left_Bower) {
+
+                if (suit == trumps) {
+                    
+                    rank = Rank::Jack;
+
+                    switch (trumps) {
+                    
+                        case Suit::Spades:      suit = Suit::Clubs; break;
+                        case Suit::Clubs:       suit = Suit::Spades; break;
+                        case Suit::Diamonds:    suit = Suit::Hearts; break;
+                        case Suit::Hearts:      suit = Suit::Diamonds; break;
+                    }
+
+                    if ((this->playedCards[static_cast<uint8_t>(suit)] & mask) > 0) {
+
+                        return true;        
+
+                    } 
+
+                }
+                else {
+                
+                    return false;
+
+                }
+                
             }
             else {
 
@@ -437,7 +485,7 @@ struct GameRound {
                 else if (!this->playedJoker) {
                     return TriState::Maybe;
                 }
-                else if (this->hasCardBeenPlayed(getTrump_AltSuit(suitToFollow), Rank::Jack)) {
+                else if (this->hasCardBeenPlayed(trumps, getTrump_AltSuit(suitToFollow), Rank::Jack)) {
                     return TriState::Maybe;
                 }
 
@@ -486,76 +534,26 @@ struct GameRound {
                 DEBUG_PRINT(F(") "));
             #endif
 
-            switch (suit) {
-            
-                case Suit::Spades:
-                case Suit::Clubs:
+            Rank topRank = (trumps == suit ? Rank::Joker : Rank::Ace);
 
-                    for (Rank rank = cardsAbove; rank <= Rank::Ace; rank++) {
+            for (Rank rank = cardsAbove; rank <= topRank; rank++) {      
 
-                        if (rank != cardsAbove && !this->hasCardBeenPlayed(suit, rank)) {
+                if (trumps == suit && rank == Rank::Jack) continue;
 
-                            #if defined(DEBUG) && defined(DEBUG_NUMBER_OF_UNPLAYED_CARDS)
-                                DEBUG_PRINT_CARD(suit, rank);
-                                DEBUG_PRINT(F(", "));
-                            #endif
-
-                            count++;
-                        }
-
-                    }
-
-                    break;
-            
-                case Suit::Hearts:
-                case Suit::Diamonds:
-
-                    for (Rank rank = cardsAbove; rank <= Rank::Ace; rank++) {
-
-                        if (rank != cardsAbove && !this->hasCardBeenPlayed(suit, rank)) {
-
-                            #if defined(DEBUG) && defined(DEBUG_NUMBER_OF_UNPLAYED_CARDS)
-                                DEBUG_PRINT_CARD(suit, rank);
-                                DEBUG_PRINT(F(", "));
-                            #endif
-
-                            count++;
-                        }
-
-                    }
-
-                    break;
-                    
-            }
-
-            if (suit == trumps) { 
-            
-                // Left bower ..
-
-                if (cardsAbove < Rank::Left_Bower && !this->hasCardBeenPlayed(getTrump_AltSuit(suit), Rank::Jack)) {
+                if (rank != cardsAbove && !this->hasCardBeenPlayed(trumps, suit, rank)) {
 
                     #if defined(DEBUG) && defined(DEBUG_NUMBER_OF_UNPLAYED_CARDS)
-                        DEBUG_PRINT(F("LB, "));
+                        DEBUG_PRINT_CARD(suit, rank);
+                        DEBUG_PRINT(F(", "));
                     #endif
 
                     count++;
                 }
-            
-                // Joker ..
 
-                if (cardsAbove < Rank::Joker && !this->hasCardBeenPlayed(Suit::None, Rank::Joker)) {
-
-                    #if defined(DEBUG) && defined(DEBUG_NUMBER_OF_UNPLAYED_CARDS)
-                        DEBUG_PRINT(F("Joker, "));
-                    #endif
-
-                    count++;
-                }
-            
             }
 
 
-            //SJH remove count of any coards in players hand or in the kitty (if player is winning bid)
+            //SJH remove count of any cards in players hand or in the kitty (if player is winning bid)
 
             #if defined(DEBUG) && defined(DEBUG_NUMBER_OF_UNPLAYED_CARDS)
                 DEBUG_PRINT(F(" = "));
@@ -625,18 +623,35 @@ struct GameRound {
         }
 
 
-        uint8_t getUnplayedCountofHigherCards_InSuit(Card &card) {
+        uint8_t getUnplayedCountofHigherCards_InSuit(Suit trumps, Card &card) {
 
             uint8_t count = 0;
 
-            for (Rank rank = static_cast<Rank>(static_cast<uint8_t>(card.getRank()) + 1); rank <= Rank::Ace; rank++) {
+            if (card.getSuit() == trumps) {
+                
+                for (Rank rank = static_cast<Rank>(static_cast<uint8_t>(card.getRank()) + 1); rank <= Rank::Joker; rank++) {
 
-                if (!this->hasCardBeenPlayed(card.getSuit(), rank)) {
-                    count++;
+                    if (rank == Rank::Jack) continue;
+
+                    if (!this->hasCardBeenPlayed(trumps, card.getSuit(), rank)) {
+                        count++;
+                    }
+
                 }
 
             }
-            
+            else {
+                
+                for (Rank rank = static_cast<Rank>(static_cast<uint8_t>(card.getRank()) + 1); rank <= Rank::Ace; rank++) {
+
+                    if (!this->hasCardBeenPlayed(trumps, card.getSuit(), rank)) {
+                        count++;
+                    }
+
+                }
+
+            }
+                
             return count;
 
         }
@@ -667,9 +682,9 @@ struct GameRound {
                         DEBUG_PRINT_SPACE();
                     #endif
 
-                    if (card.getSuit() == trumps && card.getRank(trumps) > rank) {
+                    if (card.getSuit() == trumps && card.getRank() > rank) {
 
-                        rank = card.getRank(trumps);
+                        rank = card.getRank();
                         returnIdx = i;
 
                     }
@@ -814,9 +829,9 @@ struct GameRound {
 
                             Card &card = this->hand[i];
 
-                            if (card.isTrump(trumps) && card.getRank(trumps) > rank) {
+                            if (card.isTrump(trumps) && card.getRank() > rank) {
 
-                                rank = card.getRank(trumps);
+                                rank = card.getRank();
                                 returnIdx = i;
 
                             }

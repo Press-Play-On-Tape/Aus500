@@ -64,19 +64,12 @@ Suit canShortSuit() {
 void playCard(uint8_t idx) {
 
     Card &card = this->cards[idx];
-    Suit trumps = this->gameRound->winningBid_Suit();
+    copyCard(card, this->cardJustPlayed);
 
-    if (card.getRank() == Rank::Joker) {
-        card.setSuit(this->gameRound->getJokerSuit());
-    }
+    this->gameRound->markCardPlayed(card.getOrigSuit(), card.getOrigRank());
+    copyCard(card, this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx()));
 
-    this->cardJustPlayed.setSuit(card.getSuit());
-    this->cardJustPlayed.setRank(card.getRank());
 
-    this->gameRound->markCardPlayed(card.getSuit(), card.getRank());
-    this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setSuit(card.getSuit());
-    this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx())->setRank(card.getRank());
-    
     card.reset();
     this->sort();
 
@@ -100,44 +93,14 @@ bool hasTrumps(Suit trumps) {
 
 }
 
+
 bool hasSuit(Suit suit) {
-
-    return hasSuit(suit, Suit::None);
-
-}
-
-
-bool hasSuit(Suit suit, Suit trump) {
 
     for (uint8_t i = 0; i < this->cardCount; i++) {
     
         Card &card = this->cards[i];
 
-        switch (card.getRank(trump)) {
-
-            case Rank::Four ... Rank::Ten:
-            case Rank::Queen ... Rank::Ace:
-            case Rank::Right_Bower:
-
-                if (card.getSuit() == suit ) {
-                
-                    return true;
-                    
-                }
-
-                break;
-
-            case Rank::Left_Bower:
-        
-                if (getTrump_AltSuit(card.getSuit()) == suit) {
-                
-                    return true;
-                    
-                }
-
-                break;
-        
-        }
+        if (card.getSuit() == suit) return true;
 
     }
 
@@ -188,99 +151,6 @@ uint8_t getCard(Suit suit, Rank rank) {
 }
 
 
-// Trump cards ----------------------------------------------------------------------------------------
-
-
-// Return the highest trump in the player's hand ..
-
-uint8_t getHighestTrump(Suit trumps) {
-
-    return this->getHighestTrump(trumps, Rank::None);
-
-}
-
-
-// Return the highest trump in the player's hand which is above the specified rank ..
-
-uint8_t getHighestTrump(Suit trumps, Rank highestRank) {
-
-    uint8_t foundIdx = Constants::No_Card;
-
-    for (uint8_t i = 0; i < this->cardCount; i++) {
-    
-        Card &card = this->cards[i];
-
-        if (card.getRank(trumps) == Rank::Joker) {
-
-            highestRank = Rank::Joker;
-            foundIdx = i;
-            break;
-
-        }
-
-        if (card.getSuit() == trumps || card.isLeftBower(trumps)) {
-
-            if (card.getRank(trumps) > highestRank) {
-
-                highestRank = card.getRank(trumps);
-                foundIdx = i;
-
-            }                
-
-        }
-
-    }
-
-    return foundIdx;
-
-}
-
-
-// Return the lowest trump in the player's hand ..
-
-uint8_t getLowestTrump(Suit trumps) {
-
-   return this->getLowestTrump(trumps, Rank::Joker);
-
-}
-
-
-// Return the lowest trump in the player's hand which is above the specified rank ..
-
-uint8_t getLowestTrump(Suit trumps, Rank lowestRank) {
-
-    uint8_t foundIdx = Constants::No_Card;
-
-    for (uint8_t i = 0; i < this->cardCount; i++) {
-    
-        Card &card = this->cards[i];
-
-        if (card.getRank(trumps) == Rank::Joker) {
-
-            lowestRank = Rank::Joker;
-            foundIdx = i;
-
-        }
-
-        if (card.getSuit() == trumps || card.isLeftBower(trumps)) {
-
-            if (card.getRank(trumps) < lowestRank) {
-
-                lowestRank = card.getRank(trumps);
-                foundIdx = i;
-
-            }                
-
-        }
-
-    }
-
-    return foundIdx;
-
-}
-
-
-
 // Return the next highest trump in the player's hand from specified rank ..
 
 uint8_t getNextHighestTrump(Suit trumps, Rank specifiedRank) {
@@ -296,7 +166,7 @@ uint8_t getNextHighestTrump(Suit trumps, Rank specifiedRank) {
 
         Card &card = this->cards[i];
 
-        if (card.getSuit() == trumps || card.isLeftBower(trumps)) {
+        if (card.getSuit() == trumps) {
 
             #if defined(DEBUG) && defined(DEBUG_GETNEXTHIGHESTTRUMP)
                 DEBUG_PRINT(F("Found card "));
@@ -304,17 +174,17 @@ uint8_t getNextHighestTrump(Suit trumps, Rank specifiedRank) {
                 DEBUG_PRINTLN();
             #endif
 
-            if (card.getRank(trumps) > specifiedCard.getRank(trumps)) {
+            if (card.getRank() > specifiedCard.getRank()) {
 
                 if (foundRank == Rank::None) {
                 
-                    foundRank = card.getRank(trumps);
+                    foundRank = card.getRank();
                     foundIdx = i;
 
                 }
-                else if (card.getRank(trumps) < foundRank) {
+                else if (card.getRank() < foundRank) {
 
-                    foundRank = card.getRank(trumps);
+                    foundRank = card.getRank();
                     foundIdx = i;
 
                 }
@@ -337,25 +207,25 @@ uint8_t getNextHighestTrump(Suit trumps, Rank specifiedRank) {
 
 // Get the lowest card in the any suit ..
 
-uint8_t getLowest_NonTrump_AllSuit() {
+uint8_t getLowest_AllSuit() {
 
-    return getLowest_NonTrump_AllSuit(Suit::None);
+    return getLowest_AllSuit(Suit::None);
 
 }
 
 
 // Get the lowest card in the any non trump suit ..
 
-uint8_t getLowest_NonTrump_AllSuit(Suit excludeTrumps) {
+uint8_t getLowest_AllSuit(Suit excludeSuit) {
 
     uint8_t returnIdx = Constants::No_Card;
     Rank rank = Rank::TopCard;
 
     for (Suit suit = Suit::Spades; suit <= Suit::Hearts; suit++) {
     
-        if (suit != excludeTrumps) {
+        if (suit != excludeSuit) {
 
-            uint8_t idx = this->getLowest_NonTrump_InSuit(suit);
+            uint8_t idx = this->getLowest_InSuit(suit);
 
             if (idx != Constants::No_Card)  {
 
@@ -380,16 +250,16 @@ uint8_t getLowest_NonTrump_AllSuit(Suit excludeTrumps) {
 
 // Get the lowest non-trump card in suit ..
 
-uint8_t getLowest_NonTrump_InSuit(Suit suit) {
+uint8_t getLowest_InSuit(Suit suit) {
 
-    return this->getLowest_NonTrump_InSuit(suit, Rank::TopCard);
+    return this->getLowest_InSuit(suit, Rank::TopCard);
 
 }
 
 
 // Get the lowest non-trump card in suit which is lower than the nominated rank..
 
-uint8_t getLowest_NonTrump_InSuit(Suit suit, Rank rank) {
+uint8_t getLowest_InSuit(Suit suit, Rank rank) {
 
     uint8_t idx = Constants::No_Card;
 
@@ -409,18 +279,18 @@ uint8_t getLowest_NonTrump_InSuit(Suit suit, Rank rank) {
 }
 
 
-// Get the highest non-trump card in suit ..
+// Get the highest card in suit ..
 
-uint8_t getHighest_NonTrump_InSuit(Suit suit) {
+uint8_t getHighest_InSuit(Suit suit) {
 
-    return this->getHighest_NonTrump_InSuit(suit, Rank::None);
+    return this->getHighest_InSuit(suit, Rank::None);
 
 }
 
 
-// Get the highest non-trump card in suit which is higher than the nominated rank..
+// Get the highest card in suit which is higher than the nominated rank..
 
-uint8_t getHighest_NonTrump_InSuit(Suit suit, Rank rank) {
+uint8_t getHighest_InSuit(Suit suit, Rank rank) {
 
     uint8_t idx = Constants::No_Card;
 
@@ -440,16 +310,16 @@ uint8_t getHighest_NonTrump_InSuit(Suit suit, Rank rank) {
 
 // Get the highest card in the any suit ..
 
-uint8_t getHighest_NonTrump_AllSuit() {
+uint8_t getHighest_AllSuit() {
 
-    return getHighest_NonTrump_AllSuit(Suit::None);
+    return getHighest_AllSuit(Suit::None);
 
 }
 
 
-// Get the highest card in the any non trump suit ..
+// Get the highest card in the any suit ..
 
-uint8_t getHighest_NonTrump_AllSuit(Suit excludeTrumps) {
+uint8_t getHighest_AllSuit(Suit excludeTrumps) {
 
     uint8_t returnIdx = Constants::No_Card;
     Rank rank = Rank::None;
@@ -458,7 +328,7 @@ uint8_t getHighest_NonTrump_AllSuit(Suit excludeTrumps) {
     
         if (suit != excludeTrumps) {
 
-            uint8_t idx = this->getHighest_NonTrump_InSuit(suit);
+            uint8_t idx = this->getHighest_InSuit(suit);
 
             if (idx != Constants::No_Card)  {
 
@@ -484,13 +354,13 @@ uint8_t getHighest_NonTrump_AllSuit(Suit excludeTrumps) {
 
 // Get the next highest non-trump card in suit which is higher than the nominated rank..
 
-uint8_t getNextHighest_NonTrump_InSuit(Suit suit, Rank specifiedRank) {
+uint8_t getNextHighest_InSuit(Suit suit, Rank specifiedRank) {
 
     Rank foundRank = Rank::TopCard;
     uint8_t foundIdx = Constants::No_Card;
 
     #if defined(DEBUG) && defined(DEBUG_GETNEXTHIGHESTCARD_NOTRUMP_INSUIT)
-        DEBUG_PRINT(F("getNextHighestCard_NonTrump_InSuit("));
+        DEBUG_PRINT(F("getNextHighestCard_InSuit("));
         DEBUG_PRINT_SUIT(suit);
         DEBUG_PRINT(F(","));
         DEBUG_PRINT_RANK(specifiedRank);
@@ -525,7 +395,7 @@ uint8_t getNextHighest_NonTrump_InSuit(Suit suit, Rank specifiedRank) {
 
         Card &card = this->cards[foundIdx];
 
-        #if defined(DEBUG) && defined(DEBUG_GETNEXTHIGHESTCARD_NOTRUMP_INSUIT)
+        #if defined(DEBUG) && defined(DEBUG_GETNEXTHIGHESTCARD_INSUIT)
             DEBUG_PRINT(F(" = "));
             DEBUG_PRINT_CARD(card.getSuit(), card.getRank());
             DEBUG_PRINTLN();
@@ -534,7 +404,7 @@ uint8_t getNextHighest_NonTrump_InSuit(Suit suit, Rank specifiedRank) {
     }
     else {
 
-        #if defined(DEBUG) && defined(DEBUG_GETNEXTHIGHESTCARD_NOTRUMP_INSUIT)
+        #if defined(DEBUG) && defined(DEBUG_GETNEXTHIGHESTCARD_INSUIT)
             DEBUG_PRINTLN(F(" = No_Card."));
         #endif
     
@@ -547,9 +417,9 @@ uint8_t getNextHighest_NonTrump_InSuit(Suit suit, Rank specifiedRank) {
 
 // Do we have the top unplayed card in the nominated suit ..
 
-uint8_t getTop_NonSuit(Suit suitToFollow) {
+uint8_t getTop_InSuit(Suit trumps, Suit suitToFollow) {
 
-    #if defined(DEBUG) && defined(DEBUG_GETTOP_NONSUIT)
+    #if defined(DEBUG) && defined(DEBUG_GETTOP_INSUIT)
         DEBUG_PRINT(F("getTop "));
         DEBUG_PRINT_SUIT(suitToFollow);
         DEBUG_PRINT(F(": "));
@@ -558,11 +428,11 @@ uint8_t getTop_NonSuit(Suit suitToFollow) {
 
     // What is the players highest trump?
 
-    uint8_t idx = this->getHighest_NonTrump_InSuit(suitToFollow);
+    uint8_t idx = this->getHighest_InSuit(suitToFollow);
 
     if (idx == Constants::No_Card)  {
 
-        #if defined(DEBUG) && defined(DEBUG_GETTOP_NONSUIT)
+        #if defined(DEBUG) && defined(DEBUG_GETTOP_INSUIT)
             DEBUG_PRINTLN(F("player has none."));
         #endif
 
@@ -573,7 +443,7 @@ uint8_t getTop_NonSuit(Suit suitToFollow) {
 
     Card &playersHighestCard = this->cards[idx];
 
-    #if defined(DEBUG) && defined(DEBUG_GETTOP_NONSUIT)
+    #if defined(DEBUG) && defined(DEBUG_GETTOP_INSUIT)
 
         DEBUG_PRINT(F("player holds "));
         DEBUG_PRINT_CARD(playersHighestCard.getSuit(), playersHighestCard.getRank());
@@ -585,12 +455,15 @@ uint8_t getTop_NonSuit(Suit suitToFollow) {
     // What is the highest unplayed card in this suit?
 
     Rank highestUnplayedCard = playersHighestCard.getRank();
+    Rank topRank = (trumps == suitToFollow ? Rank::Joker : Rank::Ace);
 
-    for (Rank rank = Rank::Ace; rank >= playersHighestCard.getRank(); rank--) {
+    for (Rank rank = topRank; rank >= playersHighestCard.getRank(); rank--) {
 
-        if (!this->gameRound->hasCardBeenPlayed(suitToFollow, rank)) {
+        if (trumps == suitToFollow && rank == Rank::Jack) continue;
 
-            #if defined(DEBUG) && defined(DEBUG_GETTOP_NONSUIT)
+        if (!this->gameRound->hasCardBeenPlayed(trumps, suitToFollow, rank)) {
+
+            #if defined(DEBUG) && defined(DEBUG_GETTOP_INSUIT)
 
                 DEBUG_PRINT_CARD(suitToFollow, rank);
                 DEBUG_PRINT(F(" not played. "));
@@ -603,7 +476,7 @@ uint8_t getTop_NonSuit(Suit suitToFollow) {
         } 
         else {
 
-            #if defined(DEBUG) && defined(DEBUG_GETTOP_NONSUIT)
+            #if defined(DEBUG) && defined(DEBUG_GETTOP_INSUIT)
 
                 DEBUG_PRINT_CARD(suitToFollow, rank);
                 DEBUG_PRINT(F(" played. "));
@@ -617,7 +490,7 @@ uint8_t getTop_NonSuit(Suit suitToFollow) {
 
     // So are we holding the top card?
 
-    #if defined(DEBUG) && defined(DEBUG_GETTOP_NONSUIT)
+    #if defined(DEBUG) && defined(DEBUG_GETTOP_INSUIT)
         DEBUG_PRINT(F("Highest unplayed "));
         DEBUG_PRINT_CARD(suitToFollow, highestUnplayedCard);
         DEBUG_PRINTLN(F("."));
@@ -636,12 +509,12 @@ uint8_t getTop_NonSuit(Suit suitToFollow) {
 
 // Do we have the top unplayed card in the nominated suit below the nominated rank ..
 
-uint8_t getTop_NonSuit(Suit suitToFollow, Rank topRank) {
+uint8_t getTop_InSuit(Suit trumps, Suit suitToFollow, Rank topRank) {
 
 
-    // What is the players highest trump?
+    // What is the players highest card in the specified suit?
 
-    uint8_t idx = this->getHighest_NonTrump_InSuit(suitToFollow);
+    uint8_t idx = this->getHighest_InSuit(suitToFollow);
     if (idx == Constants::No_Card)  return Constants::No_Card;
 
     Card &playersHighestCard = this->cards[idx];
@@ -653,7 +526,9 @@ uint8_t getTop_NonSuit(Suit suitToFollow, Rank topRank) {
 
     for (Rank rank = Rank::Four; rank <= topRank; rank++) {
 
-        if (!this->gameRound->hasCardBeenPlayed(suitToFollow, rank)) {
+        if (trumps == suitToFollow && rank == Rank::Jack) continue;
+
+        if (!this->gameRound->hasCardBeenPlayed(trumps, suitToFollow, rank)) {
 
             highestUnplayedCard = rank;        
 
@@ -753,16 +628,16 @@ uint8_t getScoreOfCards_InSuit(Suit suit, Rank lowestRank, BidType bidType) {
 }
 
 
-uint8_t discardAll_InSuit(Suit suit) {
+uint8_t discardAll_InSuit(Suit trumps, Suit suit) {
 
-    return this->discardAll_InSuit(suit, Rank::None);
+    return this->discardAll_InSuit(trumps, suit, Rank::None);
 
 }
 
 
 // Discard all cards in hand with a rank of 'lowestRank' or above ..
 
-uint8_t discardAll_InSuit(Suit suit, Rank lowestRank) {
+uint8_t discardAll_InSuit(Suit trumps, Suit suit, Rank lowestRank) {
 
     uint8_t cardsDiscarded = 0;
 
@@ -774,7 +649,11 @@ uint8_t discardAll_InSuit(Suit suit, Rank lowestRank) {
         DEBUG_PRINTLN(F(")"));
     #endif
 
-    for (Rank rank = lowestRank; rank <= Rank::Ace; rank++) {
+    Rank topRank = (trumps == suit ? Rank::Joker : Rank::Ace);
+
+    for (Rank rank = lowestRank; rank <= topRank; rank++) {
+
+        if (trumps == suit && rank == Rank::Jack) continue;
 
         for (int j = 0; j < this->cardCount; j++) {
 
@@ -946,17 +825,12 @@ void sort() {
 
         for (uint8_t j = i + 1; j < 13; j++) {
 
-            if (this->cards[j].getSortValue(bidType, trumps, seq) < cards[i].getSortValue(bidType, trumps, seq)) {
+            if (this->cards[j].getSortValue(bidType, seq) < cards[i].getSortValue(bidType, seq)) {
 
                 Card card;
-                card.setSuit(cards[i].getSuit());
-                card.setRank(cards[i].getRank());
-                card.setSelected(cards[i].isSelected());
-
+                copyCard(cards[i], card);
                 this->cards[i] = this->cards[j];
-                this->cards[j].setSuit(card.getSuit());
-                this->cards[j].setRank(card.getRank());
-                this->cards[j].setSelected(card.isSelected());
+                copyCard(card, this->cards[j]);
 
             }
             
@@ -969,7 +843,7 @@ void sort() {
     
     for (uint8_t i = 0; i < 13; i++) {
 
-        if (this->cards[i].getSuit() != Suit::None) {
+        if (this->cards[i].getRank() != Rank::None) {
             
             this->cardCount++;
 
@@ -997,6 +871,8 @@ void addCard(Card *card)   {
 
     this->cards[this->cardCount].setRank(card->getRank()); 
     this->cards[this->cardCount].setSuit(card->getSuit()); 
+    this->cards[this->cardCount].setOrigRank(card->getOrigRank()); 
+    this->cards[this->cardCount].setOrigSuit(card->getOrigSuit()); 
     this->cardCount++;
 
 }
@@ -1049,10 +925,10 @@ uint8_t numberOfUnplayedCards_InSuit(Suit suit, Rank cardsAbove) {
 
 // Do we have the top unplayed card in the nominated suit ..
 
-uint8_t getBottom_NonSuit(Suit suitToFollow) {
+uint8_t getBottom_InSuit(Suit trumps, Suit suitToFollow) {
 
 
-    #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_NONSUIT)
+    #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_INSUIT)
         DEBUG_PRINT(F("getBottom "));
         DEBUG_PRINT_SUIT(suitToFollow);
         DEBUG_PRINT(F(": "));
@@ -1061,11 +937,11 @@ uint8_t getBottom_NonSuit(Suit suitToFollow) {
 
     // What is the players lowest trump?
 
-    uint8_t idx = this->getLowest_NonTrump_InSuit(suitToFollow);
+    uint8_t idx = this->getLowest_InSuit(suitToFollow);
 
     if (idx == Constants::No_Card)  {
 
-        #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_NONSUIT)
+        #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_INSUIT)
             DEBUG_PRINTLN(F("player has none."));
         #endif
 
@@ -1076,7 +952,7 @@ uint8_t getBottom_NonSuit(Suit suitToFollow) {
 
     Card &playersLowestCard = this->cards[idx];
 
-    #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_NONSUIT)
+    #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_INSUIT)
 
         DEBUG_PRINT(F("player holds "));
         DEBUG_PRINT_CARD(playersLowestCard.getSuit(), playersLowestCard.getRank());
@@ -1091,9 +967,11 @@ uint8_t getBottom_NonSuit(Suit suitToFollow) {
 
     for (Rank rank = Rank::Four; rank < static_cast<Rank>(static_cast<uint8_t>(playersLowestCard.getRank()) + 1); rank++) {
 
-        if (!this->gameRound->hasCardBeenPlayed(suitToFollow, rank)) {
+        if (trumps == suitToFollow && rank == Rank::Jack) continue;
 
-            #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_NONSUIT)
+        if (!this->gameRound->hasCardBeenPlayed(trumps, suitToFollow, rank)) {
+
+            #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_INSUIT)
 
                 DEBUG_PRINT_CARD(suitToFollow, rank);
                 DEBUG_PRINT(F(" not played. "));
@@ -1106,7 +984,7 @@ uint8_t getBottom_NonSuit(Suit suitToFollow) {
         } 
         else {
 
-            #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_NONSUIT)
+            #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_INSUIT)
 
                 DEBUG_PRINT_CARD(suitToFollow, rank);
                 DEBUG_PRINT(F(" played. "));
@@ -1120,7 +998,7 @@ uint8_t getBottom_NonSuit(Suit suitToFollow) {
 
     // So are we holding the top card?
 
-    #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_NONSUIT)
+    #if defined(DEBUG) && defined(DEBUG_GETBOTTOM_INSUIT)
         DEBUG_PRINT(F("Lowest unplayed "));
         DEBUG_PRINT_CARD(suitToFollow, lowestUnplayedCard);
         DEBUG_PRINTLN(F("."));
@@ -1139,12 +1017,12 @@ uint8_t getBottom_NonSuit(Suit suitToFollow) {
 
 // Do we have the bottom unplayed card in the nominated suit below the nominated rank ..
 
-uint8_t getBottom_NonSuit(Suit suitToFollow, Rank bottomRank) {
+uint8_t getBottom_InSuit(Suit trumps, Suit suitToFollow, Rank bottomRank) {
 
 
     // What is the players highest trump?
 
-    uint8_t idx = this->getLowest_NonTrump_InSuit(suitToFollow);
+    uint8_t idx = this->getLowest_InSuit(suitToFollow);
     if (idx == Constants::No_Card)  return Constants::No_Card;
 
     Card &playersLowestCard = this->cards[idx];
@@ -1156,7 +1034,9 @@ uint8_t getBottom_NonSuit(Suit suitToFollow, Rank bottomRank) {
 
     for (Rank rank = Rank::Four; rank <= bottomRank; rank++) {
 
-        if (!this->gameRound->hasCardBeenPlayed(suitToFollow, rank)) {
+        if (trumps == suitToFollow && rank == Rank::Jack) continue;
+
+        if (!this->gameRound->hasCardBeenPlayed(trumps, suitToFollow, rank)) {
 
             lowestUnplayedCard = rank;        
 
@@ -1177,13 +1057,13 @@ uint8_t getBottom_NonSuit(Suit suitToFollow, Rank bottomRank) {
 }
 
 
-uint8_t getNextLowest_NonTrump_InSuit(Suit suit, Rank specifiedRank) {
+uint8_t getNextLowest_InSuit(Suit suit, Rank specifiedRank) {
 
     Rank foundRank = Rank::None;
     uint8_t foundIdx = Constants::No_Card;
 
-    #if defined(DEBUG) && defined(DEBUG_GETNEXTLOWEST_NONTRUMP_INSUIT)
-        DEBUG_PRINT(F("getNextLowest_NonTrump_InSuit("));
+    #if defined(DEBUG) && defined(DEBUG_GETNEXTLOWEST_INSUIT)
+        DEBUG_PRINT(F("getNextLowest_InSuit("));
         DEBUG_PRINT_SUIT(suit);
         DEBUG_PRINT(F(","));
         DEBUG_PRINT_RANK(specifiedRank);
@@ -1194,7 +1074,7 @@ uint8_t getNextLowest_NonTrump_InSuit(Suit suit, Rank specifiedRank) {
     
         Card &card = this->cards[i];
 
-        #if defined(DEBUG) && defined(DEBUG_GETNEXTLOWEST_NONTRUMP_INSUIT)
+        #if defined(DEBUG) && defined(DEBUG_GETNEXTLOWEST_INSUIT)
             DEBUG_PRINT_CARD(card.getSuit(), card.getRank());
             DEBUG_PRINT_SPACE();
         #endif
@@ -1218,7 +1098,7 @@ uint8_t getNextLowest_NonTrump_InSuit(Suit suit, Rank specifiedRank) {
 
         Card &card = this->cards[foundIdx];
 
-        #if defined(DEBUG) && defined(DEBUG_GETNEXTLOWEST_NONTRUMP_INSUIT)
+        #if defined(DEBUG) && defined(DEBUG_GETNEXTLOWEST_INSUIT)
             DEBUG_PRINT(F(" = "));
             DEBUG_PRINT_CARD(card.getSuit(), card.getRank());
             DEBUG_PRINTLN();
@@ -1227,12 +1107,32 @@ uint8_t getNextLowest_NonTrump_InSuit(Suit suit, Rank specifiedRank) {
     }
     else {
 
-        #if defined(DEBUG) && defined(DEBUG_GETNEXTLOWEST_NONTRUMP_INSUIT)
+        #if defined(DEBUG) && defined(DEBUG_GETNEXTLOWEST_INSUIT)
             DEBUG_PRINTLN(F(" = No_Card."));
         #endif
     
     }
 
     return foundIdx;
+
+}
+
+void copyCard(Card &fromCard, Card &toCard) {
+
+    toCard.setSuit(fromCard.getSuit());
+    toCard.setRank(fromCard.getRank());
+    toCard.setOrigSuit(fromCard.getOrigSuit());
+    toCard.setOrigRank(fromCard.getOrigRank());
+    toCard.setSelected(fromCard.isSelected());
+
+}
+
+void copyCard(Card &fromCard, Card *toCard) {
+
+    toCard->setSuit(fromCard.getSuit());
+    toCard->setRank(fromCard.getRank());
+    toCard->setOrigSuit(fromCard.getOrigSuit());
+    toCard->setOrigRank(fromCard.getOrigRank());
+    toCard->setSelected(fromCard.isSelected());
 
 }

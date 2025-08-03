@@ -71,7 +71,7 @@ void play_Init() {
     randomSeed(r);
     game.setRandomSeed(r);
     // #endif
-    randomSeed(3579);
+    randomSeed(7000);
 
 }
 
@@ -114,55 +114,6 @@ void play_Update() {
 
         case GameState::Play_Shuffle:  
 
-// game.players[0].getCard(0).setSuit(Suit::Diamonds);         game.players[0].getCard(0).setRank(Rank::Four);
-// game.players[0].getCard(1).setSuit(Suit::Diamonds);         game.players[0].getCard(1).setRank(Rank::King);
-// game.players[0].getCard(2).setSuit(Suit::Spades);           game.players[0].getCard(2).setRank(Rank::Six);
-// game.players[0].getCard(3).setSuit(Suit::Spades);           game.players[0].getCard(3).setRank(Rank::Nine);
-// game.players[0].getCard(4).setSuit(Suit::Spades);           game.players[0].getCard(4).setRank(Rank::Ten);
-// game.players[0].getCard(5).setSuit(Suit::Spades);           game.players[0].getCard(5).setRank(Rank::Queen);
-// game.players[0].getCard(6).setSuit(Suit::Hearts);           game.players[0].getCard(6).setRank(Rank::Ten);
-// game.players[0].getCard(7).setSuit(Suit::Hearts);           game.players[0].getCard(7).setRank(Rank::King);
-// game.players[0].getCard(8).setSuit(Suit::Hearts);           game.players[0].getCard(8).setRank(Rank::Ace);
-// game.players[0].getCard(9).setSuit(Suit::Diamonds);         game.players[0].getCard(9).setRank(Rank::Jack);
-
-// game.players[1].getCard(0).setSuit(Suit::Spades);           game.players[1].getCard(0).setRank(Rank::Seven);
-// game.players[1].getCard(1).setSuit(Suit::Diamonds);         game.players[1].getCard(1).setRank(Rank::Seven);
-// game.players[1].getCard(2).setSuit(Suit::Diamonds);         game.players[1].getCard(2).setRank(Rank::Eight);
-// game.players[1].getCard(3).setSuit(Suit::Diamonds);         game.players[1].getCard(3).setRank(Rank::Ace);
-// game.players[1].getCard(4).setSuit(Suit::Clubs);            game.players[1].getCard(4).setRank(Rank::Five);
-// game.players[1].getCard(5).setSuit(Suit::Clubs);            game.players[1].getCard(5).setRank(Rank::Six);
-// game.players[1].getCard(6).setSuit(Suit::Clubs);            game.players[1].getCard(6).setRank(Rank::Seven);
-// game.players[1].getCard(7).setSuit(Suit::Clubs);            game.players[1].getCard(7).setRank(Rank::Nine);
-// game.players[1].getCard(8).setSuit(Suit::Clubs);            game.players[1].getCard(8).setRank(Rank::King);
-// game.players[1].getCard(9).setSuit(Suit::Hearts);           game.players[1].getCard(9).setRank(Rank::Five);
-
-// game.players[2].getCard(0).setSuit(Suit::Spades);           game.players[2].getCard(0).setRank(Rank::Jack);
-// game.players[2].getCard(1).setSuit(Suit::Spades);           game.players[2].getCard(1).setRank(Rank::Ace);
-// game.players[2].getCard(2).setSuit(Suit::Hearts);           game.players[2].getCard(2).setRank(Rank::Four);
-// game.players[2].getCard(3).setSuit(Suit::Hearts);           game.players[2].getCard(3).setRank(Rank::Seven);
-// game.players[2].getCard(4).setSuit(Suit::Hearts);           game.players[2].getCard(4).setRank(Rank::Nine);
-// game.players[2].getCard(5).setSuit(Suit::Hearts);           game.players[2].getCard(5).setRank(Rank::Queen);
-// game.players[2].getCard(6).setSuit(Suit::Hearts);           game.players[2].getCard(6).setRank(Rank::Jack);
-// game.players[2].getCard(7).setSuit(Suit::Clubs);            game.players[2].getCard(7).setRank(Rank::Jack);
-// game.players[2].getCard(8).setSuit(Suit::Clubs);            game.players[2].getCard(8).setRank(Rank::Queen);
-// game.players[2].getCard(9).setSuit(Suit::Clubs);            game.players[2].getCard(9).setRank(Rank::Ace);
-
-// game.players[3].getCard(0).setSuit(Suit::Spades);           game.players[3].getCard(0).setRank(Rank::Eight);
-// game.players[3].getCard(1).setSuit(Suit::Spades);           game.players[3].getCard(1).setRank(Rank::King);
-// game.players[3].getCard(2).setSuit(Suit::Diamonds);         game.players[3].getCard(2).setRank(Rank::Nine);
-// game.players[3].getCard(3).setSuit(Suit::Diamonds);         game.players[3].getCard(3).setRank(Rank::Ten);
-// game.players[3].getCard(4).setSuit(Suit::Diamonds);         game.players[3].getCard(4).setRank(Rank::Queen);
-// game.players[3].getCard(5).setSuit(Suit::Clubs);            game.players[3].getCard(5).setRank(Rank::Eight);
-// game.players[3].getCard(6).setSuit(Suit::Clubs);            game.players[3].getCard(6).setRank(Rank::Ten);
-// game.players[3].getCard(7).setSuit(Suit::Hearts);           game.players[3].getCard(7).setRank(Rank::Six);
-// game.players[3].getCard(8).setSuit(Suit::Hearts);           game.players[3].getCard(8).setRank(Rank::Eight);
-// game.players[3].getCard(9).setSuit(Suit::No_Trumps);        game.players[3].getCard(9).setRank(Rank::Joker);
-
-// gameRound.resetRound();
-// gameRound.setRound(0);
-// gameState = GameState::Bid;
-// return;
-
             game.deck.createDeck();
             game.deck.shuffleDeck();
             game.setFrameCount(0);
@@ -182,7 +133,7 @@ void play_Update() {
                 populateRotateDetails(0);
             }
 
-        #ifdef DEBUG
+        #ifdef DEBUG_SKIP_DEAL
             gameState = GameState::Play_Deal_Catchup;
             [[fallthrough]]
         #else 
@@ -193,7 +144,7 @@ void play_Update() {
             case GameState::Play_Deal_30 ... GameState::Play_Deal_41:
                 {
 
-                    #ifdef DEBUG
+                    #ifdef DEBUG_SKIP_DEAL
                         gameState = GameState::Play_Deal_Catchup;
                     #endif
 
@@ -540,6 +491,22 @@ void play_Update() {
                     }
 
                     for (uint8_t i = 0; i < 4; i++) {
+
+                        for (uint8_t j = 0; j < game.players[i].getCardCount(); j++) {
+                        
+                            switch (gameRound.getWinningBid().getBidType()) {
+
+                                case BidType::Misere:
+                                case BidType::No_Trumps:
+                                    game.players[i].getCard(j).setTrumps(Suit::None);
+                                    break;
+
+                                default:
+                                    game.players[i].getCard(j).setTrumps(gameRound.getWinningBid().getSuit());
+                                    break;
+                            
+                            }
+                        }
                         game.players[i].sort();
                     }
                     
@@ -637,6 +604,8 @@ void play_Update() {
 
                             gameRound.getKitty(kittyIndex)->setSuit(game.players[Constants::HumanPlayer].getCard(i).getSuit());
                             gameRound.getKitty(kittyIndex)->setRank(game.players[Constants::HumanPlayer].getCard(i).getRank());
+                            gameRound.getKitty(kittyIndex)->setOrigSuit(game.players[Constants::HumanPlayer].getCard(i).getOrigSuit());
+                            gameRound.getKitty(kittyIndex)->setOrigRank(game.players[Constants::HumanPlayer].getCard(i).getOrigRank());
                             gameRound.getKitty(kittyIndex)->setSelected(false);
                             game.players[Constants::HumanPlayer].getCard(i).reset();
                             kittyIndex++;
@@ -814,17 +783,20 @@ void play_Update() {
                         
                             case BidType::Suit:
 
-                                if (cardLed.getSuit(trumps) != cardPlayed.getSuit(trumps) && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit(trumps))) {
+                                if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
 
                                     return;
+
                                 }
 
                                 break;
                         
                             case BidType::No_Trumps:
 
-                                if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
+                                if (cardLed.getSuit() != Suit::None && cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
+                                    
                                     return;
+
                                 }
 
                                 if (cardPlayed.getRank() == Rank::Joker && gameRound.getFirstPlayer_Idx() == Constants::HumanPlayer) {
@@ -832,6 +804,12 @@ void play_Update() {
                                     jokerIndex = 0;
                                     gameState = GameState::Play_02;
                                     return;
+
+                                }
+                                else if (cardPlayed.getRank() == Rank::Joker) {
+                                
+                                    cardPlayed.setSuit(cardLed.getSuit());
+
                                 }
 
                                 break;
@@ -839,7 +817,9 @@ void play_Update() {
                             case BidType::Misere:
 
                                 if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
+                                    
                                     return;
+
                                 }
 
                                 break;
@@ -873,11 +853,10 @@ void play_Update() {
 
             if (justPressed == A_BUTTON) {
 
+                game.players[Constants::HumanPlayer].getCard(selectedCard).setSuit(static_cast<Suit>(jokerIndex));
                 gameState = GameState::Play_01;
                 game.players[Constants::HumanPlayer].playCard(selectedCard);
-                gameRound.setJokerSuit(static_cast<Suit>(jokerIndex));
                 play_CardSelected();
-                gameRound.getHand(Constants::HumanPlayer)->setSuit(static_cast<Suit>(jokerIndex));
 
             }
 
@@ -1054,7 +1033,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
             renderPlayerHands(currentPlane, false, false);
             renderTableCards(currentPlane, Constants::NoWinner);
             renderHUD(currentPlane, false, true);
-            SpritesU::drawOverwriteFX(21, 15, Images::ChooseSuit, (jokerIndex * 3) + currentPlane);
+            SpritesU::drawOverwriteFX(28, 15, Images::ChooseSuit, (jokerIndex * 3) + currentPlane);
 
             break;
 

@@ -25,6 +25,8 @@ struct Deck {
                     if (rank == Rank::Four && suit < Suit::Diamonds) continue;
                     deck[deckSize].setSuit(suit);
                     deck[deckSize].setRank(rank);
+                    deck[deckSize].setOrigSuit(suit);
+                    deck[deckSize].setOrigRank(rank);
                     deck[deckSize].setSelected(false);
                     deckSize++;
                 }
@@ -33,6 +35,8 @@ struct Deck {
 
             deck[deckSize].setSuit(Suit::No_Trumps);
             deck[deckSize].setRank(Rank::Joker);
+            deck[deckSize].setOrigSuit(Suit::No_Trumps);
+            deck[deckSize].setOrigRank(Rank::Joker);
             deck[deckSize].setSelected(false);
             deckSize++;
             deckPointer = 0;

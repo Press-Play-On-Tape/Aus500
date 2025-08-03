@@ -2,11 +2,12 @@
 #include "../../fxdata/fxdata.h"
 #include "../../fxdata/images/Images.h"
 
-#define _DEBUG_PRINT    Serial.print
-#define _DEBUG_PRINTLN  Serial.println
+#define DEBUG_PRINT    Serial.print
+#define DEBUG_PRINTLN  Serial.println
 #define DEBUG_BREAK    asm volatile("break\n");
 
-#define _DEBUG
+#define DEBUG
+#define DEBUG_SKIP_DEAL
 #define _DEBUG_BASIC
 #define _DEBUG_RAND
 
@@ -35,21 +36,21 @@
 
 #define _DEBUG_PLAYER_WINNING_HAND
 #define _DEBUG_PLAYNOTRUMPS_LEAD
-#define _DEBUG_PLAYNOTRUMPS_FOLLOW
+#define DEBUG_PLAYNOTRUMPS_FOLLOW
 #define _DEBUG_PLAYSUIT_LEAD;
 #define _DEBUG_PLAYSUIT_FOLLOW;
 #define _DEBUG_PLAYMISERE_LEAD
 #define _DEBUG_PLAYMISERE_FOLLOW
 #define _DEBUG_MARKCARDPLAYED
 #define _DEBUG_HASCARDBEENPLAYED
-#define _DEBUG_GETTOP_NONSUIT
+#define _DEBUG_GETTOP_INSUIT
 #define _DEBUG_SORT
 #define _DEBUG_SORT_DETAIL
 #define _DEBUG_PLAY_ADDCARD
 #define _DEBUG_DISCARDALL_INSUIT
 #define _DEBUG_DISCARDCARD
-#define _DEBUG_GETBOTTOM_NONSUIT
-#define _DEBUG_GETNEXTLOWEST_NONTRUMP_INSUIT
+#define _DEBUG_GETBOTTOM_INSUIT
+#define _DEBUG_GETNEXTLOWEST_INSUIT
 #define _DEBUG_NUMBER_OF_UNPLAYED_CARDS
 
 
