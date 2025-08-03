@@ -69,7 +69,7 @@ void handleKitty() {
                     case 1:
                         if (scoreOfSuit <= 12) {
                             
-                            uint8_t cardsDiscarded = this->discardAll_InSuit(suit);
+                            uint8_t cardsDiscarded = this->discardAll_InSuit(trumps, suit);
                             numberDiscarded = numberDiscarded + cardsDiscarded;
 
                             #if defined(DEBUG) && defined(DEBUG_HANDLEKITTY_TRUMPS)
@@ -84,7 +84,7 @@ void handleKitty() {
                     case 2:
                         if (scoreOfSuit <= 24) {
                             
-                            uint8_t cardsDiscarded = this->discardAll_InSuit(suit);
+                            uint8_t cardsDiscarded = this->discardAll_InSuit(trumps, suit);
                             numberDiscarded = numberDiscarded + cardsDiscarded;
                             
                             #if defined(DEBUG) && defined(DEBUG_HANDLEKITTY_TRUMPS)
@@ -99,7 +99,7 @@ void handleKitty() {
                     case 3:
                         if (scoreOfSuit <= 34) {
                           
-                            uint8_t cardsDiscarded = this->discardAll_InSuit(suit);
+                            uint8_t cardsDiscarded = this->discardAll_InSuit(trumps, suit);
                             numberDiscarded = numberDiscarded + cardsDiscarded;
                             
                             #if defined(DEBUG) && defined(DEBUG_HANDLEKITTY_TRUMPS)
@@ -132,11 +132,14 @@ void handleKitty() {
                 
                 for (uint8_t i = 1; i < 10; i++) {
                                         
-                    for (Rank rank = Rank::Four; rank <= Rank::Ace; rank++) {
+                    for (Rank rank = Rank::Four; rank <= Rank::Joker; rank++) {
                         
                         for (uint8_t s = static_cast<uint8_t>(startingSuit); s < static_cast<uint8_t>(startingSuit) + 4; s++) {
 
                             Suit suit = static_cast<Suit>(s % 4);
+
+                            if (suit == trumps && rank == Rank::Jack)   continue;
+                            if (suit != trumps && rank > Rank::Ace)     continue;
 
                             if (numberDiscarded == 3) break;
 
@@ -294,7 +297,7 @@ void handleKitty() {
 
                         if (numberDiscarded < 3) { 
                             
-                            numberDiscarded = numberDiscarded + this->discardAll_InSuit(suit, lowestRank);
+                            numberDiscarded = numberDiscarded + this->discardAll_InSuit(trumps, suit, lowestRank);
 
                             #if defined(DEBUG) && defined(DEBUG_HANDLEKITTY_MISERE)
                                 DEBUG_PRINT(F("A) Dicard suit "));
@@ -329,7 +332,7 @@ void handleKitty() {
 
                     if (numberDiscarded + countOfSuit <= 3) { 
                         
-                        numberDiscarded = numberDiscarded + this->discardAll_InSuit(suit, Rank::None);
+                        numberDiscarded = numberDiscarded + this->discardAll_InSuit(trumps, suit, Rank::None);
 
                         #if defined(DEBUG) && defined(DEBUG_HANDLEKITTY_MISERE)
                             DEBUG_PRINT(F("A) Dicard suit "));
@@ -349,14 +352,16 @@ void handleKitty() {
     
                 // If we have not unloaded 3 cards, discard the highest cards  ..
                                     
-                for (Rank rank = Rank::Ace; rank >= Rank::Four; rank--) {
+                for (Rank rank = Rank::Joker; rank >= Rank::Four; rank--) {
 
                     for (uint8_t s = static_cast<uint8_t>(startingSuit); s < static_cast<uint8_t>(startingSuit) + 4; s++) {
 
                         Suit suit = static_cast<Suit>(s % 4);
 
                         if (numberDiscarded == 3) continue;
-                        
+                        if (suit == trumps && rank == Rank::Jack)   continue;
+                        if (suit != trumps && rank > Rank::Ace)     continue;
+                                                
                         uint8_t idx = this->getHighest_InSuit(suit);
 
                         if (idx != Constants::No_Card) {

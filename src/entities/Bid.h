@@ -88,6 +88,8 @@ struct Bid {
 
         bool isHigherThan(const Bid& other) const {
 
+            if (other.type == BidType::Misere && this->level >= 8) return true;
+            
             return this->getScore() > other.getScore();
 
         }

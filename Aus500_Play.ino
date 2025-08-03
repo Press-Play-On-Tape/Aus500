@@ -71,7 +71,7 @@ void play_Init() {
     randomSeed(r);
     game.setRandomSeed(r);
     // #endif
-    randomSeed(7617);
+    randomSeed(6073);
 
 }
 

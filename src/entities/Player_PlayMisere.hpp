@@ -160,7 +160,7 @@ void playMisere_Lead() {
             DEBUG_PRINTLN(F("1. Round one, I called."));
         #endif    
 
-        if (this->playBottom_AllSuit())                                                                                             return; // Play a bottom card if we have one ..
+        if (this->playBottom_AllSuit(Suit::None))                                                                                   return; // Play a bottom card if we have one ..
         else if (this->playLowest_AllSuit(Suit::None))                                                                              return; // Play a small card from any other suit.
     
     }
@@ -177,7 +177,7 @@ void playMisere_Lead() {
 
             if (hasSuit != TriState::False) {
 
-                if (this->playBottom_InSuit(suit))                                                                                  return; //  Play a bottom card if we have one ..
+                if (this->playBottom_InSuit(Suit::None, suit))                                                                      return; //  Play a bottom card if we have one ..
 
             }
 
