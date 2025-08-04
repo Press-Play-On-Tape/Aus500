@@ -182,7 +182,7 @@ void renderBids(uint8_t currentPlane) {
                 
                 if (dealer == 0) {
                     bidder_X = 92;
-                    bidder_Y = 38;
+                    bidder_Y = 37;
                 }
 
                 break;
@@ -221,20 +221,7 @@ void renderBids(uint8_t currentPlane) {
             case BidType::Suit:
                 {
                     uint8_t idx = ((static_cast<uint8_t>(bid.getSuit()) * 5) + (bid.getLevel() - 6));
-                    SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
-
-                    if (dealer == Constants::HumanPlayer) {
-                        bidder_X = 39 - (bid.getLevel() == 10 ? 2 : 0);
-                        bidder_Y = 40;                       
-                    }
-
-                }
-                break;
-
-            case BidType::No_Trumps:
-                {
-                    uint8_t idx = (20 + (bid.getLevel() - 6));
-                    SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawPlusMaskFX(41, 39, Images::Bid_Bottom, (idx * 3) + currentPlane); 
 
                     if (dealer == Constants::HumanPlayer) {
                         bidder_X = 38 - (bid.getLevel() == 10 ? 2 : 0);
@@ -244,12 +231,25 @@ void renderBids(uint8_t currentPlane) {
                 }
                 break;
 
+            case BidType::No_Trumps:
+                {
+                    uint8_t idx = (20 + (bid.getLevel() - 6));
+                    SpritesU::drawPlusMaskFX(41, 39, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+
+                    if (dealer == Constants::HumanPlayer) {
+                        bidder_X = 37 - (bid.getLevel() == 10 ? 2 : 0);
+                        bidder_Y = 40;                       
+                    }
+
+                }
+                break;
+
             case BidType::Pass:
 
-                SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (26 * 3) + currentPlane); 
+                SpritesU::drawPlusMaskFX(41, 39, Images::Bid_Bottom, (26 * 3) + currentPlane); 
 
                 if (dealer == Constants::HumanPlayer) {
-                    bidder_X = 36;
+                    bidder_X = 35;
                     bidder_Y = 40;                       
                 }
 
@@ -257,10 +257,10 @@ void renderBids(uint8_t currentPlane) {
         
             case BidType::Misere:
 
-                SpritesU::drawPlusMaskFX(41, 40, Images::Bid_Bottom, (25 * 3) + currentPlane); 
+                SpritesU::drawPlusMaskFX(41, 39, Images::Bid_Bottom, (25 * 3) + currentPlane); 
 
                 if (dealer == Constants::HumanPlayer) {
-                    bidder_X = 34;
+                    bidder_X = 33;
                     bidder_Y = 40;                       
                 }
 
@@ -293,7 +293,7 @@ void renderBids(uint8_t currentPlane) {
 
                     if (dealer == 2) {
                         bidder_X = 8;
-                        bidder_Y = 13 - (bid.getLevel() == 10 ? 2 : 0);                       
+                        bidder_Y = 12 - (bid.getLevel() == 10 ? 2 : 0);                       
                     }
 
                 }
@@ -306,7 +306,7 @@ void renderBids(uint8_t currentPlane) {
 
                     if (dealer == 2) {
                         bidder_X = 8;
-                        bidder_Y = 12 - (bid.getLevel() == 10 ? 2 : 0);                       
+                        bidder_Y = 11 - (bid.getLevel() == 10 ? 2 : 0);                       
                     }
 
                 }
@@ -318,7 +318,7 @@ void renderBids(uint8_t currentPlane) {
 
                 if (dealer == 2) {
                     bidder_X = 8;
-                    bidder_Y = 10;                       
+                    bidder_Y = 11;                       
                 }
 
                 break;
@@ -356,7 +356,7 @@ void renderBids(uint8_t currentPlane) {
             case BidType::Suit:
                 {
                     uint8_t idx = ((static_cast<uint8_t>(bid.getSuit()) * 5) + (bid.getLevel() - 6));
-                    SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Top, (idx * 3) + currentPlane); 
 
                     if (dealer == 3) {
                         bidder_X = 61 + (bid.getLevel() == 10 ? 1 : 0);
@@ -369,7 +369,7 @@ void renderBids(uint8_t currentPlane) {
             case BidType::No_Trumps:
                 {
                     uint8_t idx = (20 + (bid.getLevel() - 6));
-                    SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Bottom, (idx * 3) + currentPlane); 
+                    SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Top, (idx * 3) + currentPlane); 
 
                     if (dealer == 3) {
                         bidder_X = 62 + (bid.getLevel() == 10 ? 2 : 0);
@@ -382,7 +382,7 @@ void renderBids(uint8_t currentPlane) {
 
             case BidType::Pass:
 
-                SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Bottom, (26 * 3) + currentPlane); 
+                SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Top, (26 * 3) + currentPlane); 
 
                 if (dealer == 3) {
                     bidder_X = 64;
@@ -393,7 +393,7 @@ void renderBids(uint8_t currentPlane) {
         
             case BidType::Misere:
 
-                SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Bottom, (25 * 3) + currentPlane); 
+                SpritesU::drawPlusMaskFX(41, 6, Images::Bid_Top, (25 * 3) + currentPlane); 
 
                 if (dealer == 3) {
                     bidder_X = 66;
@@ -427,15 +427,21 @@ void renderBids(uint8_t currentPlane) {
 
 void renderTableCards(uint8_t currentPlane, uint8_t winningHand) {
 
-    renderTableCards_03(currentPlane, winningHand);
-    renderTableCards_01(currentPlane, winningHand);
-    renderTableCards_00(currentPlane, winningHand);
-    renderTableCards_02(currentPlane, winningHand);
+    renderTableCards(currentPlane, winningHand, 0);
 
 }
 
 
-void renderTableCards_00(uint8_t currentPlane, uint8_t winningHand) {   
+void renderTableCards(uint8_t currentPlane, uint8_t winningHand, uint8_t y) {
+
+    renderTableCards_03(currentPlane, winningHand, y);
+    renderTableCards_01(currentPlane, winningHand, y);
+    renderTableCards_00(currentPlane, winningHand, y);
+    renderTableCards_02(currentPlane, winningHand, y);
+
+}
+
+void renderTableCards_00(uint8_t currentPlane, uint8_t winningHand, uint8_t y) {   
 
     if (winningHand != 0 || (winningHand == 0 && game.getFrameCount(48))) {
 
@@ -444,7 +450,7 @@ void renderTableCards_00(uint8_t currentPlane, uint8_t winningHand) {
         if (card->getRank() != Rank::None)  {
 
             uint8_t idx = card->getCardIndex();
-            SpritesU::drawPlusMaskFX(60, 13, Images::Cards_Right, idx + currentPlane); 
+            SpritesU::drawPlusMaskFX(60, y + 13, Images::Cards_Right, idx + currentPlane); 
 
         }
 
@@ -452,7 +458,7 @@ void renderTableCards_00(uint8_t currentPlane, uint8_t winningHand) {
         
 }
 
-void renderTableCards_01(uint8_t currentPlane, uint8_t winningHand) {
+void renderTableCards_01(uint8_t currentPlane, uint8_t winningHand, uint8_t y) {
 
     if (winningHand != 1 || (winningHand == 1 && game.getFrameCount(48))) {
 
@@ -461,7 +467,7 @@ void renderTableCards_01(uint8_t currentPlane, uint8_t winningHand) {
         if (card->getRank() != Rank::None)  {
 
             uint8_t idx = card->getCardIndex();
-            SpritesU::drawPlusMaskFX(49, 19, Images::Cards_Bottom, idx + currentPlane); 
+            SpritesU::drawPlusMaskFX(49, y + 19, Images::Cards_Bottom, idx + currentPlane); 
 
         }
 
@@ -469,7 +475,7 @@ void renderTableCards_01(uint8_t currentPlane, uint8_t winningHand) {
 
 }
 
-void renderTableCards_02(uint8_t currentPlane, uint8_t winningHand) {
+void renderTableCards_02(uint8_t currentPlane, uint8_t winningHand, uint8_t y) {
 
     if (winningHand != 2 || (winningHand == 2 && game.getFrameCount(48))) {
 
@@ -478,7 +484,7 @@ void renderTableCards_02(uint8_t currentPlane, uint8_t winningHand) {
         if (card->getRank() != Rank::None)  {
 
             uint8_t idx = card->getCardIndex();
-            SpritesU::drawPlusMaskFX(20, 21, Images::Cards_Left, idx + currentPlane); 
+            SpritesU::drawPlusMaskFX(20, y + 21, Images::Cards_Left, idx + currentPlane); 
 
         }
 
@@ -486,7 +492,7 @@ void renderTableCards_02(uint8_t currentPlane, uint8_t winningHand) {
 
 }
 
-void renderTableCards_03(uint8_t currentPlane, uint8_t winningHand) {
+void renderTableCards_03(uint8_t currentPlane, uint8_t winningHand, uint8_t y) {
         
     if (winningHand != 3 || (winningHand == 3 && game.getFrameCount(48))) {
 
@@ -495,7 +501,7 @@ void renderTableCards_03(uint8_t currentPlane, uint8_t winningHand) {
         if (card->getRank() != Rank::None)  {
 
             uint8_t idx = card->getCardIndex();
-            SpritesU::drawPlusMaskFX(38, 9, Images::Cards_Bottom, idx + currentPlane); 
+            SpritesU::drawPlusMaskFX(38, y + 9, Images::Cards_Bottom, idx + currentPlane); 
 
         }
 

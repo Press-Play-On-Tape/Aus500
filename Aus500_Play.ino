@@ -63,6 +63,8 @@ void play_Init() {
 
     game.resetFrameCount();
     gameState = GameState::Play_Shuffle;
+    gameRound.setScore(0, 0);
+    gameRound.setScore(1, 0);
 
     // #ifdef DEBUG_RAND
     uint16_t r = random(8000);
@@ -71,7 +73,7 @@ void play_Init() {
     randomSeed(r);
     game.setRandomSeed(r);
     // #endif
-    randomSeed(7000);
+    // randomSeed(2816);
 
 }
 
@@ -868,7 +870,7 @@ void play_Update() {
 
                 uint8_t biddingTeam = gameRound.getWinningBid_Team();
                 uint8_t winningTeam = gameRound.getWinningTeam();
-                int16_t winningScore_BidTeam = gameRound.getWinningScore_BidTeam();
+                int16_t winningScore_BidTeam = gameRound.getWinningScore_BidTeam(gameRound.getTeam_TrickCount(biddingTeam));
                 uint8_t winningScore_Alt = gameRound.getWinningScore_AltTeam();
 
                 #ifdef DEBUG_BASIC
@@ -903,10 +905,13 @@ void play_Update() {
 
         case GameState::Play_EndOfRound:
 
-            if ((gameRound.getScore(0) <= -500 || gameRound.getScore(0) >= 500) ||
-                (gameRound.getScore(1) <= -500 || gameRound.getScore(1) >= 500)) {
+            // if ((gameRound.getScore(0) <= -500 || gameRound.getScore(0) >= 500) ||
+            //     (gameRound.getScore(1) <= -500 || gameRound.getScore(1) >= 500)) {  SJH
+            if ((gameRound.getScore(0) <= -50 || gameRound.getScore(0) >= 50) ||
+                (gameRound.getScore(1) <= -50 || gameRound.getScore(1) >= 50)) {
 
                 gameState = GameState::Play_EndOfGame;
+                endOfGame_Y = 0;
 
             }
             else {
@@ -922,6 +927,12 @@ void play_Update() {
             break;            
 
         case GameState::Play_EndOfGame:
+
+            if (game.getFrameCount() > 60 && game.getFrameCount() < 60 + 64) {
+
+                endOfGame_Y++;
+
+            }
 
             if (justPressed & A_BUTTON) {
 
@@ -958,7 +969,6 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
         case GameState::Bid:
 
             renderPlayerHands(currentPlane, false, false);
-            renderBids(currentPlane);
             renderHUD(currentPlane, false, false);
 
             if (playerCurrentlyBidding == Constants::HumanPlayer) {
@@ -973,6 +983,8 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
                 renderKitty(currentPlane);
                 
             }
+
+            renderBids(currentPlane);
 
             break;
 
@@ -1038,11 +1050,37 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
             break;
 
 
-        case GameState::Play_EndOfHand ... GameState::Play_EndOfGame:
+        case GameState::Play_EndOfHand ... GameState::Play_EndOfRound:
 
             renderPlayerHands(currentPlane, false, false);
             renderTableCards(currentPlane, gameRound.getWinningHand());
             renderHUD(currentPlane, false, true);
+
+            break;
+
+        case GameState::Play_EndOfGame:
+
+            if (endOfGame_Y > 0) {
+
+                renderTableCards(currentPlane, Constants::NoWinner, endOfGame_Y);
+
+                uint8_t idx = 0;
+                if ((game.getFrameCount() % 140) < 64) idx = game.getFrameCount() % 140 / 2;
+
+                if (gameRound.getScore(Constants::HumanTeam) >= 50) {//SJH
+                    SpritesU::drawOverwriteFX(16, endOfGame_Y - 55, Images::You_Won, (idx * 3) + currentPlane);
+                }
+                else {
+                    SpritesU::drawOverwriteFX(16, endOfGame_Y - 55, Images::You_Lost, (idx * 3) + currentPlane);
+                }
+
+            }
+            else {
+                renderTableCards(currentPlane, gameRound.getWinningHand(), endOfGame_Y);
+            }
+
+            renderHUD(currentPlane, false, true);
+
 
             break;
 

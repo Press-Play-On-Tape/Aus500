@@ -52,6 +52,7 @@ int16_t instructions_Y = 0;
 uint8_t jokerIndex = 0;
 uint8_t selectedCard = 0;
 uint8_t kittyHighlight = 0;
+uint8_t endOfGame_Y = 0;
 
 DealPhysics dealPhysics;
 BidInput bidInput;

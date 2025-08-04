@@ -152,6 +152,7 @@ convert_header(IMAGES + 'Bid/Bid_Panel.png',                                    
 convert_header(IMAGES + 'Bid/Bid_Suits.png',                                                   BASE + 'Images.hpp', 'Bid_Suits', 4, 9, 8)
 convert_header(IMAGES + 'Bid/Bid_Numbers.png',                                                 BASE + 'Images.hpp', 'Bid_Numbers', 4, 7, 8)
 
+convert_header(IMAGES + 'Bid/Bid_Top.png',                                                     BASE + 'Images.hpp', 'Bid_Top', 4, 23, 8)
 convert_header(IMAGES + 'Bid/Bid_Bottom.png',                                                  BASE + 'Images.hpp', 'Bid_Bottom', 4, 23, 8)
 convert_header(IMAGES + 'Bid/Bid_Left.png',                                                    BASE + 'Images.hpp', 'Bid_Left', 4, 8, 24)
 convert_header(IMAGES + 'Bid/Bid_Right.png',                                                   BASE + 'Images.hpp', 'Bid_Right', 4, 8, 24)
@@ -162,3 +163,5 @@ convert_header(IMAGES + 'Dealer.png',                                           
 convert_header(IMAGES + 'EveryonePassed.png',                                                  BASE + 'Images.hpp', 'EveryonePassed', 4)
 convert_header(IMAGES + 'KittyInstructions.png',                                               BASE + 'Images.hpp', 'KittyInstructions', 4)
 convert_header(IMAGES + 'ChooseSuit.png',                                                      BASE + 'Images.hpp', 'ChooseSuit', 4, 49, 24)
+convert_header(IMAGES + 'Titles/You_Won.png',                                                  BASE + 'Images.hpp', 'You_Won', 4, 75, 48)
+convert_header(IMAGES + 'Titles/You_Lost.png',                                                 BASE + 'Images.hpp', 'You_Lost', 4, 75, 48)

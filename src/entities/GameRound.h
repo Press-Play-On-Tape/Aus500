@@ -192,10 +192,15 @@ struct GameRound {
         }
 
 
-        int16_t getWinningScore_BidTeam() {
+        int16_t getWinningScore_BidTeam(uint8_t tricks) {
       
             Bid winningBid = this->getWinningBid();
-            return winningBid.getScore() * (this->getWinningTeam() == this->getWinningBid_Team() ? 1 : -1);
+
+            int16_t score = winningBid.getScore() * (this->getWinningTeam() == this->getWinningBid_Team() ? 1 : -1);
+
+            if (tricks == 10 && score < 250) score = 250;
+
+            return score;
 
         }
 

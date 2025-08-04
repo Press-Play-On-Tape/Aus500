@@ -177,8 +177,8 @@ uint8_t evaluateSuitHand(Suit trumpSuit) {
 
 uint8_t getBidLevelFromScore_Suits(uint8_t score) {
 
-    if (score >= 65) return 10;
-    if (score >= 54) return 9;
+    if (score >= 70) return 10;
+    if (score >= 57) return 9;
     if (score >= 43) return 8;
     if (score >= 28) return 7;
     if (score >= 15) return 6;

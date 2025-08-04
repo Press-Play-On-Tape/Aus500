@@ -112,8 +112,7 @@ void playSuit_Follow() {
                             DEBUG_PRINTLN(F("10. Next player can follow suit."));
                         #endif
 
-                        if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))                return; // Win hand with lowest possible trump ..
-                        else if (this->playLowest_InSuit(trumps))                                                   return; // Follow suit ..
+                        if (this->playLowest_InSuit(trumps))                                                        return; // Follow suit ..
                         else if(this->playLowest_AllSuit(trumps))                                                   return;
                     
                     }

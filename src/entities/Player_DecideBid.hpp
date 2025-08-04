@@ -35,15 +35,17 @@ Bid bid(Bid &previousBid, Bid&partnersBid, Bid &bestInRound) {
         case BidType::Suit:
         case BidType::No_Trumps:
             {
-                if (previousBid.getBidType() != BidType::None) { // We have already bid ..
+                // if (previousBid.getBidType() != BidType::None) { 
+                
+                //     // I have already bid and so has my partner ..
 
-                    // If partner and I are only two playing, then randomly do increase ..
+                //     uint8_t elev = random(partnersBid.getLevel()); // The higher up the the partners bid, the less likely we will up the bid ..
+                //     return increasePartnersBid(partnersBid, bestInRound, elev);
 
-                    uint8_t elev = random(partnersBid.getLevel()); // The higher up the the partners bid, the less likely we will up the bid ..
-                    return increasePartnersBid(partnersBid, bestInRound, elev);
+                // }
+                // else {
 
-                }
-                else {
+                    // My partner has already bid.  Compare my hand to my partners and decide which bid to use ..
 
                     uint8_t playing = 0;
 
@@ -123,7 +125,7 @@ Bid bid(Bid &previousBid, Bid&partnersBid, Bid &bestInRound) {
 
                     return elev;
 
-                }
+                // }
 
             }
 
@@ -328,7 +330,7 @@ Bid decideBid(Bid &bestInRound) {
 
     bool hasJoker = prepareSuitPiles(suitPiles);
 
-    if (canBidMisere(hasJoker, suitPiles)) {
+    if (canBidMisere(suitPiles)) {
 
         #if defined(DEBUG) && defined(DEBUG_EVALUATE_MISERE)
             DEBUG_PRINTLN(F("Yes!"));
@@ -366,7 +368,7 @@ Bid decideBid(Bid &bestInRound) {
         #endif
 
 
-        if (canBidOpenMisere(hasJoker, suitPiles)) {
+        if (canBidOpenMisere(suitPiles)) {
 
             #if defined(DEBUG) && defined(DEBUG_EVALUATE_OPEN_MISERE)
                 DEBUG_PRINTLN(F("Yes!"));
@@ -580,7 +582,7 @@ Bid increasePartnersBid(Bid &partnersBid, Bid &bestInRound, uint8_t elev) {
 
         if (partnersBid.getLevel() < 8) {
             
-            currentBid.setLevel(partnersBid.getLevel() + 2);
+            currentBid.setLevel(partnersBid.getLevel() + 1);
 
             if (currentBid.isHigherThan(bestInRound)) {
 

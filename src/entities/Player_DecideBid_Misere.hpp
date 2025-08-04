@@ -93,7 +93,7 @@ bool prepareSuitPiles(SuitPile suitPiles[]) {
 }
 
 
-bool canBidMisere(bool hasJoker, SuitPile suitPiles[]) { //SJH hasJoker not used
+bool canBidMisere(SuitPile suitPiles[]) { 
 
     #if defined(DEBUG) && defined(DEBUG_EVALUATE_MISERE)
         DEBUG_PRINT(F("canBidMisere, P "));
@@ -189,7 +189,7 @@ bool canBidMisere(bool hasJoker, SuitPile suitPiles[]) { //SJH hasJoker not used
 
 
 #ifdef OPEN_MISERE
-    bool canBidOpenMisere(bool hasJoker, SuitPile suitPiles[]) { //SJH hasJoker not used
+    bool canBidOpenMisere(SuitPile suitPiles[]) { 
 
         #if defined(DEBUG) && defined(DEBUG_EVALUATE_OPEN_MISERE)
             DEBUG_PRINT(F("canBidMisere, P "));
