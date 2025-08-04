@@ -884,8 +884,8 @@ void play_Update() {
                     DEBUG_PRINTLN(winningScore_Alt);
                 #endif
 
-                gameRound.incScore(biddingTeam, winningScore_BidTeam);
-                gameRound.incScore(biddingTeam == 1 ? 0 : 1, winningScore_Alt);
+                gameRound.incScore(biddingTeam, winningScore_BidTeam, false);
+                gameRound.incScore(biddingTeam == 1 ? 0 : 1, winningScore_Alt, true);
 
                 gameState = GameState::Play_EndOfRound;
 
@@ -905,10 +905,8 @@ void play_Update() {
 
         case GameState::Play_EndOfRound:
 
-            // if ((gameRound.getScore(0) <= -500 || gameRound.getScore(0) >= 500) ||
-            //     (gameRound.getScore(1) <= -500 || gameRound.getScore(1) >= 500)) {  SJH
-            if ((gameRound.getScore(0) <= -50 || gameRound.getScore(0) >= 50) ||
-                (gameRound.getScore(1) <= -50 || gameRound.getScore(1) >= 50)) {
+            if ((gameRound.getScore(0) <= -500 || gameRound.getScore(0) >= 500) ||
+                (gameRound.getScore(1) <= -500 || gameRound.getScore(1) >= 500)) {  
 
                 gameState = GameState::Play_EndOfGame;
                 endOfGame_Y = 0;
@@ -928,13 +926,13 @@ void play_Update() {
 
         case GameState::Play_EndOfGame:
 
-            if (game.getFrameCount() > 60 && game.getFrameCount() < 60 + 64) {
+            if (game.getFrameCount() > 120 && game.getFrameCount() < 120 + 64) {
 
                 endOfGame_Y++;
 
             }
 
-            if (justPressed & A_BUTTON) {
+            if (justPressed & A_BUTTON && endOfGame_Y > 90) {
 
                 gameState = GameState::Title_Init;
 

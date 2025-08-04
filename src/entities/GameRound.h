@@ -96,9 +96,18 @@ struct GameRound {
             
         }
 
-        void incScore(uint8_t teamIdx, int16_t val) { 
+        void incScore(uint8_t teamIdx, int16_t val, bool capAt500) { 
 
-            this->score[teamIdx] = this->score[teamIdx] + val; 
+            if (capAt500 && this->score[teamIdx] + val >= 500) {
+
+                this->score[teamIdx] = 490;
+            
+            }
+            else {
+
+                this->score[teamIdx] = this->score[teamIdx] + val; 
+            
+            }
 
         }
 
