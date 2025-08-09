@@ -61,17 +61,21 @@ Suit canShortSuit() {
 
 }
 
-void playCard(uint8_t idx) {
+void playCard(uint8_t idx, bool isHumanPlayer) {
 
     Card &card = this->cards[idx];
     copyCard(card, this->cardJustPlayed);
 
-    this->gameRound->markCardPlayed(card.getOrigSuit(), card.getOrigRank());
-    copyCard(card, this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx()));
+    if (!isHumanPlayer) {
+
+        this->gameRound->markCardPlayed(card.getOrigSuit(), card.getOrigRank());
+        copyCard(card, this->gameRound->getHand(this->gameRound->getCurrentPlayer_Idx()));
 
 
-    card.reset();
-    this->sort();
+        card.reset();
+        this->sort();
+
+    }
 
 }
 

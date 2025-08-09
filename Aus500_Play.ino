@@ -73,7 +73,7 @@ void play_Init() {
     randomSeed(r);
     game.setRandomSeed(r);
     // #endif
-    // randomSeed(334);
+    randomSeed(7886);
 
 }
 
@@ -618,7 +618,8 @@ void play_Update() {
 
                     game.players[Constants::HumanPlayer].sort();
                     gameRound.setRound(0);
-                    highlightSuitInHand();
+
+                    if (!playerAssist) highlightSuitInHand();
                     gameState++;
                 
                 }
@@ -642,7 +643,7 @@ void play_Update() {
                 gameRound.clearKitty();
                 game.players[gameRound.getWinningBid_Idx()].handleKitty();
                 game.players[gameRound.getWinningBid_Idx()].sort();
-                highlightSuitInHand();
+                if (!playerAssist) highlightSuitInHand();
                 gameState++;
 
             }
@@ -676,161 +677,112 @@ void play_Update() {
 
             // Select card in players hand ..
 
-            if (selectedCard >= game.players[1].getCardCount()) selectedCard--;
-            game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
+            // if (selectedCard >= game.players[Constants::HumanPlayer].getCardCount()) selectedCard--;
+            // game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
             game.setFrameCount(0);
             gameState++;
 
             break;
 
-        case GameState::Play_01:
+        case GameState::Play_Hand:
             {
 
-                if (gameRound.getCurrentPlayer_Idx() != Constants::HumanPlayer) {
+                bool isHuman = gameRound.getCurrentPlayer_Idx() == Constants::HumanPlayer;
 
-                    if (game.getFrameCount() == 32) {
+                if (game.getFrameCount() == 32 || isHuman) {
 
-                        switch (gameRound.winningBid_Type()) {
-                        
-                            case BidType::Suit:
+                    switch (gameRound.winningBid_Type()) {
+                    
+                        case BidType::Suit:
 
-                                if (gameRound.getFirstPlayer_Idx() == gameRound.getCurrentPlayer_Idx()) {
-                                    game.players[gameRound.getCurrentPlayer_Idx()].playSuit_Lead();
-                                }
-                                else {
-                                    game.players[gameRound.getCurrentPlayer_Idx()].playSuit_Follow();
-                                }
-
-                                break;
-                        
-                            case BidType::No_Trumps:
-
-                                if (gameRound.getFirstPlayer_Idx() == gameRound.getCurrentPlayer_Idx()) {
-                                    game.players[gameRound.getCurrentPlayer_Idx()].playNoTrumps_Lead();
-                                }
-                                else {
-                                    game.players[gameRound.getCurrentPlayer_Idx()].playNoTrumps_Follow();
-                                }
-
-                                break;
-
-                            case BidType::Misere:
-
-                                if (gameRound.getFirstPlayer_Idx() == gameRound.getCurrentPlayer_Idx()) {
-                                    game.players[gameRound.getCurrentPlayer_Idx()].playMisere_Lead();
-                                }
-                                else {
-                                    game.players[gameRound.getCurrentPlayer_Idx()].playMisere_Follow();
-                                }
-
-                                break;
-
-                        }
-
-                        #ifdef DEBUG_BASIC
-                            DEBUG_PRINT(F("99. Player "));
-                            DEBUG_PRINT(gameRound.getCurrentPlayer_Idx());
-                            DEBUG_PRINT(F(" played "));
-                        #endif
-
-                        Card &card = game.players[gameRound.getCurrentPlayer_Idx()].cardJustPlayed;
-
-                        #ifdef DEBUG_BASIC
-
-                            if (card.getRank() == Rank::Joker) {
-                                
-                                DEBUG_PRINT(F("JOKER"));
-
+                            if (gameRound.getFirstPlayer_Idx() == gameRound.getCurrentPlayer_Idx()) {
+                                game.players[gameRound.getCurrentPlayer_Idx()].playSuit_Lead(isHuman);
                             }
                             else {
-
-                                DEBUG_PRINT_CARD(card.getSuit(), card.getRank());
-
+                                game.players[gameRound.getCurrentPlayer_Idx()].playSuit_Follow(isHuman);
                             }
 
-                            DEBUG_PRINTLN();
+                            break;
+                    
+                        case BidType::No_Trumps:
 
-                        #endif
+                            if (gameRound.getFirstPlayer_Idx() == gameRound.getCurrentPlayer_Idx()) {
+                                game.players[gameRound.getCurrentPlayer_Idx()].playNoTrumps_Lead(isHuman);
+                            }
+                            else {
+                                game.players[gameRound.getCurrentPlayer_Idx()].playNoTrumps_Follow(isHuman);
+                            }
 
-                        play_CardSelected();
+                            break;
+
+                        case BidType::Misere:
+
+                            if (gameRound.getFirstPlayer_Idx() == gameRound.getCurrentPlayer_Idx()) {
+                                game.players[gameRound.getCurrentPlayer_Idx()].playMisere_Lead(isHuman);
+                            }
+                            else {
+                                game.players[gameRound.getCurrentPlayer_Idx()].playMisere_Follow(isHuman);
+                            }
+
+                            break;
 
                     }
 
-                }
-                else {
+                    #ifdef DEBUG_BASIC
+                        DEBUG_PRINT(F("99. Player "));
+                        DEBUG_PRINT(gameRound.getCurrentPlayer_Idx());
+                        DEBUG_PRINT(F(" played "));
+                    #endif
 
-                    if (justPressed == LEFT_BUTTON && selectedCard > 0) {
-                        selectedCard--;
-                        game.players[Constants::HumanPlayer].clearSelection();
-                        game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
+                    Card &card = game.players[gameRound.getCurrentPlayer_Idx()].cardJustPlayed;
 
-                    }
+                    #ifdef DEBUG_BASIC
 
-                    if (justPressed == RIGHT_BUTTON && selectedCard < game.players[gameRound.getCurrentPlayer_Idx()].getCardCount() - 1) {
-                        selectedCard++;
-                        game.players[Constants::HumanPlayer].clearSelection();
-                        game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
+                        if (card.getRank() == Rank::Joker) {
+                            
+                            DEBUG_PRINT(F("JOKER"));
 
-                    }
+                        }
+                        else {
 
-                    if (justPressed == A_BUTTON && game.players[gameRound.getCurrentPlayer_Idx()].getCard(selectedCard).isSelected()) {
-
-                        Suit trumps = gameRound.winningBid_Suit();
-                        Card cardLed = gameRound.getCardLed();
-                        Bid bid = gameRound.getWinningBid();
-
-                        Card &cardPlayed = game.players[gameRound.getCurrentPlayer_Idx()].getCard(selectedCard);
-
-                        switch (bid.getBidType()) {
-                        
-                            case BidType::Suit:
-
-                                if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
-
-                                    return;
-
-                                }
-
-                                break;
-                        
-                            case BidType::No_Trumps:
-
-                                if (cardLed.getSuit() != Suit::None && cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
-                                    
-                                    return;
-
-                                }
-
-                                if (cardPlayed.getRank() == Rank::Joker && gameRound.getFirstPlayer_Idx() == Constants::HumanPlayer) {
-
-                                    jokerIndex = 0;
-                                    gameState = GameState::Play_02;
-                                    return;
-
-                                }
-                                else if (cardPlayed.getRank() == Rank::Joker) {
-                                
-                                    cardPlayed.setSuit(cardLed.getSuit());
-
-                                }
-
-                                break;
-
-                            case BidType::Misere:
-
-                                if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
-                                    
-                                    return;
-
-                                }
-
-                                break;
+                            DEBUG_PRINT_CARD(card.getSuit(), card.getRank());
 
                         }
 
-                        game.players[gameRound.getCurrentPlayer_Idx()].playCard(selectedCard);
-                        play_CardSelected();
+                        DEBUG_PRINTLN();
 
+                    #endif
+
+                    if (!isHuman) {
+
+                        play_CardSelected();
+                        
+                    }
+                    else {
+
+
+                        if (playerAssist) {
+                            
+                            // Highlight the previously 'played' card ..
+
+                            game.players[Constants::HumanPlayer].clearSelection();
+
+                            for (uint8_t i = 0; i < game.players[Constants::HumanPlayer].getCardCount(); i++) {
+                            
+                                if (game.players[Constants::HumanPlayer].getCard(i).getSuit() == game.players[Constants::HumanPlayer].getCardJustPlayed().getSuit() &&
+                                    game.players[Constants::HumanPlayer].getCard(i).getRank() == game.players[Constants::HumanPlayer].getCardJustPlayed().getRank()) {
+
+                                    game.players[Constants::HumanPlayer].getCard(i).setSelected(true);
+                                    selectedCard = i;
+                                    break;
+
+                                }
+
+                            }
+
+                        }
+
+                        gameState = GameState::Play_PlayerInput;
                     }
 
                 }
@@ -839,7 +791,88 @@ void play_Update() {
 
             break;
 
-        case GameState::Play_02:
+        case GameState::Play_PlayerInput:
+            {
+
+                if (justPressed == LEFT_BUTTON && selectedCard > 0) {
+                    selectedCard--;
+                    game.players[Constants::HumanPlayer].clearSelection();
+                    game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
+
+                }
+
+                if (justPressed == RIGHT_BUTTON && selectedCard < game.players[gameRound.getCurrentPlayer_Idx()].getCardCount() - 1) {
+                    selectedCard++;
+                    game.players[Constants::HumanPlayer].clearSelection();
+                    game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);
+
+                }
+
+                if (justPressed == A_BUTTON && game.players[gameRound.getCurrentPlayer_Idx()].getCard(selectedCard).isSelected()) {
+
+                    Suit trumps = gameRound.winningBid_Suit();
+                    Card cardLed = gameRound.getCardLed();
+                    Bid bid = gameRound.getWinningBid();
+
+                    Card &cardPlayed = game.players[gameRound.getCurrentPlayer_Idx()].getCard(selectedCard);
+
+                    switch (bid.getBidType()) {
+                    
+                        case BidType::Suit:
+
+                            if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
+
+                                return;
+
+                            }
+
+                            break;
+                    
+                        case BidType::No_Trumps:
+
+                            if (cardLed.getSuit() != Suit::None && cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
+                                
+                                return;
+
+                            }
+
+                            if (cardPlayed.getRank() == Rank::Joker && gameRound.getFirstPlayer_Idx() == Constants::HumanPlayer) {
+
+                                jokerIndex = 0;
+                                gameState = GameState::Play_SelectSuitForJoker;
+                                return;
+
+                            }
+                            else if (cardPlayed.getRank() == Rank::Joker) {
+                            
+                                cardPlayed.setSuit(cardLed.getSuit());
+
+                            }
+
+                            break;
+
+                        case BidType::Misere:
+
+                            if (cardLed.getSuit() != cardPlayed.getSuit() && game.players[gameRound.getCurrentPlayer_Idx()].hasSuit(cardLed.getSuit())) {
+                                
+                                return;
+
+                            }
+
+                            break;
+
+                    }
+
+                    game.players[gameRound.getCurrentPlayer_Idx()].playCard(selectedCard, false);
+                    play_CardSelected();
+
+                }
+
+            }
+
+            break;
+
+        case GameState::Play_SelectSuitForJoker:
 
             if (justPressed == LEFT_BUTTON && jokerIndex > 0) {
 
@@ -856,8 +889,8 @@ void play_Update() {
             if (justPressed == A_BUTTON) {
 
                 game.players[Constants::HumanPlayer].getCard(selectedCard).setSuit(static_cast<Suit>(jokerIndex));
-                gameState = GameState::Play_01;
-                game.players[Constants::HumanPlayer].playCard(selectedCard);
+                gameState = GameState::Play_Hand;
+                game.players[Constants::HumanPlayer].playCard(selectedCard, false);
                 play_CardSelected();
 
             }
@@ -1030,7 +1063,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
             break;
 
-        case GameState::Play_Round_Start ... GameState::Play_01:
+        case GameState::Play_Round_Start ... GameState::Play_PlayerInput:
 
             renderPlayerHands(currentPlane, false, false);
             renderTableCards(currentPlane, Constants::NoWinner);
@@ -1038,7 +1071,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
 
             break;
 
-        case GameState::Play_02:
+        case GameState::Play_SelectSuitForJoker:
 
             renderPlayerHands(currentPlane, false, false);
             renderTableCards(currentPlane, Constants::NoWinner);

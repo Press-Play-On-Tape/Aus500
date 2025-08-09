@@ -28,6 +28,7 @@ struct Player {
         uint8_t getCardCount()                          { return this->cardCount; }
         bool isPlaying()                                { return this->playing; }
         Card &getCard(uint8_t idx)                      { return this->cards[idx]; }
+        Card &getCardJustPlayed()                       { return this->cardJustPlayed; }
 
         void setPlayerNumber(uint8_t val)               { this->playerNumber = val; }
         void setCardCount(uint8_t val)                  { this->cardCount = val; }

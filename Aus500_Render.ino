@@ -22,7 +22,8 @@ void renderPlayerHands(uint8_t currentPlane, bool blinkSelected, bool blinkRaise
 
                 switch (gameState){
                 
-                    case GameState::Play_01:
+                    case GameState::Play_Hand:
+                    case GameState::Play_PlayerInput:
 
                         if (gameRound.getCurrentPlayer_Idx() == Constants::HumanPlayer) {
                             

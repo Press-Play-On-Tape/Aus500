@@ -26,6 +26,7 @@ uint8_t getPressedButtons() {
 void play_CardSelected() {
 
     gameRound.setCurrentPlayer_Idx((gameRound.getCurrentPlayer_Idx() + 1) % 4);
+    gameState = GameState::Play_Hand;
 
 
     // If we ae playing misere and the player is sitting out then skip ..
@@ -161,27 +162,11 @@ void play_CardSelected() {
     }
 
     game.setFrameCount(0);
-    highlightSuitInHand();
+    if (!playerAssist) highlightSuitInHand();
 
 }
 
 void highlightSuitInHand() {
-
-    Suit trumpsSuit = gameRound.winningBid_Suit();
-    Card &cardLed = gameRound.getCardLed();
-
-    for (uint8_t i = 0; i < game.players[Constants::HumanPlayer].getCardCount(); i++) {
-
-        if (game.players[Constants::HumanPlayer].getCard(i).getSuit() ==  cardLed.getSuit()) {
-        
-            selectedCard = i;
-            game.players[Constants::HumanPlayer].clearSelection();
-            game.players[Constants::HumanPlayer].getCard(selectedCard).setSelected(true);            
-            return;
-
-        }
-
-    }
 
     selectedCard = 0;
     game.players[gameRound.getCurrentPlayer_Idx()].clearSelection();

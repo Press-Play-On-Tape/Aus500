@@ -6,8 +6,8 @@ using uint24_t = __uint24;
 
 // Initialize FX hardware using  FX::begin(FX_DATA_PAGE); in the setup() function.
 
-constexpr uint16_t FX_DATA_PAGE  = 0xf841;
-constexpr uint24_t FX_DATA_BYTES = 503436;
+constexpr uint16_t FX_DATA_PAGE  = 0xf835;
+constexpr uint24_t FX_DATA_BYTES = 506510;
 
 constexpr uint16_t FX_SAVE_PAGE  = 0xfff0;
 constexpr uint24_t FX_SAVE_BYTES = 2;
@@ -82,11 +82,12 @@ namespace Images
   constexpr uint24_t Bid_Result = 0x04BFA5;
   constexpr uint24_t Bid_Result_Narrow = 0x04CC4F;
   constexpr uint24_t Title500 = 0x04D2F6;
-  constexpr uint24_t Dealer = 0x0652F8;
-  constexpr uint24_t EveryonePassed = 0x065309;
-  constexpr uint24_t KittyInstructions = 0x0653E9;
-  constexpr uint24_t ChooseSuit = 0x065622;
-  constexpr uint24_t You_Won = 0x065D08;
-  constexpr uint24_t You_Lost = 0x0705CA;
+  constexpr uint24_t Title500_Assist = 0x0652F8;
+  constexpr uint24_t Dealer = 0x065EFA;
+  constexpr uint24_t EveryonePassed = 0x065F0B;
+  constexpr uint24_t KittyInstructions = 0x065FEB;
+  constexpr uint24_t ChooseSuit = 0x066224;
+  constexpr uint24_t You_Won = 0x06690A;
+  constexpr uint24_t You_Lost = 0x0711CC;
 }
 

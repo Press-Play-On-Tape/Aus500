@@ -7,7 +7,7 @@
 #define DEBUG_BREAK    asm volatile("break\n");
 
 #define _DEBUG
-#define DEBUG_SKIP_DEAL
+#define _DEBUG_SKIP_DEAL
 #define _DEBUG_BASIC
 #define _DEBUG_RAND
 

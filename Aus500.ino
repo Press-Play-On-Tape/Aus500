@@ -56,6 +56,7 @@ uint8_t endOfGame_Y = 0;
 
 DealPhysics dealPhysics;
 BidInput bidInput;
+bool playerAssist;
 
 void setup() {
 
