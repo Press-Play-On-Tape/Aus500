@@ -35,52 +35,129 @@ Bid bid(Bid &previousBid, Bid&partnersBid, Bid &bestInRound) {
         case BidType::Suit:
         case BidType::No_Trumps:
             {
-                // if (previousBid.getBidType() != BidType::None) { 
-                
-                //     // I have already bid and so has my partner ..
+                // How many are playing?
 
-                //     uint8_t elev = random(partnersBid.getLevel()); // The higher up the the partners bid, the less likely we will up the bid ..
-                //     return increasePartnersBid(partnersBid, bestInRound, elev);
+                uint8_t playing = 0;
 
-                // }
-                // else {
+                for (uint8_t i = 0; i < 4; i++) {
 
-                    // My partner has already bid.  Compare my hand to my partners and decide which bid to use ..
+                    if (this->gameRound->getBid(i).getBidType() != BidType::None) {
 
-                    uint8_t playing = 0;
+                        playing++;
 
-                    for (uint8_t i = 0; i < 4; i++) {
+                    }
+                    
+                }
 
-                        if (this->gameRound->getBid(i).getBidType() != BidType::None) {
 
-                            playing++;
+                if (previousBid.getBidType() != BidType::None) { // I have already bid and so has my partner ..
+                   
 
+                    // Did I leave anthing on the table last time?
+
+                    Bid newBid = decideBid(bestInRound);
+
+                    if (newBid.getScore() > 0 && newBid.getScore() != previousBid.getScore()) {
+
+                        Bid newPartnerBid = elevatePartnersHand(partnersBid, bestInRound);
+
+                        #if defined(DEBUG) && defined(DEBUG_EVALUATE)
+                            DEBUG_PRINT_BID(newPartnerBid.getBidType(), newPartnerBid.getSuit(), newPartnerBid.getLevel());
+                            DEBUG_PRINT_SPACE();
+                            DEBUG_PRINT(elev.getScore());
+                            DEBUG_PRINT_SPACE();
+                            DEBUG_PRINT_BID(newBid.getBidType(), newBid.getSuit(), newBid.getLevel());
+                            DEBUG_PRINT_SPACE();
+                            DEBUG_PRINTLN(newBid.getScore());
+                        #endif
+
+                        if (newPartnerBid.getBidType() != BidType::Pass && newBid.getBidType() != BidType::Pass) {
+
+                            if (playing == 2) { // Only partner and I playing ..
+                            
+                                if (abs(newPartnerBid.getScore() - newBid.getBidScore()) < 120) { // Similar level ..
+
+                                    if (random(2) == 0) {
+
+                                        return newPartnerBid;
+
+                                    }
+
+                                }
+
+                            }
+
+                            
+                            if (newBid.isHigherThan(newPartnerBid)) {
+                                return newBid;
+                            }
+
+                            return newPartnerBid;
+                        
                         }
+
+                        else if (newPartnerBid.getBidType() == BidType::Pass && newBid.getBidType() != BidType::Pass) {
+
+                            #if defined(DEBUG) && defined(DEBUG_EVALUATE)
+                                DEBUG_PRINT_BID(partnersBid.getBidType(), partnersBid.getSuit(), partnersBid.getLevel());
+                                DEBUG_PRINT_SPACE();
+                                DEBUG_PRINTLN(partnersBid.getScore());
+                                DEBUG_PRINT_BID(myBid.getBidType(), myBid.getSuit(), myBid.getLevel());
+                                DEBUG_PRINT_SPACE();
+                                DEBUG_PRINTLN(myBid.getScore());
+                            #endif
+
+                            if (abs(partnersBid.getScore() - newBid.getBidScore()) < 120) { // Similar level ..
+
+                                if (random(2) == 1) {
+
+                                    newBid.setBidType(BidType::Pass);
+                                    return newBid;
+
+                                }
+
+                            }
+
+                            return newBid;
+                        
+                        }
+
+                        return newPartnerBid;
+
+                    }
+                    else {
+
+                        return increasePartnersBid(partnersBid, bestInRound, 1, random(partnersBid.getLevel()));
                         
                     }
 
-                    Bid elev = elevatePartnersHand(partnersBid, bestInRound);
-                    Bid myBid = decideBid(bestInRound);
+                }
+                else {
+
+                    // My partner has already bid.  Compare my hand to my partners and decide which bid to use ..
+
+                    Bid newPartnerBid = elevatePartnersHand(partnersBid, bestInRound);
+                    Bid newBid = decideBid(bestInRound);
 
                     #if defined(DEBUG) && defined(DEBUG_EVALUATE)
-                        DEBUG_PRINT_BID(elev.getBidType(), elev.getSuit(), elev.getLevel());
+                        DEBUG_PRINT_BID(newPartnerBid.getBidType(), newPartnerBid.getSuit(), newPartnerBid.getLevel());
                         DEBUG_PRINT_SPACE();
                         DEBUG_PRINT(elev.getScore());
                         DEBUG_PRINT_SPACE();
-                        DEBUG_PRINT_BID(myBid.getBidType(), myBid.getSuit(), myBid.getLevel());
+                        DEBUG_PRINT_BID(newBid.getBidType(), newBid.getSuit(), newBid.getLevel());
                         DEBUG_PRINT_SPACE();
-                        DEBUG_PRINTLN(myBid.getScore());
+                        DEBUG_PRINTLN(newBid.getScore());
                     #endif
 
-                    if (elev.getBidType() != BidType::Pass && myBid.getBidType() != BidType::Pass) {
+                    if (newPartnerBid.getBidType() != BidType::Pass && newBid.getBidType() != BidType::Pass) {
 
                         if (playing == 2) { // Only partner and I playing ..
                         
-                            if (abs(elev.getScore() - myBid.getBidScore()) < 120) { // Similar level ..
+                            if (abs(newPartnerBid.getScore() - newBid.getBidScore()) < 120) { // Similar level ..
 
                                 if (random(2) == 0) {
 
-                                    return elev;
+                                    return newPartnerBid;
 
                                 }
 
@@ -89,15 +166,15 @@ Bid bid(Bid &previousBid, Bid&partnersBid, Bid &bestInRound) {
                         }
 
                         
-                        if (myBid.isHigherThan(elev)) {
-                            return myBid;
+                        if (newBid.isHigherThan(newPartnerBid)) {
+                            return newBid;
                         }
 
-                        return elev;
+                        return newPartnerBid;
                     
                     }
 
-                    else if (elev.getBidType() == BidType::Pass && myBid.getBidType() != BidType::Pass) {
+                    else if (newPartnerBid.getBidType() == BidType::Pass && newBid.getBidType() != BidType::Pass) {
 
                         #if defined(DEBUG) && defined(DEBUG_EVALUATE)
                             DEBUG_PRINT_BID(partnersBid.getBidType(), partnersBid.getSuit(), partnersBid.getLevel());
@@ -108,24 +185,24 @@ Bid bid(Bid &previousBid, Bid&partnersBid, Bid &bestInRound) {
                             DEBUG_PRINTLN(myBid.getScore());
                         #endif
 
-                        if (abs(partnersBid.getScore() - myBid.getBidScore()) < 120) { // Similar level ..
+                        if (abs(partnersBid.getScore() - newBid.getBidScore()) < 120) { // Similar level ..
 
                             if (random(2) == 1) {
 
-                                myBid.setBidType(BidType::Pass);
-                                return myBid;
+                                newBid.setBidType(BidType::Pass);
+                                return newBid;
 
                             }
 
                         }
 
-                        return myBid;
+                        return newBid;
                     
                     }
 
-                    return elev;
+                    return newPartnerBid;
 
-                // }
+                }
 
             }
 
@@ -136,6 +213,9 @@ Bid bid(Bid &previousBid, Bid&partnersBid, Bid &bestInRound) {
     return decideBid(bestInRound);
 
 }
+
+
+// Does my hand add to my partners?
 
 Bid elevatePartnersHand(Bid &partnersBid, Bid &bestInRound) {
 
@@ -171,7 +251,7 @@ Bid elevatePartnersHand(Bid &partnersBid, Bid &bestInRound) {
 
     switch (score) {
     
-        case 6 ... 11:
+        case 8 ... 13:
             {
 
                 uint8_t elev = random(isBestInRoundPartners ? 8 : 4);
@@ -181,13 +261,13 @@ Bid elevatePartnersHand(Bid &partnersBid, Bid &bestInRound) {
                     DEBUG_PRINTLN(elev);
                 #endif
                 
-                return increasePartnersBid(partnersBid, bestInRound, elev);
+                return increasePartnersBid(partnersBid, bestInRound, 1, elev);
 
             }
 
             break;
 
-        case 12 ... 19:
+        case 14 ... 23:
             {
                 uint8_t elev = random(isBestInRoundPartners ? 4 : 2);
 
@@ -196,13 +276,13 @@ Bid elevatePartnersHand(Bid &partnersBid, Bid &bestInRound) {
                     DEBUG_PRINTLN(elev);
                 #endif
 
-                return increasePartnersBid(partnersBid, bestInRound, elev);
+                return increasePartnersBid(partnersBid, bestInRound, 1, elev);
 
             }
 
             break;
 
-        case 20 ... 255:
+        case 24 ... 255:
             {
                 uint8_t inc = random(11 - partnersBid.getLevel());
 
@@ -211,19 +291,7 @@ Bid elevatePartnersHand(Bid &partnersBid, Bid &bestInRound) {
                     DEBUG_PRINTLN(inc);
                 #endif
 
-                if (partnersBid.getLevel() < 10) {
-
-                    Bid currentBid;
-                    currentBid.setBidType(partnersBid.getBidType());
-                    currentBid.setSuit(partnersBid.getSuit());
-                    currentBid.setLevel(partnersBid.getLevel() + inc);
-                    currentBid.setBidScore(score);
-
-                    if (currentBid.isHigherThan(bestInRound)) {
-                        return currentBid;
-                    }
-
-                }
+                return increasePartnersBid(partnersBid, bestInRound, 2, 0);
 
             }
 
@@ -516,11 +584,7 @@ Bid decideBid(Bid &bestInRound) {
                     }
 
                 }
-                else {
-// Serial.print("no redc ");
-// DEBUG_PRINT_BID(bestBid.getBidType(), bestBid.getSuit(), bestBid.getLevel());
-// Serial.println(".");                
-                }
+
 
             }
 
@@ -556,8 +620,8 @@ void alterBid(Bid &bestBid, uint8_t r) {
 
 }
 
-
-Bid increasePartnersBid(Bid &partnersBid, Bid &bestInRound, uint8_t elev) {
+// Increase the partners bid by 'levelToIncrease' ..
+Bid increasePartnersBid(Bid &partnersBid, Bid &bestInRound, uint8_t levelToIncrease, uint8_t elev) {
 
     if (partnersBid.getLevel() < 10 && elev == 0) {
 
@@ -580,7 +644,7 @@ Bid increasePartnersBid(Bid &partnersBid, Bid &bestInRound, uint8_t elev) {
 
         // Two ?
 
-        if (partnersBid.getLevel() < 8) {
+        if (levelToIncrease >= 2 && partnersBid.getLevel() < 10) {
             
             currentBid.setLevel(partnersBid.getLevel() + 1);
 

@@ -73,7 +73,7 @@ void play_Init() {
     randomSeed(r);
     game.setRandomSeed(r);
     // #endif
-    // randomSeed(2816);
+    // randomSeed(334);
 
 }
 
@@ -932,7 +932,7 @@ void play_Update() {
 
             }
 
-            if (justPressed & A_BUTTON && endOfGame_Y > 90) {
+            if (justPressed & A_BUTTON && endOfGame_Y > 60) {
 
                 gameState = GameState::Title_Init;
 

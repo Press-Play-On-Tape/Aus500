@@ -196,22 +196,56 @@ void playSuit_Follow() {
                 #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
                     DEBUG_PRINTLN(F("15. Trump has been led."));
                 #endif
+            
+                TriState canNextPlayerFollowSuit = this->gameRound->canPlayerFollowSuit(trumps, playerAfterIdx);
 
-                if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))                        return; // Win hand with lowest possible trump ..
-                else if (this->playLowest_InSuit(trumps))                                                           return; // Follow suit ..
-                else if (this->playLowest_AllSuit(trumps))                                                          return; // Throw rubbish ..
+                if (this->gameRound->isLastPlayer(this->getPlayerNumber())) {
+                
+                    #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
+                        DEBUG_PRINTLN(F("16. Player is last."));
+                    #endif
+
+                    if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))                        return; // Win hand with lowest possible trump ..
+                    else if (this->playLowest_InSuit(trumps))                                                           return; // Follow suit ..
+                    else if (this->playLowest_AllSuit(trumps))                                                          return; // Throw rubbish ..
+
+                }
+
+                else if (!this->gameRound->isLastPlayer(this->getPlayerNumber()) && canNextPlayerFollowSuit != TriState::False) {
+                
+                    #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
+                        DEBUG_PRINTLN(F("17. Player is not last but next cannot follow suit."));
+                    #endif
+
+                    if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))                        return; // Win hand with lowest possible trump ..
+                    else if (this->playLowest_InSuit(trumps))                                                           return; // Follow suit ..
+                    else if (this->playLowest_AllSuit(trumps))                                                          return; // Throw rubbish ..
+
+                }
+                else {
+
+                    #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
+                        DEBUG_PRINTLN(F("18. Player is not last."));
+                    #endif
+
+                    if (this->playHighest_InSuit(trumps))                                                               return; // Play a high trump ..
+                    else if (this->playNextHighest_LargerThan_InSuit(trumps, largestTrump.getRank()))                   return; // Win hand with lowest possible trump ..
+                    else if (this->playLowest_InSuit(trumps))                                                           return; // Follow suit ..
+                    else if (this->playLowest_AllSuit(trumps))                                                          return; // Throw rubbish ..
+
+                }
 
             }
             else {
 
                 #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
-                    DEBUG_PRINTLN(F("16. Trump has not been led."));
+                    DEBUG_PRINTLN(F("19. Trump has not been led."));
                 #endif
                     
                 if (this->gameRound->hasHandBeenTrumped()) {
 
                     #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
-                        DEBUG_PRINTLN(F("17. Hand has been trumped."));
+                        DEBUG_PRINTLN(F("20. Hand has been trumped."));
                     #endif
 
                     if (this->playLowest_InSuit(cardLedSuit))                                                       return; // Win hand  ..
@@ -223,7 +257,7 @@ void playSuit_Follow() {
                 else {
 
                     #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
-                        DEBUG_PRINTLN(F("18. Hand has not been trumped."));
+                        DEBUG_PRINTLN(F("21. Hand has not been trumped."));
                     #endif
 
                     if (this->playHighest_InSuit(cardLedSuit))                                                      return; // Win hand  ..
@@ -242,13 +276,13 @@ void playSuit_Follow() {
     else { // Partner has not played a card ..
 
         #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
-            DEBUG_PRINTLN(F("19. Partner has not played."));
+            DEBUG_PRINTLN(F("21. Partner has not played."));
         #endif
 
         if (this->gameRound->hasTrumpsBeenLed()) {
 
             #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
-                DEBUG_PRINTLN(F("20. Trump has been led."));
+                DEBUG_PRINTLN(F("22. Trump has been led."));
             #endif
 
             if (this->playTop_InSuit(trumps, trumps))                                                               return; // If we have the winning trump then play it ..
@@ -260,7 +294,7 @@ void playSuit_Follow() {
         else {
 
             #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
-                DEBUG_PRINTLN(F("21. Trump has not been led."));
+                DEBUG_PRINTLN(F("23. Trump has not been led."));
             #endif
 
             if (this->gameRound->hasHandBeenTrumped()) {
@@ -277,7 +311,7 @@ void playSuit_Follow() {
             else {
 
                 #if defined(DEBUG) && defined(DEBUG_PLAYSUIT_FOLLOW)
-                    DEBUG_PRINTLN(F("23. Hand has not been trumped."));
+                    DEBUG_PRINTLN(F("24. Hand has not been trumped."));
                 #endif
 
                 Card &largestCard = this->gameRound->getLargestCardInPlay(cardLedSuit);
