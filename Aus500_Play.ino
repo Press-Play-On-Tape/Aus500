@@ -46,7 +46,7 @@ void continueBidding() {
     }
     else if (passes == 3 && bids == 1) {
 
-        gameState++;    
+        gameState = GameState::Bid_Finished;    
         game.setFrameCount(0);
 
     }
@@ -73,7 +73,7 @@ void play_Init() {
     randomSeed(r);
     game.setRandomSeed(r);
     // #endif
-    randomSeed(7886);
+    // randomSeed(7886);
 
 }
 
@@ -337,92 +337,12 @@ void play_Update() {
         case GameState::Bid:
             {
 
-                if (playerCurrentlyBidding == Constants::HumanPlayer) {
+                bool isHuman = playerCurrentlyBidding == Constants::HumanPlayer;
 
-                    if (justPressed & LEFT_BUTTON && bidInput.getMode() == BidMode::Suit)                   bidInput.decMode();
-                    else if (justPressed & LEFT_BUTTON && bidInput.getMode() > BidMode::Suit)               bidInput.setMode(BidMode::Suit);
-                    else if (justPressed & RIGHT_BUTTON && bidInput.getMode() < BidMode::Bid)               bidInput.incMode();
-
-                    else if (justPressed & UP_BUTTON) {
-                    
-                        if (bidInput.getMode() == BidMode::Level && bidInput.getLevel() < 4)                bidInput.incLevel();
-                        if (bidInput.getMode() == BidMode::Suit  && bidInput.getSuit() < 4)                 bidInput.incSuit();
-                        if (bidInput.getMode() == BidMode::Pass || bidInput.getMode() == BidMode::Misere)   bidInput.decMode();
-
-                    }
-
-                    else if (justPressed & DOWN_BUTTON) {
-
-                        if (bidInput.getMode() == BidMode::Level && bidInput.getLevel() > 0)                bidInput.decLevel();
-                        if (bidInput.getMode() == BidMode::Suit && bidInput.getSuit() > 0)                  bidInput.decSuit();
-                        if (bidInput.getMode() == BidMode::Bid || bidInput.getMode() == BidMode::Pass)      bidInput.incMode();
-
-                    }
-
-                    else if (justPressed & A_BUTTON) {
-
-                        if (bidInput.getMode() == BidMode::Bid || bidInput.getMode() == BidMode::Misere) {
-
-                            Bid bid;
-                            Bid &highestBid = gameRound.getHighestBid();
-                            Bid &playersBid = gameRound.getBid(1);
-                            
-                            bid.setLevel(bidInput.getLevel() + 6);
-
-                            if (bidInput.getMode() == BidMode::Misere) {
-
-                                bid.setBidType(BidType::Misere);
-
-                            }
-                            else {
-                                
-                                if (bidInput.getSuit() == 4) {
-
-                                    bid.setSuit(Suit::No_Trumps);
-                                    bid.setBidType(BidType::No_Trumps);
-                                }
-                                else {
-
-                                    bid.setSuit(static_cast<Suit>(bidInput.getSuit()));
-                                    bid.setBidType(BidType::Suit);
-                                }
-
-                            }
-
-                            if (bid.isHigherThan(highestBid)) {
-
-                                highestBid.setBid(bid);
-                                highestBid.setPlayerIdx(Constants::HumanPlayer);
-
-                                playersBid.setPlayerIdx(1);
-                                playersBid.setBid(bid);
-
-                                winningBidIdx = 1;
-                                continueBidding();
-
-                            }
-                            else {
-
-                                gameState = GameState::Bid_Error;
-
-                            }
-
-                        }
-
-                        else if (bidInput.getMode() == BidMode::Pass) {
-
-                            gameRound.getBid(1).setBidType(BidType::Pass);
-                            continueBidding();
-
-                        }
-
-                    }
-
-                }
-                else {
+                if (!isHuman) {
                     
                     if (game.getFrameCount() == 32) {
-
+                
                         Bid &highestBid = gameRound.getHighestBid();
                         Bid &previousBid = gameRound.getBid(playerCurrentlyBidding);
                         Bid &partnerBid = gameRound.getBid((playerCurrentlyBidding + 2) % 4);
@@ -463,11 +383,130 @@ void play_Update() {
                     }
 
                 }
+                else {
+
+                    if (playerAssist) {
+                        
+                        Bid &highestBid = gameRound.getHighestBid();
+                        Bid &previousBid = gameRound.getBid(playerCurrentlyBidding);
+                        Bid &partnerBid = gameRound.getBid((playerCurrentlyBidding + 2) % 4);
+
+                        Bid retBid = game.players[playerCurrentlyBidding].bid(previousBid, partnerBid, highestBid);
+                        previousBid.setBid(retBid);
+                
+                        switch (retBid.getBidType()) {
+                                            
+                            case BidType::Pass:
+                                bidInput.setMode(BidMode::Pass);
+                                break;
+                                            
+                            case BidType::Misere:
+                                bidInput.setMode(BidMode::Misere);
+                                break;
+                                            
+                            case BidType::Suit:
+                                bidInput.setLevel(retBid.getLevel() - 6);
+                                bidInput.setSuit(static_cast<uint8_t>(retBid.getSuit()));
+                                bidInput.setMode(BidMode::Bid);
+                                break;
+
+                        }
+
+                    }
+
+                    gameState = GameState::Bid_Player;
+
+                }
 
             }
 
             break;
 
+        case GameState::Bid_Player:
+
+            if (justPressed & LEFT_BUTTON && bidInput.getMode() == BidMode::Suit)                   bidInput.decMode();
+            else if (justPressed & LEFT_BUTTON && bidInput.getMode() > BidMode::Suit)               bidInput.setMode(BidMode::Suit);
+            else if (justPressed & RIGHT_BUTTON && bidInput.getMode() < BidMode::Bid)               bidInput.incMode();
+
+            else if (justPressed & UP_BUTTON) {
+            
+                if (bidInput.getMode() == BidMode::Level && bidInput.getLevel() < 4)                bidInput.incLevel();
+                if (bidInput.getMode() == BidMode::Suit  && bidInput.getSuit() < 4)                 bidInput.incSuit();
+                if (bidInput.getMode() == BidMode::Pass || bidInput.getMode() == BidMode::Misere)   bidInput.decMode();
+
+            }
+
+            else if (justPressed & DOWN_BUTTON) {
+
+                if (bidInput.getMode() == BidMode::Level && bidInput.getLevel() > 0)                bidInput.decLevel();
+                if (bidInput.getMode() == BidMode::Suit && bidInput.getSuit() > 0)                  bidInput.decSuit();
+                if (bidInput.getMode() == BidMode::Bid || bidInput.getMode() == BidMode::Pass)      bidInput.incMode();
+
+            }
+
+            else if (justPressed & A_BUTTON) {
+
+                if (bidInput.getMode() == BidMode::Bid || bidInput.getMode() == BidMode::Misere) {
+
+                    Bid bid;
+                    Bid &highestBid = gameRound.getHighestBid();
+                    Bid &playersBid = gameRound.getBid(Constants::HumanPlayer);
+                    
+                    bid.setLevel(bidInput.getLevel() + 6);
+
+                    if (bidInput.getMode() == BidMode::Misere) {
+
+                        bid.setBidType(BidType::Misere);
+
+                    }
+                    else {
+                        
+                        if (bidInput.getSuit() == 4) {
+
+                            bid.setSuit(Suit::No_Trumps);
+                            bid.setBidType(BidType::No_Trumps);
+                        }
+                        else {
+
+                            bid.setSuit(static_cast<Suit>(bidInput.getSuit()));
+                            bid.setBidType(BidType::Suit);
+                        }
+
+                    }
+
+                    if (bid.isHigherThan(highestBid)) {
+
+                        highestBid.setBid(bid);
+                        highestBid.setPlayerIdx(Constants::HumanPlayer);
+
+                        playersBid.setPlayerIdx(Constants::HumanPlayer);
+                        playersBid.setBid(bid);
+
+                        winningBidIdx = Constants::HumanPlayer;
+                        gameState = GameState::Bid;
+                        continueBidding();
+
+                    }
+                    else {
+
+                        gameState = GameState::Bid_Error;
+
+                    }
+
+                }
+
+                else if (bidInput.getMode() == BidMode::Pass) {
+
+                    gameRound.getBid(Constants::HumanPlayer).setBidType(BidType::Pass);
+                    gameState = GameState::Bid;
+                    continueBidding();
+
+                }
+
+            }
+
+            break;
+                
         case GameState::Bid_Finished:
             {
                 if (game.getFrameCount() == 32) {
@@ -756,7 +795,7 @@ void play_Update() {
                     if (!isHuman) {
 
                         play_CardSelected();
-                        
+
                     }
                     else {
 
@@ -998,6 +1037,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
             break;
 
         case GameState::Bid:
+        case GameState::Bid_Player:
 
             renderPlayerHands(currentPlane, false, false);
             renderHUD(currentPlane, false, false);

@@ -172,6 +172,7 @@ enum class GameState : uint8_t {
         Play_Deal_42, 
         Play_Deal_Catchup, 
         Bid, 
+        Bid_Player, 
         Bid_Finished,
         Bid_Failed,
         Bid_Error,
