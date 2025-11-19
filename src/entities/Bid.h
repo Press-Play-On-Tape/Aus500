@@ -12,7 +12,7 @@ struct Bid {
         Suit suit = Suit::None;       
         uint8_t level = 0;                              // e.g., 6 for "6 Spades", 8 for "8 No Trumps"
         uint8_t playerIdx = 0;
-        BidType type = BidType::Pass;
+        BidType type = BidType::None;
         uint16_t bidScore = 0;                          // The internal evaluation score for the hand
 
     public:

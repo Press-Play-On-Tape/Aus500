@@ -59,7 +59,7 @@ struct GameRound {
         void setHandCount(uint8_t val)                              { this->handCount = val; }
         void setWinningBid_Idx(uint8_t val)                         { this->winningBidIdx = val; }
         void setDealer_Idx(uint8_t val)                             { this->dealerIdx = val % 4; }
-        void sgtPlayedJoker(bool val)                               { this->playedJoker = val; }
+        void setPlayedJoker(bool val)                               { this->playedJoker = val; }
 
 
         uint8_t getTableCardCount() {

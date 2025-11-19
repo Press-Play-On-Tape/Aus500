@@ -1138,7 +1138,7 @@ void play(ArduboyGBase_Config<ABG_Mode::L4_Triplane> &a) {
                 uint8_t idx = 0;
                 if ((game.getFrameCount() % 140) < 64) idx = game.getFrameCount() % 140 / 2;
 
-                if (gameRound.getScore(Constants::HumanTeam) >= 50) {//SJH
+                if (gameRound.getScore(Constants::HumanTeam) >= 500 || gameRound.getScore(Constants::BotTeam) <= 500) {
                     SpritesU::drawOverwriteFX(16, endOfGame_Y - 55, Images::You_Won, (idx * 3) + currentPlane);
                 }
                 else {

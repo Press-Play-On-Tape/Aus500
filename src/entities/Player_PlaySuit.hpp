@@ -261,7 +261,12 @@ void playSuit_Follow(bool isHuman) {
                         DEBUG_PRINTLN(F("21. Hand has not been trumped."));
                     #endif
 
-                    if (this->playHighest_InSuit(cardLedSuit, isHuman))                                            return; // Win hand  ..
+                    uint8_t winningCardIdx = this->gameRound->getWinningHand();
+                    Card *winningCard = this->gameRound->getHand(winningCardIdx);
+
+
+                    if (this->playNextHighest_LargerThan_InSuit(cardLedSuit, winningCard->getRank(), isHuman))     return; // Over trump ..
+                    // if (this->playHighest_InSuit(cardLedSuit, isHuman))                                            return; // Win hand  ..
                     else if (this->playLowest_InSuit(trumps, isHuman))                                             return; // Trump the hand with a small one ..
                     else if (this->playLowest_AllSuit(trumps, isHuman))                                            return; // Throw rubbish ..
 
